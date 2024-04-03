@@ -1,0 +1,74 @@
+@page "/"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using GradeProject.Data
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+<PageTitle>Home</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+
+        @if (Profile != null)
+        {
+            <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="h-100">
+                <RadzenRow>
+                    <RadzenGravatar Email="@Profile.Email" class="mx-auto w-75 h-75"/>
+                    <RadzenColumn>
+                        <h1 class="text-center">@Profile.FullName</h1>
+                        <h4 class="text-center">✨@Profile.Score stars</h4>
+                        <br/>
+                    </RadzenColumn>
+                </RadzenRow>
+
+            </RadzenStack>
+        }
+        else
+        {
+            <div class="rz-m-12">
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized to view this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    public class ProfileModel
+    {
+        public string FullName { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Gender { get; set; }
+        public int Score { get; set; }
+        public string Email { get; set; }
+    }
+
+    private ProfileModel Profile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result;
+        var user = authState.User;
+
+        if (user?.Identity?.Name != null)
+        {
+            var applicationUser = UserManager.FindByNameAsync(user.Identity.Name).Result;
+
+            if (applicationUser != null)
+            {
+                Profile = new ProfileModel
+                {
+                    FullName = applicationUser.FullName,
+                    DateOfBirth = applicationUser.DateOfBirth,
+                    Gender = applicationUser.Gender,
+                    Score = applicationUser.Score,
+                    Email = applicationUser.Email // Assign user's email to Profile.Email
+                };
+            }
+        }
+    }
+}

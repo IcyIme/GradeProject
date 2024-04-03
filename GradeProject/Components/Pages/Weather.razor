@@ -1,0 +1,71 @@
+﻿@page "/update"
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using GradeProject.Data
+@using Microsoft.AspNetCore.Identity
+
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject UserManager<ApplicationUser> userManager
+
+<h3>Update Score</h3>
+
+@if (updateSuccessful)
+{
+    <p>Score updated successfully!</p>
+}
+else if (updateError)
+{
+    <p>Failed to update score.</p>
+}
+
+<button class="btn btn-primary" @onclick="UpdateScore">Update Score</button>
+
+@code {
+    private bool updateSuccessful = false;
+    private bool updateError = false;
+
+    private async Task UpdateScore()
+    {
+        try
+        {
+            var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var currentUser = await userManager.GetUserAsync(user);
+                if (currentUser != null)
+                {
+                    // Update the score
+                    currentUser.Score += 10; // Example: Increase score by 10
+
+                    // Save changes to the user
+                    var result = await userManager.UpdateAsync(currentUser);
+
+                    if (result.Succeeded)
+                    {
+                        updateSuccessful = true;
+                        updateError = false;
+                    }
+                    else
+                    {
+                        updateSuccessful = false;
+                        updateError = true;
+                    }
+                }
+                else
+                {
+                    updateSuccessful = false;
+                    updateError = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            updateSuccessful = false;
+            updateError = true;
+        }
+    }
+}
