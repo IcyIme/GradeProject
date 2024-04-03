@@ -16,12 +16,12 @@
                 <RadzenRow>
                     <RadzenGravatar Email="@Profile.Email" class="mx-auto w-75 h-75"/>
                     <RadzenColumn>
-                        <h1 class="text-center">@Profile.FullName</h1>
+                        <h1 class="text-center">Hello, @Profile.FullName</h1>
                         <h4 class="text-center">✨@Profile.Score stars</h4>
                         <br/>
                     </RadzenColumn>
                 </RadzenRow>
-
+                <RadzenButton Style="width: 260px; border-radius: 10px">@ButtonLessonText()</RadzenButton>
             </RadzenStack>
         }
         else
@@ -37,6 +37,19 @@
 </AuthorizeView>
 
 @code {
+
+    private string ButtonLessonText()
+    {
+        if (GetLessons == null)
+        {
+            return "Start Learning";
+        }
+        else
+        {
+            return $"continue on lection {GetLessons[GetLessons.Length - 1]}";
+        }
+    }
+
     public class ProfileModel
     {
         public string FullName { get; set; }
@@ -47,6 +60,7 @@
     }
 
     private ProfileModel Profile;
+    private string[] GetLessons;
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,6 +82,7 @@
                     Score = applicationUser.Score,
                     Email = applicationUser.Email // Assign user's email to Profile.Email
                 };
+                GetLessons = applicationUser.CompletedLesson;
             }
         }
     }

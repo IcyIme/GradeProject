@@ -3,7 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GradeProject.Data
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        // DbSet for your custom entity
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        // Other DbSet declarations can also be added here if needed
     }
 }

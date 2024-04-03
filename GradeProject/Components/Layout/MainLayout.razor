@@ -9,7 +9,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
                 <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
-                <RadzenLabel Text="@GetFullName()"/>
+                <RadzenLabel Text="Project Grade v0a1"/>
             </RadzenStack>
             <div>
                 <Pmenu/>
@@ -38,24 +38,6 @@
 <NavMenu></NavMenu>
 @code {
     bool sidebar1Expanded = true;
-
-    private string GetFullName()
-    {
-        var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result; // Use .Result to synchronously wait for the result
-        var user = authState.User;
-
-        if (user?.Identity?.Name != null)
-        {
-            var applicationUser = UserManager.FindByNameAsync(user.Identity.Name).Result; // Use .Result to synchronously wait for the result
-
-            if (applicationUser != null)
-            {
-                return $"Hello👋, {applicationUser.FullName}. You score is: {applicationUser.Score} 🤗";
-            }
-        }
-
-        return "Loading...";
-    }
 }
 
 <div id="blazor-error-ui">
