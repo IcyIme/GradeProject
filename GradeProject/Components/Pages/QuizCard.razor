@@ -1,0 +1,88 @@
+﻿@page "/quizcard"
+@inherits Quizzing.Pages.QuizCardBase
+@using GradeProject.Components.Components
+@using Microsoft.AspNetCore.Identity
+
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject UserManager<ApplicationUser> userManager
+
+<div class="container">
+    <div class="quiz">
+        @if (questionIndex < Questions.Count())
+        {
+            <div class="app-title">
+                Quizzing!
+            </div>
+            <div class="quiz-header">
+                @Questions[questionIndex].QuestionTitle
+            </div>
+            <div class="quiz-body">
+                @foreach (var option in Questions[questionIndex].Options)
+                {
+                    <OptionCard Option="@option" OnOptionSelected="OptionSelected"></OptionCard>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="app-title">
+                @if (score > (Questions.Count() / 2))
+                {
+                    <img src="https://img.icons8.com/ios/100/000000/prize--v1.png" />
+                    <text>Congratulations</text>
+                    @UpdateScore(score)
+                }
+                else
+                {
+                    <img src="https://img.icons8.com/color/96/000000/lose.png" />
+                    <text>Better Luck Next Time</text>
+                }
+            </div>
+            <div class="quiz-header">
+                <b>You scored @score points!</b>
+            </div>
+            <div class="quiz-footer">
+                <button class="next-btn" @onclick="@RestartQuiz">Play Again</button>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private bool updateSuccessful = false;
+    private bool updateError = false;
+
+    private async Task UpdateScore(int score)
+    {
+        try
+        {
+            var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var currentUser = await userManager.GetUserAsync(user);
+                if (currentUser != null)
+                {
+                    // Update the score
+                    currentUser.Score += 2*score; // Example: Increase score by 2
+
+                    // Save changes to the user
+                    var result = await userManager.UpdateAsync(currentUser);
+                }
+                else
+                {
+                    updateSuccessful = false;
+                    updateError = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            updateSuccessful = false;
+            updateError = true;
+        }
+    }
+}

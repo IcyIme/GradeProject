@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\OptionCard.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
@@ -16,7 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Models\" />
+    <UpToDateCheckInput Remove="Components\OptionCard.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\OptionCard.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Components\OptionCard.razor" />
   </ItemGroup>
 
 </Project>
