@@ -39,8 +39,8 @@
                     {
                         <tr>
                             <td><b>@(Leaderboard.IndexOf(user) + 1)</b></td>
-                            <td>@user.FullName</td>
-                            <td>@user.Score</td>
+                            <td><RadzenGravatar Email="@user.Email" class="" /> @user.FullName</td>
+                            <td>✨@user.Score</td>
                         </tr>
                     }
                 </tbody>
@@ -63,11 +63,11 @@
     {
         if (GetLessons == null)
         {
-            return "Start Learning";
+            return "Začnite sa učiť!";
         }
         else
         {
-            return $"continue on lesson {GetLessons[GetLessons.Length - 1]}";
+            return $"Pokračujte v lekcii {GetLessons[GetLessons.Length - 1]}!";
         }
     }
 

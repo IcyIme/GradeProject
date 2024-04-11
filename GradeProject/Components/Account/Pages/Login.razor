@@ -24,7 +24,7 @@
                     </div>
                     <div class="card shadow-lg">
                         <div class="card-body p-5">
-                            <h1 class="fs-4 card-title fw-bold mb-4">Login</h1>
+                            <h1 class="fs-4 card-title fw-bold mb-4">Prihlásenie</h1>
                             <StatusMessage Message="@errorMessage" />
                             <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
                                 <DataAnnotationsValidator />
@@ -36,9 +36,9 @@
 
                                 <div class="mb-3">
                                     <div class="mb-2 w-100">
-                                        <label class="text-muted" for="password">Password</label>
+                                        <label class="text-muted" for="password">Heslo</label>
                                         <a href="Account/ForgotPassword" class="float-end">
-                                            Forgot your password?
+                                            Zabudli ste heslo?
                                         </a>
                                     </div>
                                     <InputText id="password" type="password" @bind-Value="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
@@ -49,10 +49,10 @@
                                     <div class="form-check">
                                         <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" />
 
-                                        <label for="remember" class="form-check-label">Remember Me</label>
+                                        <label for="remember" class="form-check-label">Zapamätať si ma</label>
                                     </div>
                                     <button type="submit" class="btn btn-primary ms-auto">
-                                        Login
+                                        Prihlásiť sa
                                     </button>
                                 </div>
                             </EditForm>
@@ -115,7 +115,7 @@
         }
         else
         {
-            errorMessage = "Error: Invalid login attempt.";
+            errorMessage = "Chyba: Neplatný pokus o prihlásenie.";
         }
     }
 

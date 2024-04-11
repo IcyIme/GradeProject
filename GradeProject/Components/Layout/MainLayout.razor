@@ -20,7 +20,7 @@
     <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
         <RadzenPanelMenu>
             <RadzenPanelMenuItem Text="Home" Icon="home" Path="/" />
-            <RadzenPanelMenuItem Text="Users" Icon="account_box" Path="/update" />
+            <RadzenPanelMenuItem Text="Users" Icon="account_box" Path="/q" />
         </RadzenPanelMenu>
         <div class="rz-p-4">
             Version: 0a1
@@ -35,7 +35,6 @@
         © @DateTime.Today.Year Grade - All Rights Reserved.
     </RadzenFooter>
 </RadzenLayout>
-<NavMenu></NavMenu>
 @code {
     bool sidebar1Expanded = true;
 }

@@ -1,8 +1,9 @@
-﻿using GradeProject.Data.Models;
+﻿using System.Threading.Tasks;
+using GradeProject.Data.Models;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 
-
-namespace Quizzing.Pages
+namespace GradeProject
 {
     public class QuizCardBase : ComponentBase
     {
@@ -12,9 +13,7 @@ namespace Quizzing.Pages
 
         protected override Task OnInitializedAsync()
         {
-            LoadQuestions();
-
-            return base.OnInitializedAsync();
+            return LoadQuestionsAsync(); // Call the asynchronous method
         }
 
         protected void OptionSelected(string option)
@@ -32,37 +31,45 @@ namespace Quizzing.Pages
             questionIndex = 0;
         }
 
-        private void LoadQuestions()
+        private async Task LoadQuestionsAsync() // Change method signature to return Task
         {
+            // Create questions synchronously
             Question q1 = new Question
             {
-                QuestionTitle = "How much is 1+1?",
-                Options = new List<string>() { "1", "999", "2", "Abrahan Lincoln" },
-                Answer = "2"
+                QuestionTitle = "Ako sa deklaruje celočíselná premenná v C#?",
+                Options = new List<string>() { "int x;", "integer x;", "x = int;", "int x = 5;" },
+                Answer = "int x;"
             };
 
             Question q2 = new Question
             {
-                QuestionTitle = "Who was the 40th President of the USA?",
-                Options = new List<string>() { "Bill Clinton", "Richard Nixon", "Jimmy Carter", "Ronald Reagan" },
-                Answer = "Ronald Reagan"
+                QuestionTitle = "Ktoré kľúčové slovo sa používa na definovanie triedy v C#?",
+                Options = new List<string>() { "class", "struct", "interface", "void" },
+                Answer = "class"
             };
 
             Question q3 = new Question
             {
-                QuestionTitle = "In the movie 'Scream' who is Ghost Face?",
-                Options = new List<string>() { "Billy Loomis and Stu Macher", "Dewey Riley", "Sidney Prescott", "Archie Prescott and Philip Marv" },
-                Answer = "Billy Loomis and Stu Macher"
+                QuestionTitle = "Čo znamená 'void' v deklarácii metódy?",
+                Options = new List<string>() { "Vracia celé číslo", "Nevracia nič", "Vracia boolean", "Vracia objekt" },
+                Answer = "Nevracia nič"
             };
 
             Question q4 = new Question
             {
-                QuestionTitle = "Who was the director of 'Scott Pilgrim vs. the World (2010)'?",
-                Options = new List<string>() { "Phil Lord", "Chris Miller", "Seth Rogan", "Edgar Wright" },
-                Answer = "Edgar Wright"
+                QuestionTitle = "Ako pridáte prvok na koniec zoznamu v C#?",
+                Options = new List<string>() { "list.add()", "list.append()", "list.push()", "list.Add()" },
+                Answer = "list.Add()"
             };
 
-            Questions.AddRange(new List<Question> { q1, q2, q3, q4 });
+            Question q5 = new Question
+            {
+                QuestionTitle = "Aký je výstup nasledujúceho kódu: Console.WriteLine(5 > 3 ? 'Áno' : 'Nie')?",
+                Options = new List<string>() { "Áno", "Nie", "Pravda", "Nepravda" },
+                Answer = "Áno"
+            };
+            // Add questions to the list
+            Questions.AddRange(new List<Question> { q1, q2, q3, q4, q5 });
         }
     }
 }

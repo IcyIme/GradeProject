@@ -1,4 +1,4 @@
-﻿*{
+﻿* {
     margin: 0px;
     padding: 0px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,8 +14,9 @@
 }
 
 .quiz {
-    margin: 10px auto;
-    width: 50%;
+    margin: auto;
+    width: 90%; /* Adjusted width for smaller screens */
+    max-width: 500px; /* Added maximum width for larger screens */
     background-color: #f5f6f6;
     border-radius: 10px;
     padding: 15px;
@@ -24,6 +25,7 @@
 
 .quiz-header {
     text-align: center;
+    font-size: 20pt;
 }
 
 .quiz-body {
@@ -49,4 +51,24 @@
 
 .next-btn:hover {
     box-shadow: -1.5px 1.5px 10px rgba(0,0,0,0.3);
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 768px) {
+    .quiz {
+        width: 80%; /* Adjusted width for smaller screens */
+        max-width: 400px; /* Added maximum width for larger screens */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .quiz {
+        width: 100%; /* Adjusted width for smaller screens */
+        max-width: 300px; /* Added maximum width for larger screens */
+    }
+
+    .next-btn {
+        width: 150px; /* Adjusted width for smaller screens */
+        font-size: 12pt; /* Adjusted font size for smaller screens */
+    }
 }

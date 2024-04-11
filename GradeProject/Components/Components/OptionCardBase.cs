@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Quizzing.Components
+namespace GradeProject.Components.Pages
 {
     public class OptionCardBase : ComponentBase
     {

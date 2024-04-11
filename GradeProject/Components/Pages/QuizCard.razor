@@ -1,52 +1,63 @@
 ﻿@page "/q"
-@inherits Quizzing.Pages.QuizCardBase
+@inherits GradeProject.QuizCardBase
 @using GradeProject.Components.Components
 @using Microsoft.AspNetCore.Identity
 
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject UserManager<ApplicationUser> userManager
-
-<div class="container">
-    <div class="quiz">
-        @if (questionIndex < Questions.Count())
-        {
-            <div class="app-title">
-                Quizzing!
-            </div>
-            <div class="quiz-header">
-                @Questions[questionIndex].QuestionTitle
-            </div>
-            <div class="quiz-body">
-                @foreach (var option in Questions[questionIndex].Options)
+@if (Questions.Count != 0)
+{
+    <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="h-100">
+        <div class="container">
+            <div class="quiz" style="max-width: 500px; margin: 0 auto;">
+                @if (questionIndex < Questions.Count())
                 {
-                    <OptionCard Option="@option" OnOptionSelected="OptionSelected"></OptionCard>
-                }
-            </div>
-        }
-        else
-        {
-            <div class="app-title">
-                @if (score > (Questions.Count() / 2))
-                {
-                    <img src="https://img.icons8.com/ios/100/000000/prize--v1.png" />
-                    <text>Congratulations</text>
-                    <p>@update()</p>
+                    <div class="app-title">
+                        Poďme precvičovať!
+                    </div>
+                    <div class="quiz-header">
+                        @Questions[questionIndex].QuestionTitle
+                    </div>
+                    <div class="quiz-body">
+                        @foreach (var option in Questions[questionIndex].Options)
+                        {
+                            <OptionCard Option="@option" OnOptionSelected="OptionSelected"></OptionCard>
+                        }
+                    </div>
                 }
                 else
                 {
-                    <img src="https://img.icons8.com/color/96/000000/lose.png" />
-                    <text>Better Luck Next Time</text>
+                    <div class="app-title">
+                        @if (score > (Questions.Count() / 2))
+                        {
+                            <img src="/img/Gifs/stars.gif" />
+                            <text>Blahoželám</text>
+                            <p>@update()</p>
+                            <div class="quiz-header">
+                                <b>Získal si @(score * 2) ✨ (stars)!</b>
+                            </div>
+                        }
+                        else
+                        {
+                            <img src="/img/Gifs/error.gif" />
+                            <br />
+                            <text>Lepšie šťastie nabudúce!</text>
+                        }
+                    </div>
+                    <div class="quiz-footer">
+                        <button class="next-btn" @onclick="@RestartQuiz">Znovu</button>
+                    </div>
                 }
             </div>
-            <div class="quiz-header">
-                <b>You scored @(score*2) ✨ (stars)!</b>
-            </div>
-            <div class="quiz-footer">
-                <button class="next-btn" @onclick="@RestartQuiz">Play Again</button>
-            </div>
-        }
-    </div>
+        </div>
+    </RadzenStack>
+}
+else
+{
+<div class="rz-m-12">
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
 </div>
+}
 
 @code {
     private bool updateSuccessful = false;
@@ -58,7 +69,7 @@
         return $"";
     }
 
-    
+
     private async Task UpdateScoreAsync(int score)
     {
         try
@@ -72,7 +83,7 @@
                 if (currentUser != null)
                 {
                     // Update the score
-                    currentUser.Score += 2*score; // Example: Increase score by 2
+                    currentUser.Score += 2 * score; // Example: Increase score by 2
 
                     // Save changes to the user
                     var result = await userManager.UpdateAsync(currentUser);
