@@ -19,8 +19,14 @@
     </RadzenHeader>
     <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
         <RadzenPanelMenu>
-            <RadzenPanelMenuItem Text="Home" Icon="home" Path="/" />
-            <RadzenPanelMenuItem Text="Users" Icon="account_box" Path="/q" />
+            <RadzenPanelMenuItem Text="Domov" Icon="home" Path="/" />
+            <RadzenPanelMenuItem Text="Users" Icon="description" Path="/q" />
+            <RadzenPanelMenuItem Text="Playgound" Icon="description" Path="/playground"/>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <RadzenPanelMenuItem Text="Admin Panel" icon="" Path="/admin"></RadzenPanelMenuItem>
+                </Authorized>
+            </AuthorizeView>
         </RadzenPanelMenu>
         <div class="rz-p-4">
             Version: 0a1

@@ -1,0 +1,56 @@
+﻿@page "/playground"
+@using GradeProject.Services
+
+<style>
+    #myEditor {
+        height: 80vh; /* Set the height to 80% of the viewport height */
+        width: 100%; /* Set the width to 100% */
+    }
+</style>
+
+<div class="h-100 w-100">
+    <StandaloneCodeEditor Id="myEditor" ConstructionOptions="EditorConstructionOptions" />
+</div>
+
+<button @onclick="ExecuteCode">Execute Code</button>
+
+@if (!string.IsNullOrEmpty(output))
+{
+    <pre>@output</pre>
+    <p>@evaluationResult</p>
+}
+
+@code {
+    private string code = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, world!\");\n    }\n}";
+
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+    {
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "csharp", 
+            Theme = "vs-dark",
+            Value = code,
+        };
+    }
+    private string output = "";
+    private string evaluationResult = "";
+
+    [Inject]
+    private ICSharpExecutorService ExecutorService { get; set; }
+
+    private void ExecuteCode()
+    {
+        string expectedOutput = "Hello, world!";
+        output = ExecutorService.ExecuteCSharpCode(code);
+
+        if (output.Trim() == expectedOutput)
+        {
+            evaluationResult = "Code execution successful!";
+        }
+        else
+        {
+            evaluationResult = "Code execution failed. Expected output: " + expectedOutput;
+        }
+    }
+}

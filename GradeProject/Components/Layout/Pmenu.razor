@@ -1,22 +1,28 @@
 ﻿@inject NavigationManager NavigationManager
 <AuthorizeView>
-    <RadzenProfileMenu>
-        <Template>
-            <RadzenGravatar Email="@context.User.Identity?.Name">
-            </RadzenGravatar>
-        </Template>
-        <ChildContent>
-            <RadzenProfileMenuItem Text="Account" Path="Account/Manage" Icon="account_circle"></RadzenProfileMenuItem>
-            <RadzenProfileMenuItem Text="FileInput" Path="fileinput" Icon="attach_file"></RadzenProfileMenuItem>
-            <RadzenProfileMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenProfileMenuItem>
-            <RadzenProfileMenuItem Text="Notification" Path="notification" Icon="announcement"></RadzenProfileMenuItem>
-            <form action="Account/Logout" method="post">
-                <AntiforgeryToken />
-                <input type="hidden" name="ReturnUrl" />
-                <button type="submit" class="nav-link">
-                    <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
-                </button>
-            </form>
-        </ChildContent>
-    </RadzenProfileMenu>
+    <RadzenRow >
+        <div class="d-flex justify-content-between align-items-center">
+            <RadzenLabel Text="@context.User.Identity?.Name"/>
+        </div>
+        <RadzenProfileMenu>
+            <Template>
+                <RadzenGravatar Email="@context.User.Identity?.Name">
+                </RadzenGravatar>
+            </Template>
+            <ChildContent>
+                <RadzenProfileMenuItem Text="Account" Path="Account/Manage" Icon="account_circle"></RadzenProfileMenuItem>
+                <RadzenProfileMenuItem Text="FileInput" Path="fileinput" Icon="attach_file"></RadzenProfileMenuItem>
+                <RadzenProfileMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenProfileMenuItem>
+                <RadzenProfileMenuItem Text="Notification" Path="notification" Icon="announcement"></RadzenProfileMenuItem>
+                <form action="Account/Logout" method="post">
+                    <AntiforgeryToken/>
+                    <input type="hidden" name="ReturnUrl"/>
+                    <button type="submit" class="nav-link">
+                        <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                    </button>
+                </form>
+            </ChildContent>
+        </RadzenProfileMenu>
+    </RadzenRow>
+    
 </AuthorizeView>

@@ -1,7 +1,4 @@
 @page "/"
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Identity
-@using GradeProject.Data
 @inject UserManager<ApplicationUser> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize]
@@ -17,7 +14,7 @@
                         <div class="mx-auto pfp">
                             <RadzenGravatar Email="@Profile.Email" class="h-100 w-100" />
                         </div>
-                        <h1 class="text-center"><b>Hello, @Profile.FullName</b></h1>
+                        <h1 class="text-center"><b>Ahoj, @Profile.FullName</b></h1>
                         <h4 class="text-center">✨<b>@Profile.Score</b> Stars</h4>
                         <br/>
                     </RadzenColumn>
@@ -28,23 +25,24 @@
             <h3 class="text-center">Leaderboard</h3>
             <table class="table table-striped">
                 <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Stars</th>
-                    </tr>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Stars</th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var user in Leaderboard)
-                    {
-                        <tr>
-                            <td><b>@(Leaderboard.IndexOf(user) + 1)</b></td>
-                            <td><RadzenGravatar Email="@user.Email" class="" /> @user.FullName</td>
-                            <td>✨@user.Score</td>
-                        </tr>
-                    }
+                @foreach (var user in Leaderboard)
+                {
+                    <tr>
+                        <td><b>@(Leaderboard.IndexOf(user) + 1)</b></td>
+                        <td><RadzenGravatar Email="@user.Email" class="" /> @user.FullName</td>
+                        <td>✨@user.Score</td>
+                    </tr>
+                }
                 </tbody>
             </table>
+            
         }
         else
         {
@@ -52,6 +50,8 @@
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
             </div>
         }
+        
+
     </Authorized>
     <NotAuthorized>
         <p>You are not authorized to view this page.</p>
@@ -83,6 +83,22 @@
     private ProfileModel Profile;
     private string[] GetLessons;
     private List<ApplicationUser> Leaderboard;
+
+    private async Task ResetScores()
+    {
+        // Reset all users' scores to zero
+        var allUsers = UserManager.Users.ToList();
+        foreach (var userToUpdate in allUsers)
+        {
+            userToUpdate.Score = 0;
+            await UserManager.UpdateAsync(userToUpdate);
+        }
+
+        // Refresh the page or update any necessary state
+        // Get leaderboard data
+        Leaderboard = await GetLeaderboard();
+        StateHasChanged(); // Refresh the UI
+    }
 
     protected override async Task OnInitializedAsync()
     {

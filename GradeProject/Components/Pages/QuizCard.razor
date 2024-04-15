@@ -1,10 +1,11 @@
 ﻿@page "/q"
 @inherits GradeProject.QuizCardBase
-@using GradeProject.Components.Components
-@using Microsoft.AspNetCore.Identity
 
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject UserManager<ApplicationUser> userManager
+
+<PageTitle>Q</PageTitle>
+
 @if (Questions.Count != 0)
 {
     <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="h-100">

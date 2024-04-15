@@ -1,0 +1,87 @@
+﻿@page "/admin"
+@inject UserManager<ApplicationUser> UserManager
+@inject NotificationService NotificationService
+@using System.Linq
+
+<PageTitle>Admin Panel</PageTitle>
+
+@attribute [Authorize(Roles = "Admin")]
+
+<h3>AdminPanel</h3>
+<AuthorizeView>
+    <Authorized>
+        @if (!isWorking)
+        {
+            <RadzenButton Style="width: 260px; border-radius: 10px" Click="@ResetScores">Reset All Scores</RadzenButton>
+        }
+        else
+        {
+            <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+        }
+        <RadzenChart>
+            <RadzenPieSeries Data="@ChartData" CategoryProperty="Label" ValueProperty="Value" />
+        </RadzenChart>
+        
+
+    </Authorized>
+    <NotAuthorized>
+        <p>chyba 401</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    bool isWorking = false;
+
+    List<ChartDataItem> ChartData = new List<ChartDataItem>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadChartData();
+        }
+    }
+
+    private async Task LoadChartData()
+    {
+        var allUsers = UserManager.Users.ToList();
+        var maleCount = allUsers.Count(u => u.Gender == "Male");
+        var femaleCount = allUsers.Count(u => u.Gender == "Female");
+        var prefferNotSayCount = allUsers.Count(u => u.Gender == "PreferNotToSay");
+
+        ChartData = new List<ChartDataItem>
+        {
+            new ChartDataItem { Label = "Male", Value = maleCount },
+            new ChartDataItem { Label = "Female", Value = femaleCount },
+            new ChartDataItem {Label = "Prefer Not To Say", Value = prefferNotSayCount }
+        };
+    }
+
+    private async Task ResetScores()
+    {
+        isWorking = true;
+        // Reset all users' scores to zero
+        var allUsers = UserManager.Users.ToList();
+        foreach (var userToUpdate in allUsers)
+        {
+            userToUpdate.Score = 0;
+            await UserManager.UpdateAsync(userToUpdate);
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Reset úspešný", Detail = "", Duration = 4000 });
+        }
+
+        isWorking = false;
+        StateHasChanged(); // Refresh the UI
+    }
+
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+    public class ChartDataItem
+    {
+        public string Label { get; set; }
+        public int Value { get; set; }
+    }
+}
