@@ -1,0 +1,109 @@
+﻿@page "/compiler"
+@using Microsoft.CodeAnalysis
+@using Microsoft.CodeAnalysis.CSharp
+@using Microsoft.CodeAnalysis.Emit
+@using System.IO
+@using System.Linq
+@using System.Reflection
+
+<h3>C# Code Executor</h3>
+
+<textarea @bind="code" rows="10" cols="50"></textarea>
+<button @onclick="ExecuteCode">Execute Code</button>
+
+@if (!string.IsNullOrWhiteSpace(result))
+{
+    <div>
+        @if (isError)
+        {
+            <p style="color: red;">@result</p>
+        }
+        else
+        {
+            <p>@result</p>
+        }
+    </div>
+}
+
+@code {
+
+
+    private string code = @"
+using System;
+
+public class Program
+{
+    public static void Main()
+    {
+        Console.WriteLine(""Hello, world!"");
+    }
+}";
+    private string result = "";
+    private bool isError = false;
+
+    private void ExecuteCode()
+    {
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            result = "No code provided.";
+            isError = true;
+            return;
+        }
+
+        // Parse the code into a syntax tree
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
+
+        // Define compilation options
+        CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+
+        // Add metadata references for all required assemblies
+        MetadataReference[] references = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
+            .Select(a => MetadataReference.CreateFromFile(a.Location))
+            .ToArray();
+
+        // Compile the code
+        CSharpCompilation compilation = CSharpCompilation.Create("DynamicCode")
+                                                         .WithOptions(compilationOptions)
+                                                         .AddReferences(references)
+                                                         .AddSyntaxTrees(syntaxTree);
+
+        // Generate the assembly
+        using (var ms = new MemoryStream())
+        {
+            EmitResult emitResult = compilation.Emit(ms);
+
+            if (!emitResult.Success)
+            {
+                result = "Compilation failed: " + string.Join(", ", emitResult.Diagnostics.Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error).Select(diagnostic => diagnostic.GetMessage()));
+                isError = true;
+                return;
+            }
+            else
+            {
+                ms.Seek(0, SeekOrigin.Begin);
+                Assembly assembly = Assembly.Load(ms.ToArray());
+
+                // Invoke the method
+                Type type = assembly.GetType("Program");
+                MethodInfo mainMethod = type.GetMethod("Main");
+                result = CaptureConsoleOutput(() =>
+                {
+                    mainMethod.Invoke(null, null);
+                });
+                isError = false;
+            }
+        }
+    }
+
+    // Helper method to capture console output
+    private string CaptureConsoleOutput(Action action)
+    {
+        using (var writer = new StringWriter())
+        {
+            Console.SetOut(writer);
+            action.Invoke();
+            return writer.ToString();
+        }
+    }
+}
