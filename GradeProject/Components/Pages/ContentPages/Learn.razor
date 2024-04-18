@@ -1,0 +1,87 @@
+﻿@page "/learn"
+@inject NavigationManager NavigationManager
+
+<div class="container-sm">
+    <h1>Vitajte v kurze programovacieho jazyka C#!</h1>
+
+    <p>Tento kurz vás zavedie do sveta programovania v jazyku C#. Budeme sa učiť základné koncepty a postupne sa posúvame k pokročilejším témam.</p>
+
+    <h2>Obsah kurzu:</h2>
+
+    <h2>1. Úvod do jazyka C#</h2>
+    <ul>
+        <li>Úvod do jazyka C#</li>
+        <li>Inštalácia a používanie vývojového prostredia</li>
+        <li>Prvé programy v C#</li>
+    </ul>
+
+    <h2>2. Základy syntaxe a typov C#</h2>
+    <ul>
+        <li>Premenné a ich typy</li>
+        <li>Operátory a výrazy</li>
+        <li>Vetvenie a cykly</li>
+    </ul>
+
+    <h2>3. Funkcie a metódy</h2>
+    <ul>
+        <li>Definícia a volanie funkcií</li>
+        <li>Parametre a návratové typy</li>
+        <li>Rekurzia</li>
+    </ul>
+
+    <h2>4. Práca s poliami a kolekciami</h2>
+    <ul>
+        <li>Jednorozmerné a viacrozmerné polia</li>
+        <li>Použitie kolekcií (List, Dictionary, atď.)</li>
+    </ul>
+
+    <h2>5. Objektovo orientované programovanie (OOP)</h2>
+    <ul>
+        <li>Triedy a objekty</li>
+        <li>Dedičnosť a polymorfizmus</li>
+        <li>Zapuzdrenie a rozhrania</li>
+    </ul>
+
+    <h2>6. Manipulácia s reťazcami</h2>
+    <ul>
+        <li>Práca s reťazcami</li>
+        <li>Formátovanie reťazcov</li>
+        <li>Vyhľadávanie a nahradzovanie v reťazcoch</li>
+    </ul>
+
+    <h2>7. Vstup a výstup</h2>
+    <ul>
+        <li>Čítanie a zápis zo súborov</li>
+        <li>Práca s konzolovým vstupom a výstupom</li>
+    </ul>
+
+    <h2>8. Ošetrenie výnimiek</h2>
+    <ul>
+        <li>Práca s výnimkami</li>
+        <li>Blok try-catch-finally</li>
+    </ul>
+
+    <h2>9. Asynchronné programovanie</h2>
+    <ul>
+        <li>Asynchronné metódy a čakanie na výsledok</li>
+        <li>Práca s vláknami a paralelizmus</li>
+    </ul>
+    <section>
+        <h2>Čo sa naučíte na tejto stránke?</h2>
+        <p>Na tejto stránke sa dozviete základy jazyka C#, vrátane syntaxe, dátových typov, riadiacich štruktúr a objektovo orientovaného programovania. Máme pre vás pripravené interaktívne príklady, ktoré vám pomôžu lepšie porozumieť konceptom a zlepšiť vaše zručnosti v programovaní.</p>
+    </section>
+    <section>
+        <h2>Začnite s nami</h2>
+        <p>Je čas začať svoju cestu do sveta C#! Ak ste začínajúci vývojár, alebo len hľadáte osvieženie, zostante s nami a objavte krásu a silu jazyka C#.</p>
+    </section>
+    <RadzenButton Click=@(startCourse) Text="Začať kurz" ButtonStyle="ButtonStyle.Primary" />
+</div>
+
+@code{
+
+    private void startCourse()
+    {
+        NavigationManager.NavigateTo("/learn/intro");
+    }
+
+}

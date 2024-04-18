@@ -1,0 +1,44 @@
+﻿@page "/learn/intro"
+
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+
+<PageTitle>Úvod do C#</PageTitle>
+
+<div class="container-sm">
+    <h1>Úvod do C#</h1>
+
+    <section>
+        <h2>Čo je C#?</h2>
+        <p>C# (vyslovuje sa "C sharp") je staticky typovaný, objektovo orientovaný programovací jazyk, ktorý kombinuje silu jazykov ako je C++ s jednoduchosťou jazykov ako je Java. Bol navrhnutý tak, aby bol ľahko čitateľný a zapisovateľný a ponúka širokú škálu funkcií pre efektívny vývoj softvéru.</p>
+    </section>
+    <section>
+        <h2>História jazyka C#</h2>
+        <p>C# bol prvýkrát predstavený v roku 2000 spoločnosťou Microsoft ako súčasť ich platformy .NET. Odvtedy prešiel niekoľkými verziami, pričom najnovší je C# 9.0, ktorý prináša nové funkcie a vylepšenia pre vývojárov.</p>
+    </section>
+    <section>
+        <h2>Prečo sa učiť C#?</h2>
+        <ul>
+            <li><strong>Univerzálnosť:</strong> C# možno použiť pre vývoj širokej škály aplikácií, od webových stránok po herné enginy.</li>
+            <li><strong>Bohatý ekosystém:</strong> S C# získate prístup k bohatému ekosystému knižníc a nástrojov, ktoré uľahčujú vývoj.</li>
+            <li><strong>Vysoká dopyt na trhu práce:</strong> C# je žiadaným súborom zručností na trhu práce, čo znamená, že znalosť tohto jazyka môže otvoriť mnoho dverí v kariére.</li>
+        </ul>
+    </section>
+
+
+    <RadzenButton Click=@(nextLesson) Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+</div>
+
+@code {
+
+    private void nextLesson()
+    {
+        NavigationManager.NavigateTo("q/intro");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        LessonService.AddLesson("intro");
+    }
+}

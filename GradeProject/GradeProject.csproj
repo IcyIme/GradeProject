@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Layout\SubMenu.razor" />
     <Content Remove="Components\OptionCard.razor" />
   </ItemGroup>
 
@@ -26,15 +27,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Layout\SubMenu.razor" />
     <_ContentIncludedByDefault Remove="Components\OptionCard.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Components\Components\OptionCard.razor" />
+    <None Include="Components\Layout\SubMenu.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\Js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Layout\SubMenu.razor" />
   </ItemGroup>
 
 </Project>

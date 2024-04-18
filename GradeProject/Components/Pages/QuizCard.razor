@@ -1,73 +1,96 @@
-﻿@page "/q"
-@inherits GradeProject.QuizCardBase
+﻿@page "/q/{Id}"
+@using GradeProject.Data.Models
+@using GradeProject.Components.Pages.ContentPages.IntroductionPages
 
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject UserManager<ApplicationUser> userManager
+@inject IQuizService QuizService;
+@inject NavigationManager NavigationManager
 
 <PageTitle>Q</PageTitle>
-
-@if (Questions.Count != 0)
+@if (quizUnavailable)
 {
-    <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="h-100">
-        <div class="container">
-            <div class="quiz" style="max-width: 500px; margin: 0 auto;">
-                @if (questionIndex < Questions.Count())
-                {
-                    <div class="app-title">
-                        Poďme precvičovať!
-                    </div>
-                    <div class="quiz-header">
-                        @Questions[questionIndex].QuestionTitle
-                    </div>
-                    <div class="quiz-body">
-                        @foreach (var option in Questions[questionIndex].Options)
+    <h1>This quiz is unvaible</h1>
+}
+else
+{
+    @if (Questions.Count != 0)
+    {
+        <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="h-100">
+            <div class="container">
+                <div class="quiz" style="max-width: 500px; margin: 0 auto;">
+                    @if (questionIndex < Questions.Count())
+                    {
+                        <div class="app-title">
+                            Poďme precvičovať!
+                        </div>
+                        <div class="quiz-header">
+                            @Questions[questionIndex].QuestionTitle
+                        </div>
+                        <div class="quiz-body">
+                            @foreach (var option in Questions[questionIndex].Options)
+                            {
+                                <OptionCard Option="@option" OnOptionSelected="OptionSelected"></OptionCard>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="app-title">
+                            @if (score > (Questions.Count() / 2))
+                            {
+                                <img src="/img/Gifs/stars.gif" />
+                                <text>Blahoželám</text>
+                                <p>@update()</p>
+                                <div class="quiz-header">
+                                    <b>Získal si @(score * 2) ✨ (stars)!</b>
+                                </div>
+                            }
+                            else
+                            {
+                                <img src="/img/Gifs/error.gif" />
+                                <br />
+                                <text>Lepšie šťastie nabudúce!</text>
+                            }
+                        </div>
+                        @if ((score > (Questions.Count() / 2)))
                         {
-                            <OptionCard Option="@option" OnOptionSelected="OptionSelected"></OptionCard>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="app-title">
-                        @if (score > (Questions.Count() / 2))
-                        {
-                            <img src="/img/Gifs/stars.gif" />
-                            <text>Blahoželám</text>
-                            <p>@update()</p>
-                            <div class="quiz-header">
-                                <b>Získal si @(score * 2) ✨ (stars)!</b>
+                            <div class="quiz-footer">
+                                <button class="next-btn" @onclick="@goBack">Pokracovat na ucenie</button>
                             </div>
                         }
                         else
                         {
-                            <img src="/img/Gifs/error.gif" />
-                            <br />
-                            <text>Lepšie šťastie nabudúce!</text>
+                            <div class="quiz-footer">
+                                <button class="next-btn" @onclick="@RestartQuiz">Znovu</button>
+                            </div>
                         }
-                    </div>
-                    <div class="quiz-footer">
-                        <button class="next-btn" @onclick="@RestartQuiz">Znovu</button>
-                    </div>
-                }
+                    }
+                </div>
             </div>
+        </RadzenStack>
+    }
+    else
+    {
+        <div class="rz-m-12">
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
         </div>
-    </RadzenStack>
-}
-else
-{
-<div class="rz-m-12">
-    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
-</div>
+    }
 }
 
 @code {
+
+    [Parameter] public string Id { get; set; }
+
     private bool updateSuccessful = false;
     private bool updateError = false;
+    private bool quizUnavailable = false;
+    private bool quizIsTaken = false;
 
-    private string update()
+    private async Task update()
     {
-        UpdateScoreAsync(score);
-        return $"";
+        
+        await UpdateScoreAsync(score);
     }
 
 
@@ -88,6 +111,18 @@ else
 
                     // Save changes to the user
                     var result = await userManager.UpdateAsync(currentUser);
+                    QuizService.AddQuiz(Id);
+                    if (result.Succeeded)
+                    {
+                        // Update was successful
+                        updateSuccessful = true;
+                    }
+                    else
+                    {
+                        // Update failed
+                        updateSuccessful = false;
+                        updateError = true;
+                    }
                 }
                 else
                 {
@@ -104,4 +139,117 @@ else
             updateError = true;
         }
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        LoadQuestionsAsync(Id);
+        try
+        {
+            var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var currentUser = await userManager.GetUserAsync(user);
+                if (currentUser != null && currentUser.CompletedQuiz != null)
+                {
+                    // Check if the current quiz is in the completed quiz list
+                    if (currentUser.CompletedQuiz.Contains(Id))
+                    {
+                        quizUnavailable = true;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+    }
+
+
+    public List<Question> Questions { get; set; } = new List<Question>();
+    protected int questionIndex = 0;
+    protected int score = 0;
+
+
+    protected void OptionSelected(string option)
+    {
+        if (option == Questions[questionIndex].Answer)
+        {
+            score++;
+        }
+        questionIndex++;
+    }
+
+    protected void RestartQuiz()
+    {
+        score = 0;
+        questionIndex = 0;
+    }
+
+    private void goBack()
+    {
+        switch (Id)
+        {
+            case "intro":
+                NavigationManager.NavigateTo("/learn/intro");
+                break;
+        }
+    }
+
+    private async Task LoadQuestionsAsync(string id) // Change method signature to return Task
+    {
+
+        switch (id)
+        {
+            case "intro":
+                Question q1 = new Question
+                {
+                    QuestionTitle = "Ako sa deklaruje celočíselná premenná v C#?",
+                    Options = new List<string>() { "int x;", "integer x;", "x = int;", "int x = 5;" },
+                    Answer = "int x;"
+                };
+
+                Question q2 = new Question
+                {
+                    QuestionTitle = "Ktoré kľúčové slovo sa používa na definovanie triedy v C#?",
+                    Options = new List<string>() { "class", "struct", "interface", "void" },
+                    Answer = "class"
+                };
+
+                Question q3 = new Question
+                {
+                    QuestionTitle = "Čo znamená 'void' v deklarácii metódy?",
+                    Options = new List<string>() { "Vracia celé číslo", "Nevracia nič", "Vracia boolean", "Vracia objekt" },
+                    Answer = "Nevracia nič"
+                };
+
+                Question q4 = new Question
+                {
+                    QuestionTitle = "Ako pridáte prvok na koniec zoznamu v C#?",
+                    Options = new List<string>() { "list.add()", "list.append()", "list.push()", "list.Add()" },
+                    Answer = "list.Add()"
+                };
+
+                Question q5 = new Question
+                {
+                    QuestionTitle = "Aký je výstup nasledujúceho kódu: Console.WriteLine(5 > 3 ? 'Áno' : 'Nie')?",
+                    Options = new List<string>() { "Áno", "Nie", "Pravda", "Nepravda" },
+                    Answer = "Áno"
+                };
+                // Add questions to the list
+                Questions.AddRange(new List<Question> { q1, q2, q3, q4, q5 });
+                break;
+
+            default:
+                NavigationManager.NavigateTo("/notfound");
+                break;
+        }
+        // Create questions synchronously
+        
+    }
 }
+

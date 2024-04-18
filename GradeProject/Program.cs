@@ -18,6 +18,8 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<ICSharpExecutorService, CSharpExecutorService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -63,5 +65,5 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
-app.UseStatusCodePagesWithRedirects("/404");
+app.UseStatusCodePagesWithRedirects("/notfound");
 app.Run();

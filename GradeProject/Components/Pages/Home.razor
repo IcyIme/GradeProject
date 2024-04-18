@@ -1,7 +1,12 @@
 @page "/"
+
 @inject UserManager<ApplicationUser> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+
 @attribute [Authorize]
+
 <PageTitle>Home</PageTitle>
 
 <AuthorizeView>
@@ -19,7 +24,7 @@
                         <br/>
                     </RadzenColumn>
                 </RadzenRow>
-                <RadzenButton Style="width: 260px; border-radius: 10px">@ButtonLessonText()</RadzenButton>
+                <RadzenButton Click=@(onClickRedirect) Style="width: 260px; border-radius: 10px">@ButtonLessonText()</RadzenButton>
                 </RadzenStack>
             <br />
             <h3 class="text-center">Leaderboard</h3>
@@ -42,7 +47,6 @@
                 }
                 </tbody>
             </table>
-            
         }
         else
         {
@@ -50,8 +54,6 @@
                 <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
             </div>
         }
-        
-
     </Authorized>
     <NotAuthorized>
         <p>You are not authorized to view this page.</p>
@@ -68,6 +70,26 @@
         else
         {
             return $"Pokračujte v lekcii {GetLessons[GetLessons.Length - 1]}!";
+        }
+    }
+
+    private void onClickRedirect()
+    {
+        if (GetLessons == null)
+        {
+            NavigationManager.NavigateTo("/learn");
+        }
+        else
+        {
+            switch (GetLessons[GetLessons.Length - 1])
+            {
+                case "intro":
+                    NavigationManager.NavigateTo("/learn/intro");
+                    break;
+                default:
+                    NavigationManager.NavigateTo("");
+                    break;
+            }
         }
     }
 
