@@ -7,8 +7,15 @@
 @using System.Reflection
 
 <h3>C# Code Executor</h3>
-
-<textarea @bind="code" rows="10" cols="50"></textarea>
+<style>
+    #myEditor {
+        height: 80vh; /* Set the height to 80% of the viewport height */
+        width: 100%; /* Set the width to 100% */
+    }
+</style>
+<div class="h-100 w-100">
+    <StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
+</div>
 <button @onclick="ExecuteCode">Execute Code</button>
 
 @if (!string.IsNullOrWhiteSpace(result))
@@ -26,18 +33,24 @@
 }
 
 @code {
-
-
-    private string code = @"
-using System;
-
-public class Program
-{
-    public static void Main()
+    private StandaloneCodeEditor myEditor;
+    private async Task HandleContentChange()
     {
-        Console.WriteLine(""Hello, world!"");
+        code = await myEditor.GetValue();
     }
-}";
+
+    private string code = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, world!\");\n    }\n}";
+
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+    {
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "csharp", 
+            Theme = "vs-dark",
+            Value = code,
+        };
+    }
     private string result = "";
     private bool isError = false;
 

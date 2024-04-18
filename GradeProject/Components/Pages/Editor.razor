@@ -9,8 +9,9 @@
 </style>
 
 <div class="h-100 w-100">
-    <StandaloneCodeEditor Id="myEditor" ConstructionOptions="EditorConstructionOptions" />
+    <StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
 </div>
+
 
 <button @onclick="ExecuteCode">Execute Code</button>
 
@@ -21,6 +22,13 @@
 }
 
 @code {
+
+    private StandaloneCodeEditor myEditor;
+    private async Task HandleContentChange()
+    {
+        code = await myEditor.GetValue();
+    }
+
     private string code = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, world!\");\n    }\n}";
 
     private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
