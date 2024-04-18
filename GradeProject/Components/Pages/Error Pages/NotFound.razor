@@ -1,0 +1,21 @@
+﻿@page "/notfound"
+@layout EmptyLayout
+@inject NavigationManager NavigationManager
+
+<PageTitle>❌ERROR: 404 Page not found!</PageTitle>
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center vh-100">
+        <div class="col-12 text-center">
+            <h1>404 Page NotFound</h1>
+            <RadzenButton Click=@(GoToHome) Text="Return to Home" ButtonStyle="ButtonStyle.Primary" />
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private void GoToHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

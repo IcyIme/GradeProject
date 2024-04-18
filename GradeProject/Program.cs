@@ -63,5 +63,5 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
-app.UseStatusCodePagesWithRedirects("/404");
+app.UseStatusCodePagesWithRedirects("/notfound");
 app.Run();
