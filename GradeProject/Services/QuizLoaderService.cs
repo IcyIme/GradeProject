@@ -39,37 +39,44 @@ public class QuizLoaderService : IQuizLoaderService
     {
         Question q1 = new Question
         {
-            QuestionTitle = "Ako sa deklaruje celočíselná premenná v C#?",
-            Options = new List<string>() { "int x;", "integer x;", "x = int;", "int x = 5;" },
-            Answer = "int x;"
+            QuestionTitle = "Ako sa vyslovuje C#?",
+            Options = new List<string>() { "C number", "C sharp", "C hashtag", "C pound" },
+            Answer = "C sharp"
         };
 
         Question q2 = new Question
         {
-            QuestionTitle = "Ktoré kľúčové slovo sa používa na definovanie triedy v C#?",
-            Options = new List<string>() { "class", "struct", "interface", "void" },
-            Answer = "class"
+            QuestionTitle = "Aké vlastnosti má jazyk C#?",
+            Options = new List<string>() { "Dynamická typovanie", "Objektovo orientovaný", "Špecifický pre web development", "Štruktúrovaný syntax" },
+            Answer = "Objektovo orientovaný"
         };
 
         Question q3 = new Question
         {
-            QuestionTitle = "Čo znamená 'void' v deklarácii metódy?",
-            Options = new List<string>() { "Vracia celé číslo", "Nevracia nič", "Vracia boolean", "Vracia objekt" },
-            Answer = "Nevracia nič"
+            QuestionTitle = "Kedy bol C# prvýkrát predstavený a ktorá spoločnosť ho vyvinula?",
+            Options = new List<string>() { "V roku 1995, vyvinula ho spoločnosť Google", "V roku 2000, vyvinula ho spoločnosť Microsoft", "V roku 2010, vyvinula ho spoločnosť Apple", "V roku 1990, vyvinula ho spoločnosť IBM" },
+            Answer = "V roku 2000, vyvinula ho spoločnosť Microsoft"
         };
 
         Question q4 = new Question
         {
-            QuestionTitle = "Ako pridáte prvok na koniec zoznamu v C#?",
-            Options = new List<string>() { "list.add()", "list.append()", "list.push()", "list.Add()" },
-            Answer = "list.Add()"
+            QuestionTitle = "Aká je najnovšia verzia jazyka C# a čo prináša?",
+            Options = new List<string>() { "C# 8, pridáva podporu pre asynchronous programming", "C# 10, pridáva nové dátové typy", "C# 12, pridáva nové funkcie a vylepšenia", "C# 6, pridáva podporu pre GUI vývoj" },
+            Answer = "C# 12, pridáva nové funkcie a vylepšenia"
         };
 
         Question q5 = new Question
         {
-            QuestionTitle = "Aký je výstup nasledujúceho kódu: Console.WriteLine(5 > 3 ? 'Áno' : 'Nie')?",
-            Options = new List<string>() { "Áno", "Nie", "Pravda", "Nepravda" },
-            Answer = "Áno"
+            QuestionTitle = "Aký je jeden dôvod, prečo sa učiť C#?",
+            Options = new List<string>() { "Vysoká popularita", "Jednoduchosť syntaxe", "Možnosť použitia výhradne na mobilné aplikácie", "Vysoká cena kurzov" },
+            Answer = "Vysoká popularita"
+        };
+
+        Question q6 = new Question
+        {
+            QuestionTitle = "Aké výhody prináša používanie jazyka C# pre vývoj softvéru?",
+            Options = new List<string>() { "Univerzálnosť, bohatý ekosystém a vysoký dopyt na trhu práce", "Statické typovanie, komplexná matematická knižnica a webový framework", "Jednoduchá integrácia s operačnými systémami, široká podpora pre databázové systémy a vysoká škálovateľnosť", "Vysoká rýchlosť kompilácie, intuitívne API a jednoduchá distribúcia aplikácií" },
+            Answer = "Univerzálnosť, bohatý ekosystém a vysoký dopyt na trhu práce"
         };
 
         // Add questions to the list

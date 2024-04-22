@@ -41,6 +41,7 @@
                                 {
                                     <img src="/img/Gifs/stars.gif" />
                                     <text>Blahoželám</text>
+                                    @write()
                                     <div class="quiz-header">
                                         <b>Získal si @(score * 2) ✨ (stars)!</b>
                                     </div>
@@ -55,7 +56,7 @@
                             @if ((score > (Questions.Count() / 2)))
                             {
                                 <div class="quiz-footer">
-                                    <button class="next-btn" @onclick="@goBack">Pokracovat na ucenie</button>
+                                    <button class="next-btn" @onclick="@goBack">Pokračovať na učenie</button>
                                 </div>
                             }
                             else
@@ -70,6 +71,12 @@
             </RadzenStack>
             <br/>
             <RadzenProgressBar Value="CalculateProgress()" ShowValue="true" />
+            <br/>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-12 text-center">
+                        <RadzenButton Click=@(goBack) Text="Ukončiť" ButtonStyle="ButtonStyle.Danger" />
+                    </div>
+                </div>
         </RadzenColumn>
     }
     else
@@ -81,11 +88,19 @@
 }
 else
 {
-    <h1>qq</h1>
+    <RadzenColumn class="align-items-center">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center vh-100">
+                <div class="col-12 text-center">
+                    <h1>Tento quiz si už urobil 🤗</h1>
+                    <RadzenButton Click=@(goBack) Text="Return to Home" ButtonStyle="ButtonStyle.Primary" />
+                </div>
+            </div>
+        </div>
+    </RadzenColumn>
 }
 
 @code {
-
     [Parameter] public string Id { get; set; }
 
     private bool _updateSuccessful = false;
@@ -136,7 +151,6 @@ else
 
                     // Save changes to the user
                     var result = await userManager.UpdateAsync(currentUser);
-                    QuizService.AddQuiz(Id);
                     if (result.Succeeded)
                     {
                         // Update was successful
@@ -186,13 +200,18 @@ else
         questionIndex = 0;
     }
 
+    private string write()
+    {
+        QuizService.AddQuiz(Id);
+        UpdateScoreAsync(score);
+        return "!";
+    }
+
     private void goBack()
     {
         switch (Id)
         {
             case "intro":
-                UpdateScoreAsync(score);
-                StateHasChanged();
                 NavigationManager.NavigateTo("/learn/intro");
                 break;
         }
