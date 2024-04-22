@@ -1,9 +1,8 @@
 ﻿@page "/learn/intro"
 
-@inject UserManager<ApplicationUser> UserManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject ILessonService LessonService
+@inject IQuizService QuizService
 
 <PageTitle>Úvod do C#</PageTitle>
 
@@ -23,22 +22,43 @@
         <ul>
             <li><strong>Univerzálnosť:</strong> C# možno použiť pre vývoj širokej škály aplikácií, od webových stránok po herné enginy.</li>
             <li><strong>Bohatý ekosystém:</strong> S C# získate prístup k bohatému ekosystému knižníc a nástrojov, ktoré uľahčujú vývoj.</li>
-            <li><strong>Vysoká dopyt na trhu práce:</strong> C# je žiadaným súborom zručností na trhu práce, čo znamená, že znalosť tohto jazyka môže otvoriť mnoho dverí v kariére.</li>
+            <li><strong>Vysoky dopyt na trhu práce:</strong> C# je žiadaným súborom zručností na trhu práce, čo znamená, že znalosť tohto jazyka môže otvoriť mnoho dverí v kariére.</li>
         </ul>
     </section>
 
+    @if (_isQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
 
-    <RadzenButton Click=@(nextLesson) Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    <RadzenButton Click="nextLesson" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    
 </div>
 
 @code {
+    private bool _isQuizAvailable;
 
-    private void nextLesson()
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadQuizAvailability();
+
+    }
+
+    private async Task LoadQuizAvailability()
+    {
+        await LessonService.AddLesson("intro");
+        _isQuizAvailable = await QuizService.IsQuizAvailable("intro");
+    }
+
+    private void Quiz()
     {
         NavigationManager.NavigateTo("q/intro");
     }
-    protected override async Task OnInitializedAsync()
+
+    private void nextLesson()
     {
-        LessonService.AddLesson("intro");
+        NavigationManager.NavigateTo("/");
     }
+
+
 }

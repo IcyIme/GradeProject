@@ -65,12 +65,12 @@ namespace GradeProject.Services
                     // Check if the current quiz is in the completed quiz list
                     if (currentUser.CompletedQuiz.Contains(quizId))
                     {
-                        return true; // Quiz is completed, hence unavailable
+                        return false; // Quiz is completed, hence unavailable
                     }
                 }
             }
 
-            return false; // Quiz is available
+            return true; // Quiz is available
         }
     }
 }
