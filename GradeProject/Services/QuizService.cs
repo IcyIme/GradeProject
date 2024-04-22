@@ -9,7 +9,8 @@ namespace GradeProject.Services
 {
     public interface IQuizService
     {
-        public Task AddQuiz(string QuizName);
+        Task AddQuiz(string quizName);
+        Task<bool> IsQuizAvailable(string quizId);
     }
 
     public class QuizService : IQuizService
@@ -17,13 +18,15 @@ namespace GradeProject.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public QuizService(UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
+        public QuizService(
+            UserManager<ApplicationUser> userManager,
+            AuthenticationStateProvider authenticationStateProvider)
         {
             _userManager = userManager;
             _authenticationStateProvider = authenticationStateProvider;
         }
 
-        public async Task AddQuiz(string QuizName)
+        public async Task AddQuiz(string quizName)
         {
             var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
@@ -34,19 +37,40 @@ namespace GradeProject.Services
 
                 if (applicationUser != null)
                 {
-                    // Check if the "intro" lesson has already been completed
-                    bool hasCompletedIntro = applicationUser.CompletedQuiz != null && applicationUser.CompletedQuiz.Contains(QuizName);
+                    // Check if the quiz has already been completed
+                    bool hasCompletedQuiz = applicationUser.CompletedQuiz != null && applicationUser.CompletedQuiz.Contains(quizName);
 
-                    // If "intro" lesson hasn't been completed yet, add it to CompletedQuiz
-                    if (!hasCompletedIntro)
+                    // If quiz hasn't been completed yet, add it to CompletedQuiz
+                    if (!hasCompletedQuiz)
                     {
-                        var updatedLessons = applicationUser.CompletedQuiz?.ToList() ?? new List<string>();
-                        updatedLessons.Add(QuizName);
-                        applicationUser.CompletedQuiz = updatedLessons.ToArray();
+                        var updatedQuizzes = applicationUser.CompletedQuiz?.ToList() ?? new List<string>();
+                        updatedQuizzes.Add(quizName);
+                        applicationUser.CompletedQuiz = updatedQuizzes.ToArray();
                         await _userManager.UpdateAsync(applicationUser);
                     }
                 }
             }
+        }
+
+        public async Task<bool> IsQuizAvailable(string quizId)
+        {
+            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var currentUser = await _userManager.GetUserAsync(user);
+                if (currentUser != null && currentUser.CompletedQuiz != null)
+                {
+                    // Check if the current quiz is in the completed quiz list
+                    if (currentUser.CompletedQuiz.Contains(quizId))
+                    {
+                        return true; // Quiz is completed, hence unavailable
+                    }
+                }
+            }
+
+            return false; // Quiz is available
         }
     }
 }

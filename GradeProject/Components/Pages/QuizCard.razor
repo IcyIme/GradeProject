@@ -89,7 +89,7 @@ else
 
     private async Task update()
     {
-        
+
         await UpdateScoreAsync(score);
     }
 
@@ -146,21 +146,7 @@ else
         LoadQuestionsAsync(Id);
         try
         {
-            var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user.Identity.IsAuthenticated)
-            {
-                var currentUser = await userManager.GetUserAsync(user);
-                if (currentUser != null && currentUser.CompletedQuiz != null)
-                {
-                    // Check if the current quiz is in the completed quiz list
-                    if (currentUser.CompletedQuiz.Contains(Id))
-                    {
-                        quizUnavailable = true;
-                    }
-                }
-            }
+            quizUnavailable = await QuizService.IsQuizAvailable("intro");
         }
         catch (Exception ex)
         {
