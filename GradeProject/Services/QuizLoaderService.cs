@@ -26,6 +26,9 @@ public class QuizLoaderService : IQuizLoaderService
             case "intro":
                 return AddIntroQuestions();
                 break;
+            case "instalation":
+                return AddInsQuestions();
+                break;
 
             default:
                 NavigationManager.NavigateTo("/notfound");
@@ -34,6 +37,8 @@ public class QuizLoaderService : IQuizLoaderService
 
         return null;
     }
+
+    
 
     private List<Question> AddIntroQuestions()
     {
@@ -81,5 +86,17 @@ public class QuizLoaderService : IQuizLoaderService
 
         // Add questions to the list
         return new List<Question> { q1, q2, q3, q4, q5 };
+    }
+
+    private List<Question> AddInsQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Nainstaloval si?",
+            Options = new List<string>() { "Ano", "Nie"},
+            Answer = "Ano"
+        };
+
+        return new List<Question> { q1 };
     }
 }

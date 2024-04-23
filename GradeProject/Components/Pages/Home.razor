@@ -84,7 +84,10 @@
             switch (GetLessons[GetLessons.Length - 1])
             {
                 case "intro":
-                    NavigationManager.NavigateTo("/learn/intro");
+                    NavigationManager.NavigateTo(UrlData.lectionUrlIntro);
+                    break;
+                case "instalation":
+                    NavigationManager.NavigateTo(UrlData.lectionUrlInstalation);
                     break;
                 default:
                     NavigationManager.NavigateTo("");

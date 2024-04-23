@@ -1,0 +1,79 @@
+﻿@page "/learn/instalation"
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+
+<PageTitle>Úvod do C#</PageTitle>
+
+<div class="container-sm">
+    <h1>Inštalácia Visual Studio IDE</h1>
+
+    <section>
+        <h2>Čo je Visual Studio IDE</h2>
+        <p>Visual Studio IDE je vývojové prostredie vyvinuté spoločnosťou Microsoft. Ponúka širokú škálu nástrojov a funkcií pre vývoj softvéru v rôznych programovacích jazykoch. Tu je postup, ako nainštalovať Visual Studio IDE:</p>
+    </section>
+    <section>
+        <h2>Pre Windows:</h2>
+        <p>Pre inštaláciu Visual Studio IDE na systéme Windows postupujte podľa týchto krokov:</p>
+        <ol>
+            <li>Navštívte oficiálnu webovú stránku Visual Studio na adrese <a href="https://visualstudio.microsoft.com/">https://visualstudio.microsoft.com/</a>.</li>
+            <li>Vyberte edíciu, ktorú chcete nainštalovať (napríklad Visual Studio Community, Professional alebo Enterprise).</li>
+            <li>Stiahnite si inštalačný súbor a spustite ho.</li>
+            <li>Postupujte podľa inštrukcií na obrazovke a dokončite inštaláciu.</li>
+        </ol>
+    </section>
+    <section>
+        <h2>Pre macOS:</h2>
+        <p>Pre inštaláciu Visual Studio IDE na systéme macOS postupujte podľa týchto krokov:</p>
+        <ol>
+            <li>Navštívte oficiálnu webovú stránku Visual Studio na adrese <a href="https://visualstudio.microsoft.com/">https://visualstudio.microsoft.com/</a>.</li>
+            <li>Vyberte edíciu, ktorú chcete nainštalovať (napríklad Visual Studio Community, Professional alebo Enterprise).</li>
+            <li>Stiahnite si inštalačný súbor a spustite ho.</li>
+            <li>Postupujte podľa inštrukcií na obrazovke a dokončite inštaláciu.</li>
+        </ol>
+        <video width="640" height="480" controls>
+            <source src="/Instalation.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
+
+    @if (_isQuizAvailable)
+    {
+            <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+            <RadzenButton Click="nextLesson" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+
+
+</div>
+
+@code {
+    private bool _isQuizAvailable;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadQuizAvailability();
+
+    }
+
+    private async Task LoadQuizAvailability()
+    {
+        await LessonService.AddLesson("instalation");
+        _isQuizAvailable = await QuizService.IsQuizAvailable("instalation");
+    }
+
+    private void Quiz()
+    {
+        NavigationManager.NavigateTo(UrlData.quizUrlInstalation);
+    }
+
+    private void nextLesson()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+
+}

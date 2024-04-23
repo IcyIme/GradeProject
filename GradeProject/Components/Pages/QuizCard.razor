@@ -43,7 +43,7 @@
                                     <text>Blahoželám</text>
                                     @write()
                                     <div class="quiz-header">
-                                        <b>Získal si @(score * 2) ✨ (stars)!</b>
+                                        <b>Získal si @(score * 2) ✨!</b>
                                     </div>
                                 }
                                 else
@@ -114,7 +114,7 @@ else
         Questions = await QuizLoaderService.LoadQuestionsAsync(Id);
         try
         {
-            _quizAvailable = await QuizService.IsQuizAvailable("intro");
+            _quizAvailable = await QuizService.IsQuizAvailable(Id);
         }
         catch (Exception ex)
         {
@@ -212,7 +212,11 @@ else
         switch (Id)
         {
             case "intro":
-                NavigationManager.NavigateTo("/learn/intro");
+                NavigationManager.NavigateTo(UrlData.lectionUrlIntro);
+                break;
+                
+            case "instalation":
+                NavigationManager.NavigateTo(UrlData.lectionUrlInstalation);
                 break;
         }
     }

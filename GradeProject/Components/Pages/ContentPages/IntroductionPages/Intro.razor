@@ -16,11 +16,12 @@
     <section>
         <h2>História jazyka C#</h2>
         <p>C# bol prvýkrát predstavený v roku 2000 spoločnosťou Microsoft ako súčasť ich platformy .NET. Odvtedy prešiel niekoľkými verziami, pričom najnovší je C# 12, ktorý prináša nové funkcie a vylepšenia pre vývojárov.</p>
-        <RadzenImage Path="img/IntroImages/C_Sharp_Logo_2023.svg.png" Style="width: 10rem;" AlternateText="C# LOGO" />
+        <RadzenImage Path="img/IntroImages/C_Sharp_Logo_2023.svg.png" Style="width: 8rem;" AlternateText="C# LOGO" />
         </section>
     <section>
         <h2>Prečo sa učiť C#?</h2>
         <ul>
+            <p>C # sa používa na vývoj webových aplikácií, desktopových aplikácií, mobilných aplikácií, hier a oveľa viac.</p>
             <li><strong>Univerzálnosť:</strong> C# možno použiť pre vývoj širokej škály aplikácií, od webových stránok po herné enginy.</li>
             <li><strong>Bohatý ekosystém:</strong> S C# získate prístup k bohatému ekosystému knižníc a nástrojov, ktoré uľahčujú vývoj.</li>
             <li><strong>Vysoky dopyt na trhu práce:</strong> C# je žiadaným súborom zručností na trhu práce, čo znamená, že znalosť tohto jazyka môže otvoriť mnoho dverí v kariére.</li>
@@ -56,12 +57,12 @@
 
     private void Quiz()
     {
-        NavigationManager.NavigateTo("q/intro");
+        NavigationManager.NavigateTo(UrlData.quizUrlIntro);
     }
 
     private void nextLesson()
     {
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo(UrlData.lectionUrlInstalation);
     }
 
 
