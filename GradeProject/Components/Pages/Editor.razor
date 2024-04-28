@@ -12,7 +12,6 @@
     <StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
 </div>
 
-
 <button @onclick="ExecuteCode">Execute Code</button>
 
 @if (!string.IsNullOrEmpty(output))
@@ -47,7 +46,7 @@
     [Inject]
     private ICSharpExecutorService ExecutorService { get; set; }
 
-    private void ExecuteCode()
+    private async Task ExecuteCode()
     {
         string expectedOutput = "Hello, world!";
         output = ExecutorService.ExecuteCSharpCode(code);
