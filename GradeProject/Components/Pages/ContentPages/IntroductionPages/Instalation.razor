@@ -1,5 +1,7 @@
 ﻿@page "/learn/instalation"
 
+@inherits LearnPageBase
+
 @inject NavigationManager NavigationManager
 @inject ILessonService LessonService
 @inject IQuizService QuizService
@@ -38,42 +40,31 @@
         </video>
     </section>
 
-    @if (_isQuizAvailable)
+    @if (IsQuizAvailable)
     {
             <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
     }
     else
     {
-            <RadzenButton Click="nextLesson" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+            <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
     }
 
 
 </div>
 
 @code {
-    private bool _isQuizAvailable;
-
-    protected override async Task OnInitializedAsync()
+    protected override string GetLessonName()
     {
-        await LoadQuizAvailability();
-
-    }
-
-    private async Task LoadQuizAvailability()
-    {
-        await LessonService.AddLesson("instalation");
-        _isQuizAvailable = await QuizService.IsQuizAvailable("instalation");
+        return "instalation";
     }
 
     private void Quiz()
     {
-        NavigationManager.NavigateTo(UrlData.quizUrlInstalation);
+        NavigateToQuiz(UrlData.quizUrlInstalation);
     }
 
-    private void nextLesson()
+    private void NextLection()
     {
-        NavigationManager.NavigateTo("/");
+        NavigateToNextLesson(UrlData.home);
     }
-
-
 }
