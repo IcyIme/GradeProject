@@ -5,21 +5,28 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace GradeProject.Services
 {
     public interface ICSharpExecutorService
     {
-        string ExecuteCSharpCode(string code);
+        string ExecuteCSharpCode(string code, List<string> inputs);
     }
 
     public class CSharpExecutorService : ICSharpExecutorService
     {
-        public string ExecuteCSharpCode(string code)
+        public string ExecuteCSharpCode(string code, List<string> inputs)
         {
             if (string.IsNullOrWhiteSpace(code))
             {
                 return "No code provided.";
+            }
+
+            // Replace each Console.ReadLine() with the corresponding input value
+            for (int i = 0; i < inputs.Count; i++)
+            {
+                code = ReplaceFirst(code, "Console.ReadLine()", $"\"{inputs[i]}\"");
             }
 
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
@@ -66,6 +73,17 @@ namespace GradeProject.Services
                     return output;
                 }
             }
+        }
+
+        // Helper method to replace the first occurrence of a substring
+        private string ReplaceFirst(string text, string search, string replace)
+        {
+            int pos = text.IndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
         // Helper method to capture console output

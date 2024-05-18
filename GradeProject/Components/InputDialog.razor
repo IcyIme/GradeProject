@@ -1,0 +1,35 @@
+﻿@page "/input-dialog"
+@inject DialogService DialogService
+
+<RadzenTemplateForm Data="@inputModel" TItem="InputModel">
+	<ChildContent>
+		<div class="p-2">
+			<RadzenLabel Text="@(Prompt ?? "Enter input:")" />
+			<RadzenTextBox @bind-Value="inputModel.Input" Name="input" Style="width:100%" />
+		</div>
+		<div class="p-2">
+			<RadzenButton Text="OK" Click="Submit" Style="margin-right: 5px;" />
+			<RadzenButton Text="Cancel" Click="Cancel" ButtonStyle="ButtonStyle.Secondary" />
+		</div>
+	</ChildContent>
+</RadzenTemplateForm>
+
+@code {
+	[Parameter] public string Prompt { get; set; }
+	private InputModel inputModel = new InputModel();
+
+	class InputModel
+	{
+		public string Input { get; set; }
+	}
+
+	void Submit()
+	{
+		DialogService.Close(inputModel.Input);
+	}
+
+	void Cancel()
+	{
+		DialogService.Close(null);
+	}
+}
