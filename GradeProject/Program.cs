@@ -21,6 +21,7 @@ builder.Services.AddScoped<ICSharpExecutorService, CSharpExecutorService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuizLoaderService, QuizLoaderService>();
+builder.Services.AddScoped<INavigationService, NavigationService>();
 
 builder.Services.AddAuthentication(options =>
     {

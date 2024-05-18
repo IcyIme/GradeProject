@@ -25,7 +25,7 @@ namespace GradeProject.Pages
 
         protected virtual string GetLessonName()
         {
-            return "default"; // Implement in derived classes to provide specific lesson names
+            return "default";
         }
 
         private async Task LoadQuizAvailability(string lessonName)

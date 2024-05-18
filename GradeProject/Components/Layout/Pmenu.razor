@@ -1,9 +1,9 @@
 ﻿@inject NavigationManager NavigationManager
 <AuthorizeView>
     <RadzenRow >
-        <div class="d-flex justify-content-between align-items-center">
-            <RadzenLabel class="hide-label" Text="@context.User.Identity?.Name"/>
-        </div>
+	    <div class="d-flex justify-content-between align-items-center">
+		    @* <RadzenLabel class="hide-label" Text="@context.User.Identity?.Name"/> *@
+	    </div>
         <RadzenProfileMenu>
             <Template>
                 <RadzenGravatar Email="@context.User.Identity?.Name">

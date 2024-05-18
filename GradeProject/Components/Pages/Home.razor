@@ -3,7 +3,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-
+@inject INavigationService NavigationService
 
 @attribute [Authorize]
 
@@ -81,18 +81,7 @@
         }
         else
         {
-            switch (GetLessons[GetLessons.Length - 1])
-            {
-                case "intro":
-                    NavigationManager.NavigateTo(UrlData.lectionUrlIntro);
-                    break;
-                case "instalation":
-                    NavigationManager.NavigateTo(UrlData.lectionUrlInstalation);
-                    break;
-                default:
-                    NavigationManager.NavigateTo("");
-                    break;
-            }
+	        NavigationService.Navigator(GetLessons[GetLessons.Length - 1]);
         }
     }
 

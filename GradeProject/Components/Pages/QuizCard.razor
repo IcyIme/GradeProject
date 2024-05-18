@@ -9,6 +9,7 @@
 @inject IQuizService QuizService;
 @inject NavigationManager NavigationManager
 @inject IQuizLoaderService QuizLoaderService
+@inject INavigationService NavigationService
 
 <PageTitle>Q</PageTitle>
 @if (_quizAvailable)
@@ -209,16 +210,7 @@ else
 
     private void goBack()
     {
-        switch (Id)
-        {
-            case "intro":
-                NavigationManager.NavigateTo(UrlData.lectionUrlIntro);
-                break;
-                
-            case "instalation":
-                NavigationManager.NavigateTo(UrlData.lectionUrlInstalation);
-                break;
-        }
+        NavigationService.Navigator(Id);
     }
 
 }
