@@ -1,6 +1,7 @@
 ﻿@page "/repl/playground/0a1"
 @using GradeProject.Services
 @using Radzen
+@attribute [Authorize]
 @inject IJSRuntime JSRuntime
 @inject DialogService DialogService
 
@@ -54,9 +55,21 @@
     private async Task ExecuteCode()
     {
         userInputs.Clear();
-        await HandleInputDialog(code);
+
+        // Find the number of Console.ReadLine() occurrences
+        int readLineCount = code.Split(new[] { "Console.ReadLine()" }, StringSplitOptions.None).Length - 1;
+
+        // Prompt for inputs sequentially
+        for (int i = 0; i < readLineCount; i++)
+        {
+            var result = await DialogService.OpenAsync<InputDialog>($"Enter input for Console.ReadLine() #{i + 1}",
+                new Dictionary<string, object> { { "Prompt", $"Enter input for Console.ReadLine() #{i + 1}:" } });
+            userInputs.Add(result as string);
+        }
+
         string expectedOutput = "Hello, world!";
         output = ExecutorService.ExecuteCSharpCode(code, userInputs);
+
         if (output.Trim() == expectedOutput)
         {
             evaluationResult = "Code execution successful!";
@@ -64,21 +77,6 @@
         else
         {
             evaluationResult = "Code execution failed. Expected output: " + expectedOutput;
-        }
-    }
-
-    private async Task HandleInputDialog(string code)
-    {
-        int readLineIndex = code.IndexOf("Console.ReadLine()");
-        if (readLineIndex != -1)
-        {
-            string prompt = $"Enter input for Console.ReadLine() #{userInputs.Count + 1}:";
-            var result = await DialogService.OpenAsync<InputDialog>(prompt);
-            if (result != null)
-            {
-                userInputs.Add(result.ToString());
-                await HandleInputDialog(code.Substring(readLineIndex + 1));
-            }
         }
     }
 }

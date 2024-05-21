@@ -1,6 +1,7 @@
 ﻿@page "/learn/intro"
 
 @inherits LearnPageBase
+@attribute [Authorize]
 
 @inject NavigationManager NavigationManager
 @inject ILessonService LessonService
