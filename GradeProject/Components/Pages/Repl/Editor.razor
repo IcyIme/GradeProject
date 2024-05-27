@@ -1,4 +1,4 @@
-﻿@page "/repl/playground/0a1"
+﻿@page "/repl/playground"
 @using GradeProject.Services
 @using Radzen
 @attribute [Authorize]
@@ -10,6 +10,12 @@
         height: 50vh; /* Set the height to 50% of the viewport height */
         width: 100%; /* Set the width to 100% */
     }
+    .console{
+        min-height: 20vh;
+        width: 100%;
+        color: white;
+        background-color: #262526;
+    }
 </style>
 
 <div class="h-100 w-100">
@@ -17,12 +23,14 @@
 </div>
 
 <button @onclick="ExecuteCode">Execute Code</button>
+<div class="console">
+	@if (!string.IsNullOrEmpty(output))
+	{
+		<pre>@output</pre>
+		<p>@evaluationResult</p>
+	}
+</div>
 
-@if (!string.IsNullOrEmpty(output))
-{
-    <pre>@output</pre>
-    <p>@evaluationResult</p>
-}
 
 <RadzenDialog />
 
