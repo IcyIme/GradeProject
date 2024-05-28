@@ -1,0 +1,46 @@
+﻿<!-- Components/CodeEditor.razor -->
+@page "/editor"
+@using Microsoft.AspNetCore.Components.Web
+
+<StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" Style="width:100%; height:500px;" />
+
+@code {
+	private StandaloneCodeEditor myEditor;
+
+	private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+	{
+		return new StandaloneEditorConstructionOptions
+		{
+			AutomaticLayout = true,
+			Language = "csharp",
+			Theme = "vs-dark",
+			Value = code,
+		};
+	}
+
+
+	private string code = "using System;\npublic class Program { public static void Main() { Console.WriteLine(\"Hello, World!\"); } }";
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await myEditor.SetValue(code);
+		}
+	}
+
+	private async void HandleContentChange()
+	{
+		code = await myEditor.GetValue();
+	}
+
+	public async Task<string> GetCode()
+	{
+		return await myEditor.GetValue();
+	}
+
+	public async Task SetCode(string newCode)
+	{
+		await myEditor.SetValue(newCode);
+	}
+}

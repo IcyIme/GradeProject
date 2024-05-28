@@ -1,0 +1,22 @@
+﻿<!-- Pages/ProblemList.razor -->
+@page "/problems"
+@inject ProblemService ProblemService
+
+<h3>Problem List</h3>
+<table class="table">
+	<thead>
+	<tr>
+		<th>Title</th>
+		<th>Difficulty</th>
+	</tr>
+	</thead>
+	<tbody>
+	@foreach (var problem in ProblemService.GetProblems())
+	{
+		<tr>
+			<td><a href="problems/@problem.Id">@problem.Title</a></td>
+			<td>@problem.Difficulty</td>
+		</tr>
+	}
+	</tbody>
+</table>

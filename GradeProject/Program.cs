@@ -1,5 +1,6 @@
 using GradeProject.Components;
 using GradeProject.Components.Account;
+using GradeProject.Components.Pages.Leet;
 using GradeProject.Data;
 using GradeProject.Services;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -22,6 +23,7 @@ builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuizLoaderService, QuizLoaderService>();
 builder.Services.AddScoped<INavigationService, NavigationService>();
+builder.Services.AddSingleton<ProblemService>();
 
 builder.Services.AddAuthentication(options =>
     {

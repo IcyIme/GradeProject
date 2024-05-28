@@ -1,0 +1,70 @@
+﻿@page "/solve/{id:int}"
+@inject ProblemService ProblemService
+@inject ICSharpExecutorService ExecutorService
+@attribute [Authorize]
+
+@using GradeProject.Data.Models
+
+<h3>@problem.Title</h3>
+<p>@problem.Description</p>
+<p><strong>Difficulty:</strong> @problem.Difficulty</p>
+
+
+<style>
+    #myEditor {
+        height: 50vh; /* Set the height to 50% of the viewport height */
+        width: 100%; /* Set the width to 100% */
+    }
+</style>
+
+<div class="h-100 w-100">
+	<StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
+</div>
+
+<button @onclick="CompileAndRun">Run Code</button>
+
+<div>
+	<h4>Output:</h4>
+	<pre>@output</pre>
+</div>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	private Problem problem;
+	private CodeEditor codeEditor;
+	private List<string> inputs = new List<string>(); // Placeholder for inputs if needed
+
+	protected override void OnParametersSet()
+	{
+		problem = ProblemService.GetProblemById(Id);
+	}
+
+	private async Task CompileAndRun()
+	{
+		output = ExecutorService.ExecuteCSharpCode(code, inputs);
+	}
+
+	private StandaloneCodeEditor myEditor;
+	private async Task HandleContentChange()
+	{
+		code = await myEditor.GetValue();
+	}
+
+	private string code = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, world!\");\n    }\n}";
+	private string output = "";
+	private string evaluationResult = "";
+
+
+	private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+	{
+		return new StandaloneEditorConstructionOptions
+		{
+			AutomaticLayout = true,
+			Language = "csharp",
+			Theme = "vs-dark",
+			Value = code,
+		};
+	}
+}
