@@ -43,7 +43,7 @@
 
 	private async Task CompileAndRun()
 	{
-		output = ExecutorService.ExecuteCSharpCode(code, inputs);
+		output = await ExecutorService.ExecuteCSharpCodeAsync(code, inputs);
 	}
 
 	private StandaloneCodeEditor myEditor;

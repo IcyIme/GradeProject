@@ -6,17 +6,18 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GradeProject.Services
 {
     public interface ICSharpExecutorService
     {
-        string ExecuteCSharpCode(string code, List<string> inputs);
+        Task<string> ExecuteCSharpCodeAsync(string code, List<string> inputs);
     }
 
     public class CSharpExecutorService : ICSharpExecutorService
     {
-        public string ExecuteCSharpCode(string code, List<string> inputs)
+        public async Task<string> ExecuteCSharpCodeAsync(string code, List<string> inputs)
         {
             if (string.IsNullOrWhiteSpace(code))
             {
@@ -65,7 +66,7 @@ namespace GradeProject.Services
                     // Invoke the method
                     Type type = assembly.GetType("Program");
                     MethodInfo mainMethod = type.GetMethod("Main");
-                    string output = CaptureConsoleOutput(() =>
+                    string output = await CaptureConsoleOutputAsync(() =>
                     {
                         mainMethod.Invoke(null, null);
                     });
@@ -86,13 +87,15 @@ namespace GradeProject.Services
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
-        // Helper method to capture console output
-        private string CaptureConsoleOutput(Action action)
+        // Helper method to capture console output asynchronously
+        private async Task<string> CaptureConsoleOutputAsync(Action action)
         {
             using (var writer = new StringWriter())
             {
+                TextWriter originalOut = Console.Out;
                 Console.SetOut(writer);
-                action.Invoke();
+                await Task.Run(action); // Run the action asynchronously
+                Console.SetOut(originalOut);
                 return writer.ToString();
             }
         }

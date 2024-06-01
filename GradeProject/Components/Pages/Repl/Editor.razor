@@ -13,32 +13,32 @@
 </style>
 
 <div class="h-100 w-100">
-    <StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
+	<StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
 </div>
 
 <button @onclick="ExecuteCode">Execute Code</button>
 <div class="console">
-	@if (!string.IsNullOrEmpty(output))
-	{
-		<pre>@output</pre>
-		<p>@evaluationResult</p>
-	}
+    @if (isExecuting)
+    {
+        <pre>Waiting for execution...</pre>
+    }
+    @if (!string.IsNullOrEmpty(output))
+    {
+        <pre>@output</pre>
+        <p>@evaluationResult</p>
+    }
 </div>
-
-
-<RadzenDialog />
+<RadzenButton Text="Busy Dialog with markup" ButtonStyle="ButtonStyle.Secondary" Click=ShowBusyDialog />
 
 @code {
     private StandaloneCodeEditor myEditor;
-    private async Task HandleContentChange()
-    {
-        code = await myEditor.GetValue();
-    }
-
-    private string code = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, world!\");\n    }\n}";
+    private string initialCode = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, world!\");\n    }\n}";
+    private string code;
     private List<string> userInputs = new List<string>();
     private string output = "";
     private string evaluationResult = "";
+
+    private bool isExecuting = false;
 
     [Inject]
     private ICSharpExecutorService ExecutorService { get; set; }
@@ -54,10 +54,21 @@
             };
     }
 
+    protected override void OnInitialized()
+    {
+        code = initialCode;
+    }
+
+    private async Task HandleContentChange()
+    {
+        code = await myEditor.GetValue();
+    }
+
     private async Task ExecuteCode()
     {
+	    ShowBusyDialog();
         userInputs.Clear();
-
+        await Task.Delay(4000);
         // Find the number of Console.ReadLine() occurrences
         int readLineCount = code.Split(new[] { "Console.ReadLine()" }, StringSplitOptions.None).Length - 1;
 
@@ -70,7 +81,7 @@
         }
 
         string expectedOutput = "Hello, world!";
-        output = ExecutorService.ExecuteCSharpCode(code, userInputs);
+        output = await ExecutorService.ExecuteCSharpCodeAsync(code, userInputs);
 
         if (output.Trim() == expectedOutput)
         {
@@ -80,5 +91,50 @@
         {
             evaluationResult = "Code execution failed. Expected output: " + expectedOutput;
         }
+
+        DialogService.Close();
+    }
+
+    async Task ShowBusyDialog()
+    {
+	    InvokeAsync(async () =>
+	    {
+			if (!string.IsNullOrEmpty(output))
+				DialogService.Close();
+	    });
+
+	    await BusyDialog();
+    }
+
+    // Busy dialog from markup
+    async Task BusyDialog()
+    {
+	    await DialogService.OpenAsync("", ds =>
+		    @<RadzenStack AlignItems="AlignItems.Center" Gap="2rem" Class="rz-p-12">
+			     <RadzenImage Path="/img/Gifs/wired-lineal-186-puzzle.gif" Style="width: 200px;" AlternateText="community" /> 
+			    @*<iframe src="https://giphy.com/embed/3ohhwgzypC7LCONoeA" width="200" height="200" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe*@
+			    <RadzenText TextStyle="TextStyle.H6">Executing code, please wait...</RadzenText>
+	    </RadzenStack>, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
+    }
+
+    // Busy dialog from string
+    async Task BusyDialog(string message)
+    {
+	    await DialogService.OpenAsync("", ds =>
+	    {
+		    RenderFragment content = b =>
+		    {
+			    b.OpenElement(0, "RadzenRow");
+
+			    b.OpenElement(1, "RadzenColumn");
+			    b.AddAttribute(2, "Size", "12");
+
+			    b.AddContent(3, message);
+
+			    b.CloseElement();
+			    b.CloseElement();
+		    };
+		    return content;
+	    }, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
     }
 }
