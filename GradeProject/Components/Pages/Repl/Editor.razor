@@ -5,6 +5,8 @@
 @inject IJSRuntime JSRuntime
 @inject DialogService DialogService
 
+<PageTitle>GRADE REPL 1.0</PageTitle>
+
 <style>
     #myEditor {
         height: 50vh; /* Set the height to 50% of the viewport height */
@@ -16,7 +18,7 @@
 	<StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
 </div>
 
-<button @onclick="ExecuteCode">Execute Code</button>
+<RadzenButton Text="Compile" Click="ExecuteCode"></RadzenButton>
 <div class="console">
     @if (isExecuting)
     {
@@ -28,7 +30,6 @@
         <p>@evaluationResult</p>
     }
 </div>
-<RadzenButton Text="Busy Dialog with markup" ButtonStyle="ButtonStyle.Secondary" Click=ShowBusyDialog />
 
 @code {
     private StandaloneCodeEditor myEditor;
@@ -37,7 +38,9 @@
     private List<string> userInputs = new List<string>();
     private string output = "";
     private string evaluationResult = "";
-
+    
+    Random random = new Random();
+    
     private bool isExecuting = false;
 
     [Inject]
@@ -68,7 +71,7 @@
     {
 	    ShowBusyDialog();
         userInputs.Clear();
-        await Task.Delay(4000);
+        await Task.Delay(random.Next(1000, 4000));
         // Find the number of Console.ReadLine() occurrences
         int readLineCount = code.Split(new[] { "Console.ReadLine()" }, StringSplitOptions.None).Length - 1;
 

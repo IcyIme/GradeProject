@@ -2,55 +2,77 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GradeProject.Services
 {
     public interface ICSharpExecutorService
     {
-        Task<string> ExecuteCSharpCodeAsync(string code, List<string> inputs);
+        Task<string> ExecuteCSharpCodeAsync(string code, List<string> inputs, int timeoutMilliseconds = 5000);
     }
 
     public class CSharpExecutorService : ICSharpExecutorService
     {
-        public async Task<string> ExecuteCSharpCodeAsync(string code, List<string> inputs)
+        public async Task<string> ExecuteCSharpCodeAsync(string code, List<string> inputs, int timeoutMilliseconds = 5000)
         {
             if (string.IsNullOrWhiteSpace(code))
             {
                 return "No code provided.";
             }
 
-            // Replace each Console.ReadLine() with the corresponding input value
             for (int i = 0; i < inputs.Count; i++)
             {
                 code = ReplaceFirst(code, "Console.ReadLine()", $"\"{inputs[i]}\"");
             }
 
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var sandbox = AppDomain.CreateDomain("Sandbox");
+            var executor = (SandboxExecutor)sandbox.CreateInstanceAndUnwrap(
+                typeof(SandboxExecutor).Assembly.FullName,
+                typeof(SandboxExecutor).FullName);
 
-            // Define compilation options
-            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+            var result = executor.ExecuteCSharpCode(code, timeoutMilliseconds);
 
-            // Add metadata references for all required assemblies
-            MetadataReference[] references = AppDomain.CurrentDomain.GetAssemblies()
+            AppDomain.Unload(sandbox);
+
+            return await result;
+        }
+
+        private string ReplaceFirst(string text, string search, string replace)
+        {
+            int pos = text.IndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
+    }
+
+    public class SandboxExecutor : MarshalByRefObject
+    {
+        public async Task<string> ExecuteCSharpCode(string code, int timeoutMilliseconds)
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+
+            var references = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
                 .Select(a => MetadataReference.CreateFromFile(a.Location))
                 .ToArray();
 
-            // Compile the code
-            CSharpCompilation compilation = CSharpCompilation.Create("DynamicCode")
-                                                             .WithOptions(compilationOptions)
-                                                             .AddReferences(references)
-                                                             .AddSyntaxTrees(syntaxTree);
+            var compilation = CSharpCompilation.Create("DynamicCode")
+                                                .WithOptions(compilationOptions)
+                                                .AddReferences(references)
+                                                .AddSyntaxTrees(syntaxTree);
 
-            // Generate the assembly
             using (var ms = new MemoryStream())
             {
-                EmitResult result = compilation.Emit(ms);
+                var result = compilation.Emit(ms);
 
                 if (!result.Success)
                 {
@@ -61,42 +83,56 @@ namespace GradeProject.Services
                 else
                 {
                     ms.Seek(0, SeekOrigin.Begin);
-                    Assembly assembly = Assembly.Load(ms.ToArray());
+                    var assembly = Assembly.Load(ms.ToArray());
 
-                    // Invoke the method
-                    Type type = assembly.GetType("Program");
-                    MethodInfo mainMethod = type.GetMethod("Main");
-                    string output = await CaptureConsoleOutputAsync(() =>
+                    var type = assembly.GetType("Program");
+                    var mainMethod = type.GetMethod("Main");
+
+                    if (mainMethod == null)
                     {
-                        mainMethod.Invoke(null, null);
-                    });
+                        return "No Main method found in the code.";
+                    }
+
+                    var cts = new CancellationTokenSource();
+                    cts.CancelAfter(timeoutMilliseconds);
+
+                    string output;
+                    try
+                    {
+                        output = await CaptureConsoleOutputWithTimeoutAsync(() =>
+                        {
+                            mainMethod.Invoke(null, null);
+                        }, cts.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        output = "Execution timed out.";
+                    }
 
                     return output;
                 }
             }
         }
 
-        // Helper method to replace the first occurrence of a substring
-        private string ReplaceFirst(string text, string search, string replace)
-        {
-            int pos = text.IndexOf(search);
-            if (pos < 0)
-            {
-                return text;
-            }
-            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
-        }
-
-        // Helper method to capture console output asynchronously
-        private async Task<string> CaptureConsoleOutputAsync(Action action)
+        private async Task<string> CaptureConsoleOutputWithTimeoutAsync(Action action, CancellationToken cancellationToken)
         {
             using (var writer = new StringWriter())
             {
                 TextWriter originalOut = Console.Out;
                 Console.SetOut(writer);
-                await Task.Run(action); // Run the action asynchronously
+
+                var task = Task.Run(action, cancellationToken);
+                await Task.WhenAny(task, Task.Delay(Timeout.Infinite, cancellationToken));
+
                 Console.SetOut(originalOut);
-                return writer.ToString();
+                if (task.IsCompleted)
+                {
+                    return writer.ToString();
+                }
+                else
+                {
+                    throw new OperationCanceledException();
+                }
             }
         }
     }
