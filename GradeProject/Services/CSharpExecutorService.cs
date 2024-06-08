@@ -2,12 +2,12 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace GradeProject.Services
 {
@@ -30,49 +30,22 @@ namespace GradeProject.Services
                 code = ReplaceFirst(code, "Console.ReadLine()", $"\"{inputs[i]}\"");
             }
 
-            var sandbox = AppDomain.CreateDomain("Sandbox");
-            var executor = (SandboxExecutor)sandbox.CreateInstanceAndUnwrap(
-                typeof(SandboxExecutor).Assembly.FullName,
-                typeof(SandboxExecutor).FullName);
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
+            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
-            var result = executor.ExecuteCSharpCode(code, timeoutMilliseconds);
-
-            AppDomain.Unload(sandbox);
-
-            return await result;
-        }
-
-        private string ReplaceFirst(string text, string search, string replace)
-        {
-            int pos = text.IndexOf(search);
-            if (pos < 0)
-            {
-                return text;
-            }
-            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
-        }
-    }
-
-    public class SandboxExecutor : MarshalByRefObject
-    {
-        public async Task<string> ExecuteCSharpCode(string code, int timeoutMilliseconds)
-        {
-            var syntaxTree = CSharpSyntaxTree.ParseText(code);
-            var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
-
-            var references = AppDomain.CurrentDomain.GetAssemblies()
+            MetadataReference[] references = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
                 .Select(a => MetadataReference.CreateFromFile(a.Location))
                 .ToArray();
 
-            var compilation = CSharpCompilation.Create("DynamicCode")
-                                                .WithOptions(compilationOptions)
-                                                .AddReferences(references)
-                                                .AddSyntaxTrees(syntaxTree);
+            CSharpCompilation compilation = CSharpCompilation.Create("DynamicCode")
+                                                             .WithOptions(compilationOptions)
+                                                             .AddReferences(references)
+                                                             .AddSyntaxTrees(syntaxTree);
 
             using (var ms = new MemoryStream())
             {
-                var result = compilation.Emit(ms);
+                EmitResult result = compilation.Emit(ms);
 
                 if (!result.Success)
                 {
@@ -83,10 +56,10 @@ namespace GradeProject.Services
                 else
                 {
                     ms.Seek(0, SeekOrigin.Begin);
-                    var assembly = Assembly.Load(ms.ToArray());
+                    Assembly assembly = Assembly.Load(ms.ToArray());
 
-                    var type = assembly.GetType("Program");
-                    var mainMethod = type.GetMethod("Main");
+                    Type type = assembly.GetType("Program");
+                    MethodInfo mainMethod = type.GetMethod("Main");
 
                     if (mainMethod == null)
                     {
@@ -106,12 +79,23 @@ namespace GradeProject.Services
                     }
                     catch (OperationCanceledException)
                     {
+                        // Notify the Blazor page about the timeout
                         output = "Execution timed out.";
                     }
 
                     return output;
                 }
             }
+        }
+
+        private string ReplaceFirst(string text, string search, string replace)
+        {
+            int pos = text.IndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
         private async Task<string> CaptureConsoleOutputWithTimeoutAsync(Action action, CancellationToken cancellationToken)
