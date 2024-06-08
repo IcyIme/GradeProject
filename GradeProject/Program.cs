@@ -1,3 +1,4 @@
+using Blazor.Components;
 using GradeProject.Components;
 using GradeProject.Components.Account;
 using GradeProject.Components.Pages.Leet;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,7 @@ builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuizLoaderService, QuizLoaderService>();
 builder.Services.AddScoped<INavigationService, NavigationService>();
 builder.Services.AddSingleton<ProblemService>();
+builder.Services.AddCommandLine();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -67,7 +70,7 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
-
+app.UseCommandLine(Environment.UserDomainName);
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

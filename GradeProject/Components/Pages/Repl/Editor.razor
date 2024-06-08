@@ -1,8 +1,5 @@
 ﻿@page "/repl/playground"
-@using GradeProject.Services
-@using Radzen
 @attribute [Authorize]
-@inject IJSRuntime JSRuntime
 @inject DialogService DialogService
 
 <PageTitle>GRADE REPL 1.0</PageTitle>
@@ -30,6 +27,8 @@
         <p>@evaluationResult</p>
     }
 </div>
+
+
 
 @code {
     private StandaloneCodeEditor myEditor;
