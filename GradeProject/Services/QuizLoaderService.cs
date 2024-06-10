@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using GradeProject.Data.Models;
+﻿using GradeProject.Data.Models;
 using Microsoft.AspNetCore.Components;
 
 public interface IQuizLoaderService
@@ -20,7 +17,6 @@ public class QuizLoaderService : IQuizLoaderService
 
     public async Task<List<Question>> LoadQuestionsAsync(string id)
     {
-
         switch (id)
         {
             case "intro":
@@ -34,7 +30,6 @@ public class QuizLoaderService : IQuizLoaderService
                 NavigationManager.NavigateTo("/notfound");
                 break;
         }
-
         return null;
     }
 

@@ -154,3 +154,8 @@ h1:focus {
     padding: 20px;
     border-radius: 20px;
 }
+
+imagebackgound{
+    background-image:url(Background/bg2.jpg);
+    background-size: cover;
+}
