@@ -1,13 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
-using System;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace GradeProject.Services
 {

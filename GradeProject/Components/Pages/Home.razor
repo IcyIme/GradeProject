@@ -14,19 +14,22 @@
         @if (Profile != null)
         {
             <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="h-100">
-                <RadzenRow>
-                    <RadzenColumn>
-                        <div class="mx-auto pfp">
-                            <RadzenGravatar Email="@Profile.Email" class="h-100 w-100" />
-                        </div>
-                        <h1 class="text-center"><b>Ahoj, @Profile.FullName</b></h1>
-                        <h4 class="text-center">✨<b>@Profile.Score</b> Stars</h4>
-                        <br/>
-                    </RadzenColumn>
-                </RadzenRow>
-                <RadzenButton Click=@(onClickRedirect) Style="width: 260px; border-radius: 10px">@ButtonLessonText()</RadzenButton>
-                </RadzenStack>
+                <div class="bg">
+                    <RadzenRow>
+                        <RadzenColumn Style="text-align: center; border-radius: 100px; padding: 20px">
+                            <div class="mx-auto pfp">
+                                <RadzenGravatar Email="@Profile.Email" class="h-100 w-100" />
+                            </div>
+                            <h1 class="text-center"><b>Ahoj, @Profile.FullName</b></h1>
+                            <h4 class="text-center">✨<b>@Profile.Score</b> Stars</h4>
+                            <br/>
+                            <RadzenButton Click=@(onClickRedirect) Style="width: 260px; border-radius: 10px; text-align: center">@ButtonLessonText()</RadzenButton>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </div>
+            </RadzenStack>
             <br />
+            <div class="bg">
             <h3 class="text-center">Leaderboard</h3>
             <table class="table table-striped">
                 <thead>
@@ -47,6 +50,7 @@
                 }
                 </tbody>
             </table>
+            </div>
         }
         else
         {

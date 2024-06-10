@@ -1,4 +1,4 @@
-﻿@page "/learn/intro"
+@page "/learn/intro"
 
 @inherits LearnPageBase
 @attribute [Authorize]
@@ -10,6 +10,7 @@
 <PageTitle>Úvod do C#</PageTitle>
 
 <div class="container-sm">
+<div class="bgtext">
     <h1>Úvod do C#</h1>
 
     <section>
@@ -30,7 +31,6 @@
             <li><strong>Vysoky dopyt na trhu práce:</strong> C# je žiadaným súborom zručností na trhu práce, čo znamená, že znalosť tohto jazyka môže otvoriť mnoho dverí v kariére.</li>
         </ul>
     </section>
-
     @if (IsQuizAvailable)
     {
         <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
@@ -39,8 +39,7 @@
     {
         <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
     }
-    
-    
+</div> 
 </div>
 
 @code {

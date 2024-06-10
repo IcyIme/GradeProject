@@ -2,31 +2,58 @@
 @attribute [Authorize]
 @inject DialogService DialogService
 
-<PageTitle>GRADE REPL 1.0</PageTitle>
+<PageTitle>GRADE REPL 1a0</PageTitle>
 
 <style>
     #myEditor {
-        height: 50vh; /* Set the height to 50% of the viewport height */
+        height: 80vh; /* Set the height to 50% of the viewport height */
         width: 100%; /* Set the width to 100% */
+    }
+    
+    .console-bg {
+	    min-height: 80vh;
+	    width: 100%;
+	    color: white;
+	    background-color: #262526;
+    }
+    
+    .console-scroll{
+	    height: 80vh;
+	    overflow: hidden;
+	    overflow-y:scroll ;
+    }
+
+    .replgrid{
+	    display: grid;
+	    grid-template-columns: repeat(2, 1fr);
+	    grid-template-rows: 1fr;
+	    grid-column-gap: 0px;
+	    grid-row-gap: 0px;
     }
 </style>
 
-<div class="h-100 w-100">
-	<StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
+<div class="replgrid">
+	<div class="h-100 w-100">
+		<StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
+	</div>
+	<div class="console-bg">
+		<div class="console-scroll">
+			@if (isExecuting)
+			{
+			<pre>Waiting for execution...</pre>
+			}
+			@if (!string.IsNullOrEmpty(output))
+			{
+			<pre>@output</pre>
+			<p>@evaluationResult</p>
+			}
+		</div>
+	</div>
 </div>
 
+
 <RadzenButton Text="Compile" Click="ExecuteCode"></RadzenButton>
-<div class="console">
-    @if (isExecuting)
-    {
-        <pre>Waiting for execution...</pre>
-    }
-    @if (!string.IsNullOrEmpty(output))
-    {
-        <pre>@output</pre>
-        <p>@evaluationResult</p>
-    }
-</div>
+
 
 
 
