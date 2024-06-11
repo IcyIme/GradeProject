@@ -11,7 +11,6 @@
 	{
 		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 		var user = authState.User;
-
 		if (user.Identity.IsAuthenticated)
 		{
 			Navigation.NavigateTo("/home");
