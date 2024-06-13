@@ -15,6 +15,7 @@
 	    width: 100%;
 	    color: black;
 	    background-color: #f3f6f9;
+	    padding-left: 10px;
     }
     
     .console-scroll{
@@ -43,7 +44,8 @@
 			<pre>Waiting for execution...</pre>
 			}
 			@if (!string.IsNullOrEmpty(output))
-			{
+			{ 
+				<br>
 			<pre>@output</pre>
 			<p>@evaluationResult</p>
 			}

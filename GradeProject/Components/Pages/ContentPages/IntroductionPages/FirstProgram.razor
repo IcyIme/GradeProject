@@ -1,0 +1,100 @@
+@page "/learn/FirstProgram"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Úvod do C#</PageTitle>
+
+<div class="container-sm">
+    <div class="bgtext">
+        <h1>Prvý program v C#</h1>
+
+        <h2>Úvod</h2>
+        <p>V tomto návode sa naučíte, ako vytvoriť svoj prvý program v programovacom jazyku C#. C# je moderný, objektovo orientovaný jazyk vyvinutý spoločnosťou Microsoft. Používa sa na vývoj rôznych typov aplikácií, vrátane desktopových, webových a mobilných aplikácií. Tento jednoduchý príklad vám ukáže, ako začať a pochopiť základnú štruktúru C# programu.</p>
+
+        <h2>Vytvorenie nového projektu</h2>
+        <ol>
+            <li>Otvorte Visual Studio.</li>
+            <li>Kliknite na <strong>Create a new project</strong>.</li>
+            <li>Vyberte <strong>Console App</strong> (C#) a kliknite na <strong>Next</strong>.</li>
+            <li>Pomenujte svoj projekt (napr. <em>HelloWorld</em>) a kliknite na <strong>Create</strong>.</li>
+        </ol>
+
+        <h2>Napísanie prvého programu</h2>
+        <p>Po vytvorení projektu by ste mali vidieť súbor <code>Program.cs</code> otvorený v editore kódu. Tento súbor bude obsahovať váš prvý program.</p>
+        <p>Do <code>Program.cs</code> napíšte nasledujúci kód:</p>
+
+        <pre><code>
+using System;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+        }
+    }
+}
+    </code></pre>
+
+        <h2>Vysvetlenie kódu</h2>
+        <ul>
+            <li><code>using System;</code> – Tento riadok umožňuje použitie tried z <code>System</code> namespace, čo je základná knižnica pre mnoho funkcií v C#.</li>
+            <li><code>namespace HelloWorld</code> – Namespaces sú kontajnery pre triedy a iné typy. Pomáhajú organizovať kód a predchádzať konfliktom názvov.</li>
+            <li><code>class Program</code> – Triedy sú základné stavebné bloky každého programu v C#. Obsahujú metódy a dáta.</li>
+            <li><code>static void Main(string[] args)</code> – Toto je vstupný bod programu. Každý konzolový program v C# začína vykonávaním tejto metódy.</li>
+            <li><code>Console.WriteLine("Hello, World!");</code> – Tento riadok vypíše text <code>Hello, World!</code> na konzolu.</li>
+        </ul>
+
+        <h2>Spustenie programu</h2>
+        <ol>
+            <li>Uistite sa, že je váš projekt vybraný v <strong>Solution Explorer</strong>.</li>
+            <li>Kliknite na <strong>Run</strong> alebo stlačte <strong>F5</strong>.</li>
+            <li>V konzolovom okne by ste mali vidieť výstup <code>Hello, World!</code>.</li>
+        </ol>
+
+        <h2>Záver</h2>
+        <p>Gratulujeme! Úspešne ste vytvorili a spustili svoj prvý program v C#. Tento jednoduchý príklad vám ukázal základnú štruktúru C# programu a ako môžete pomocou neho komunikovať s konzolou. Teraz môžete pokračovať v učení a preskúmať ďalšie funkcie a schopnosti C#.</p>
+
+        <h2>Ďalšie kroky</h2>
+        <ul>
+            <li>Skúste upraviť váš program tak, aby vypísal rôzne správy.</li>
+            <li>Preštudujte si základné konštrukcie jazyka C#, ako sú premenné, podmienky a cykly.</li>
+            <li>Vyskúšajte vytvoriť jednoduché aplikácie, ktoré riešia základné problémy alebo vykonávajú bežné úlohy.</li>
+        </ul>
+
+        @if (IsQuizAvailable)
+        {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+        }
+        else
+        {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+        }
+    </div>
+</div>
+
+@code {
+protected override string GetLessonName()
+{
+return "firstprogram";
+}
+
+private void Quiz()
+{
+NavigateToQuiz(UrlData.quiUrlFirstProgram);
+}
+
+private void NextLection()
+{
+NavigateToNextLesson(UrlData.home);
+}
+}

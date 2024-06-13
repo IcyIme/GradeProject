@@ -1,5 +1,29 @@
-﻿@media (max-width: 768px) {
+﻿
+
+.console-bg {
+    min-height: 70vh;
+    width: 100%;
+    color: black;
+    background-color: #f3f6f9;
+}
+
+.console-scroll{
+    height: 70vh;
+    overflow: hidden;
+    overflow-y:scroll ;
+}
+
+.replgrid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+@media (max-width: 768px) {
     .replgrid {
         display: block; /* Remove the grid layout */
+        height: 30vh;
     }
 }

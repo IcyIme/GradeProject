@@ -1,7 +1,5 @@
 @page "/q/{Id}"
 
-@using GradeProject.Data.Models
-
 @layout QuizLayout
 
 @inject AuthenticationStateProvider authenticationStateProvider
@@ -10,6 +8,7 @@
 @inject NavigationManager NavigationManager
 @inject IQuizLoaderService QuizLoaderService
 @inject INavigationService NavigationService
+@inject NotificationService NotificationService
 
 <PageTitle>Q</PageTitle>
 @if (_quizAvailable)
@@ -156,6 +155,7 @@ else
                     {
                         // Update was successful
                         _updateSuccessful = true;
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"Získal si {score * 2}\u2728!", Detail = "Na tvoj účet boli pripisane \u2728!", Duration = 4000 });
                     }
                     else
                     {
@@ -212,6 +212,9 @@ else
     {
         NavigationService.Navigator(Id);
     }
-
+    private void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
 }
 

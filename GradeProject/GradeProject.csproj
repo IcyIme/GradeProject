@@ -38,7 +38,7 @@
 
   <ItemGroup>
     <None Include="Components\Components\OptionCard.razor" />
-    <None Include="Components\Layout\SubMenu.razor" />
+    <None Include="wwwroot\learnpages.css" />
   </ItemGroup>
 
   <ItemGroup>

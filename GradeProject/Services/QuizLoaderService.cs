@@ -25,6 +25,9 @@ public class QuizLoaderService : IQuizLoaderService
             case "instalation":
                 return AddInsQuestions();
                 break;
+            case "firstprogram":
+                return AddFirstProgramQuestions();
+                break;
 
             default:
                 NavigationManager.NavigateTo("/notfound");
@@ -94,4 +97,45 @@ public class QuizLoaderService : IQuizLoaderService
 
         return new List<Question> { q1 };
     }
+    
+    private List<Question> AddFirstProgramQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Čo je C#?",
+            Options = new List<string> { "Programovací jazyk", "Operačný systém", "Textový editor", "Webový prehliadač" },
+            Answer = "Programovací jazyk"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Aká je hlavná funkcia C# programu?",
+            Options = new List<string> { "start", "main", "run", "execute" },
+            Answer = "main"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Čo vypíše program: Console.WriteLine(\"Hello, World!\");",
+            Options = new List<string> { "Hello, World!", "Hello World", "Hello", "World" },
+            Answer = "Hello, World!"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Čo znamená 'static' v deklarácii metódy?",
+            Options = new List<string> { "Metóda je volaná bez vytvorenia inštancie triedy", "Metóda nemôže byť volaná", "Metóda je volaná iba raz", "Metóda je volaná viacerými vláknami" },
+            Answer = "Metóda je volaná bez vytvorenia inštancie triedy"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Aká trieda sa používa na výstup do konzoly?",
+            Options = new List<string> { "System", "Console", "Output", "Print" },
+            Answer = "Console"
+        };
+
+        return new List<Question> { q1, q2, q3, q4, q5 };
+    }
+
 }

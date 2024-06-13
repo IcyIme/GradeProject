@@ -1,6 +1,4 @@
-﻿<!-- Components/CodeEditor.razor -->
-@page "/editor"
-@using Microsoft.AspNetCore.Components.Web
+﻿@page "/editor"
 
 <StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" Style="width:100%; height:500px;" />
 
