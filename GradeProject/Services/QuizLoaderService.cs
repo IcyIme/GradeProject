@@ -137,5 +137,4 @@ public class QuizLoaderService : IQuizLoaderService
 
         return new List<Question> { q1, q2, q3, q4, q5 };
     }
-
 }

@@ -1,7 +1,4 @@
-﻿using GradeProject.Components.Pages.ContentPages.IntroductionPages;
-using GradeProject.Components.Pages.ContentPages;
-
-namespace GradeProject.Data
+﻿namespace GradeProject.Data
 {
     public class UrlData
     {

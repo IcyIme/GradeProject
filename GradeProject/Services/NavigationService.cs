@@ -26,6 +26,9 @@ namespace GradeProject.Services
                 case "instalation":
                     _navigationManager.NavigateTo(UrlData.lectionUrlInstalation);
                     break;
+                case "firstprogram":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlFirstProgram);
+                    break;
                 default:
                     _navigationManager.NavigateTo(""); // Navigate to home or another page
                     break;

@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2" />
     <PackageReference Include="Radzen.Blazor" Version="4.29.1" />
+    <PackageReference Include="Toolbelt.Blazor.ViewTransition" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +49,12 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Components\Layout\SubMenu.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Components\Pages\ContentPages\LearnPages\IntroductionPages\FirstProgram.razor" />
+    <AdditionalFiles Include="Components\Pages\ContentPages\LearnPages\IntroductionPages\Instalation.razor" />
+    <AdditionalFiles Include="Components\Pages\ContentPages\LearnPages\IntroductionPages\Intro.razor" />
   </ItemGroup>
 
 </Project>
