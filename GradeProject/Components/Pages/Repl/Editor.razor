@@ -1,4 +1,4 @@
-﻿@page "/repl/playground"
+﻿@page "/repl/playground/{id:int?}"
 @attribute [Authorize]
 @inject DialogService DialogService
 
@@ -6,60 +6,59 @@
 
 <style>
     #myEditor {
-        height: 70vh; /* Set the height to 50% of the viewport height */
+        height: 70vh; /* Set the height to 70% of the viewport height */
         width: 100%; /* Set the width to 100% */
     }
     
     .console-bg {
-	    min-height: 70vh;
-	    width: 100%;
-	    color: black;
-	    background-color: #f3f6f9;
-	    padding-left: 10px;
+        min-height: 70vh;
+        width: 100%;
+        color: black;
+        background-color: #f3f6f9;
+        padding-left: 10px;
     }
     
     .console-scroll{
-	    height: 70vh;
-	    overflow: hidden;
-	    overflow-y:scroll ;
+        height: 70vh;
+        overflow: hidden;
+        overflow-y:scroll ;
     }
 
     .replgrid{
-	    display: grid;
-	    grid-template-columns: repeat(2, 1fr);
-	    grid-template-rows: 1fr;
-	    grid-column-gap: 0px;
-	    grid-row-gap: 0px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr;
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
     }
 </style>
 
 <div class="replgrid">
-	<div class="h-100 w-100">
-		<StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
-	</div>
-	<div class="console-bg">
-		<div class="console-scroll">
-			@if (isExecuting)
-			{
-			<pre>Waiting for execution...</pre>
-			}
-			@if (!string.IsNullOrEmpty(output))
-			{ 
-				<br>
-			<pre>@output</pre>
-			<p>@evaluationResult</p>
-			}
-		</div>
-	</div>
+    <div class="h-100 w-100">
+        <StandaloneCodeEditor @ref="myEditor" Id="myEditor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="HandleContentChange" />
+    </div>
+    <div class="console-bg">
+        <div class="console-scroll">
+            @if (isExecuting)
+            {
+                <pre>Waiting for execution...</pre>
+            }
+            @if (!string.IsNullOrEmpty(output))
+            { 
+                <br>
+                <pre>@output</pre>
+                <p>@evaluationResult</p>
+            }
+        </div>
+    </div>
 </div>
 
 <br/>
 <RadzenButton Text="Compile" Click="ExecuteCode"></RadzenButton>
 
-
-
-
 @code {
+    [Parameter] 
+    public int? id { get; set; }
     private StandaloneCodeEditor myEditor;
     private string initialCode = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, world!\");\n    }\n}";
     private string code;
@@ -77,17 +76,35 @@
     private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
     {
         return new StandaloneEditorConstructionOptions
-            {
-                AutomaticLayout = true,
-                Language = "csharp",
-                Theme = "vs-light",
-                Value = code,
-            };
+        {
+            AutomaticLayout = true,
+            Language = "csharp",
+            Theme = "vs-light",
+            Value = code,
+        };
     }
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        code = initialCode;
+        base.OnParametersSet();
+
+        // Update code based on the id parameter
+        switch (id)
+        {
+            case 1:
+                code = initialCode;
+                break;
+            default:
+                code = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n        Console.WriteLine(\"Hello, wld!\");\n    }\n}";
+                break;
+        }
+
+        // If the editor is already initialized, update its value
+        if (myEditor != null)
+        {
+            myEditor.SetValue(code);
+        }
+        
     }
 
     private async Task HandleContentChange()
@@ -97,13 +114,12 @@
 
     private async Task ExecuteCode()
     {
-	    ShowBusyDialog();
+        ShowBusyDialog();
         userInputs.Clear();
         await Task.Delay(random.Next(1000, 4000));
-        // Find the number of Console.ReadLine() occurrences
+        
         int readLineCount = code.Split(new[] { "Console.ReadLine()" }, StringSplitOptions.None).Length - 1;
 
-        // Prompt for inputs sequentially
         for (int i = 0; i < readLineCount; i++)
         {
             var result = await DialogService.OpenAsync<InputDialog>($"Enter input for Console.ReadLine() #{i + 1}",
@@ -128,44 +144,41 @@
 
     async Task ShowBusyDialog()
     {
-	    InvokeAsync(async () =>
-	    {
-			if (!string.IsNullOrEmpty(output))
-				DialogService.Close();
-	    });
+        InvokeAsync(async () =>
+        {
+            if (!string.IsNullOrEmpty(output))
+                DialogService.Close();
+        });
 
-	    await BusyDialog();
+        await BusyDialog();
     }
 
-    // Busy dialog from markup
     async Task BusyDialog()
     {
-	    await DialogService.OpenAsync("", ds =>
-		    @<RadzenStack AlignItems="AlignItems.Center" Gap="2rem" Class="rz-p-12">
-			     <RadzenImage Path="/img/Gifs/wired-lineal-186-puzzle.gif" Style="width: 200px;" AlternateText="community" /> 
-			    @*<iframe src="https://giphy.com/embed/3ohhwgzypC7LCONoeA" width="200" height="200" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe*@
-			    <RadzenText TextStyle="TextStyle.H6">Executing code, please wait...</RadzenText>
-	    </RadzenStack>, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
+        await DialogService.OpenAsync("", ds =>
+            @<RadzenStack AlignItems="AlignItems.Center" Gap="2rem" Class="rz-p-12">
+                <RadzenImage Path="/img/Gifs/wired-lineal-186-puzzle.gif" Style="width: 200px;" AlternateText="community" /> 
+                <RadzenText TextStyle="TextStyle.H6">Executing code, please wait...</RadzenText>
+            </RadzenStack>, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
     }
 
-    // Busy dialog from string
     async Task BusyDialog(string message)
     {
-	    await DialogService.OpenAsync("", ds =>
-	    {
-		    RenderFragment content = b =>
-		    {
-			    b.OpenElement(0, "RadzenRow");
+        await DialogService.OpenAsync("", ds =>
+        {
+            RenderFragment content = b =>
+            {
+                b.OpenElement(0, "RadzenRow");
 
-			    b.OpenElement(1, "RadzenColumn");
-			    b.AddAttribute(2, "Size", "12");
+                b.OpenElement(1, "RadzenColumn");
+                b.AddAttribute(2, "Size", "12");
 
-			    b.AddContent(3, message);
+                b.AddContent(3, message);
 
-			    b.CloseElement();
-			    b.CloseElement();
-		    };
-		    return content;
-	    }, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
+                b.CloseElement();
+                b.CloseElement();
+            };
+            return content;
+        }, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
     }
 }

@@ -44,6 +44,7 @@ namespace HelloWorld
     }
 }
     </code></pre>
+        <RadzenButton Text="Vyskúšať v REPL" Click="OpenPlayground" ButtonStyle="ButtonStyle.Primary" />
 
         <h2>Vysvetlenie kódu</h2>
         <ul>
@@ -83,18 +84,22 @@ namespace HelloWorld
 </div>
 
 @code {
-protected override string GetLessonName()
-{
-return "firstprogram";
-}
+    protected override string GetLessonName()
+    {
+        return "firstprogram";
+    }
 
-private void Quiz()
-{
-NavigateToQuiz(UrlData.quiUrlFirstProgram);
-}
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quiUrlFirstProgram);
+    }
 
-private void NextLection()
-{
-NavigateToNextLesson(UrlData.home);
-}
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.home);
+    }
+    private void OpenPlayground()
+    {
+        NavigationManager.NavigateTo("/repl/playground/1", true);
+    }
 }
