@@ -1,0 +1,127 @@
+@page "/learn/Operators"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Základy syntaxe a typov C#</PageTitle>
+
+<div class="container-sm">
+    <div class="bgtext">
+        <h1>Operátory a výrazy v C#</h1>
+        <p>Operátory a výrazy sú základné stavebné prvky v programovaní, ktoré umožňujú vykonávať rôzne operácie nad premennými a hodnotami. V C# existuje množstvo operátorov, ktoré sú rozdelené do niekoľkých kategórií.</p>
+
+        <h2>Aritmetické operátory</h2>
+        <p>Aritmetické operátory umožňujú vykonávať základné matematické operácie ako sčítanie, odčítanie, násobenie a delenie.</p>
+        <ul>
+            <li><code>+</code> (sčítanie): Sčíta dve čísla.</li>
+            <li><code>-</code> (odčítanie): Odčíta druhé číslo od prvého.</li>
+            <li><code>*</code> (násobenie): Vynásobí dve čísla.</li>
+            <li><code>/</code> (delenie): Vydelí prvé číslo druhým.</li>
+            <li><code>%</code> (modulo): Vráti zvyšok po delení prvého čísla druhým.</li>
+        </ul>
+        <pre><code>int a = 10;
+int b = 3;
+int suma = a + b; // 13
+int rozdiel = a - b; // 7
+int sucin = a * b; // 30
+int podiel = a / b; // 3
+int zvysok = a % b; // 1</code></pre>
+
+        <h2>Porovnávacie operátory</h2>
+        <p>Porovnávacie operátory sa používajú na porovnávanie dvoch hodnôt. Výsledkom porovnania je hodnota typu <code>bool</code> (pravda alebo nepravda).</p>
+        <ul>
+            <li><code>==</code> (rovná sa): Vráti <code>true</code>, ak sú hodnoty rovnaké.</li>
+            <li><code>!=</code> (nerovná sa): Vráti <code>true</code>, ak sú hodnoty rôzne.</li>
+            <li><code>></code> (väčší ako): Vráti <code>true</code>, ak je prvá hodnota väčšia ako druhá.</li>
+            <li><code>&lt;</code> (menší ako): Vráti <code>true</code>, ak je prvá hodnota menšia ako druhá.</li>
+            <li><code>>=</code> (väčší alebo rovný): Vráti <code>true</code>, ak je prvá hodnota väčšia alebo rovná druhej.</li>
+            <li><code>&lt;=</code> (menší alebo rovný): Vráti <code>true</code>, ak je prvá hodnota menšia alebo rovná druhej.</li>
+        </ul>
+        <pre><code>int x = 5;
+int y = 10;
+bool jeRovnake = (x == y); // false
+bool jeRozne = (x != y); // true
+bool jeVacsie = (x &gt; y); // false
+bool jeMensie = (x &lt; y); // true
+bool jeVacsieAleboRovne = (x &gt;= y); // false
+bool jeMensieAleboRovne = (x &lt;= y); // true</code></pre>
+
+        <h2>Logické operátory</h2>
+        <p>Logické operátory sa používajú na kombinovanie logických výrazov.</p>
+        <ul>
+            <li><code>&&</code> (logické AND): Vráti <code>true</code>, ak sú obidve podmienky pravdivé.</li>
+            <li><code>||</code> (logické OR): Vráti <code>true</code>, ak aspoň jedna podmienka je pravdivá.</li>
+            <li><code>!</code> (logické NOT): Invertuje logickú hodnotu.</li>
+        </ul>
+        <pre><code>bool a = true;
+bool b = false;
+bool vysledokAND = a && b; // false
+bool vysledokOR = a || b; // true
+bool vysledokNOT = !a; // false</code></pre>
+
+        <h2>Priraďovacie operátory</h2>
+        <p>Priraďovacie operátory sa používajú na priradenie hodnôt premenným.</p>
+        <ul>
+            <li><code>=</code> (priradenie): Priradí hodnotu na pravej strane premenné na ľavej strane.</li>
+            <li><code>+=</code> (priradenie s pripočítaním): Pripočíta hodnotu na pravej strane k premennej na ľavej strane.</li>
+            <li><code>-=</code> (priradenie s odčítaním): Odčíta hodnotu na pravej strane od premennej na ľavej strane.</li>
+            <li><code>*=</code> (priradenie s násobením): Vynásobí hodnotu na pravej strane s premennou na ľavej strane.</li>
+            <li><code>/=</code> (priradenie s delením): Vydelí hodnotu na pravej strane premennou na ľavej strane.</li>
+            <li><code>%=</code> (priradenie s modulo): Priradí zvyšok po delení hodnoty na pravej strane premenné na ľavej strane.</li>
+        </ul>
+        <pre><code>int z = 5;
+z += 3; // z = 8
+z -= 2; // z = 6
+z *= 4; // z = 24
+z /= 3; // z = 8
+z %= 5; // z = 3</code></pre>
+
+        <h2>Operátory inkrementácie a dekrementácie</h2>
+        <p>Tieto operátory sa používajú na zvýšenie alebo zníženie hodnoty premennej o jednu jednotku.</p>
+        <ul>
+            <li><code>++</code> (inkrementácia): Zvýši hodnotu premennej o 1.</li>
+            <li><code>--</code> (dekrementácia): Zníži hodnotu premennej o 1.</li>
+        </ul>
+        <pre><code>int a = 5;
+a++; // a = 6
+a--; // a = 5</code></pre>
+
+        <h2>Záver</h2>
+        <p>Operátory a výrazy sú základom práce s premennými a hodnotami v jazyku C#. Ich správne pochopenie a používanie je kľúčové pre efektívne programovanie.</p>
+        
+
+        @if (IsQuizAvailable)
+        {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+        }
+        else
+        {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+        }
+    </div>
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "operators";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlOperations);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.home);
+    }
+
+}

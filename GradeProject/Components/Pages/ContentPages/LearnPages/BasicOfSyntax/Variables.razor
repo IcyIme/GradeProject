@@ -1,0 +1,130 @@
+@page "/learn/Variables"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Základy syntaxe a typov C#</PageTitle>
+
+<div class="container-sm">
+    <div class="bgtext">
+        <h1>Premenné a ich typy v C#</h1>
+
+        <p>Premenné sú základné stavebné kamene každého programu. V C# sú premenlivé kontajnery, ktoré uchovávajú dáta. Každá premenná má svoj typ, ktorý určuje, aké hodnoty môže obsahovať a aké operácie s ňou môžu byť vykonané.</p>
+
+        <h2>Deklarácia premenných</h2>
+        <p>Premennú v C# deklarujeme tak, že špecifikujeme jej typ a názov. Môžeme ju inicializovať aj priradením počiatočnej hodnoty.</p>
+        <pre><code>
+int vek; // Deklarácia premennej bez inicializácie
+vek = 25; // Priradenie hodnoty
+
+double teplota = 36.6; // Deklarácia a inicializácia premennej
+    </code></pre>
+
+        <h2>Základné typy premenných</h2>
+        <p>V C# máme niekoľko základných typov premenných, ktoré sú kategorizované do rôznych skupín.</p>
+
+        <h3>Celé čísla</h3>
+        <ul>
+            <li><code>byte</code>: 8-bitové celé číslo (0 až 255)</li>
+            <li><code>sbyte</code>: 8-bitové celé číslo so znamienkom (-128 až 127)</li>
+            <li><code>short</code>: 16-bitové celé číslo so znamienkom (-32,768 až 32,767)</li>
+            <li><code>ushort</code>: 16-bitové celé číslo bez znamienka (0 až 65,535)</li>
+            <li><code>int</code>: 32-bitové celé číslo so znamienkom (-2,147,483,648 až 2,147,483,647)</li>
+            <li><code>uint</code>: 32-bitové celé číslo bez znamienka (0 až 4,294,967,295)</li>
+            <li><code>long</code>: 64-bitové celé číslo so znamienkom (-9,223,372,036,854,775,808 až 9,223,372,036,854,775,807)</li>
+            <li><code>ulong</code>: 64-bitové celé číslo bez znamienka (0 až 18,446,744,073,709,551,615)</li>
+        </ul>
+        <pre><code>
+int a = 10;
+long b = 10000000000L;
+    </code></pre>
+
+        <h3>Desatinné čísla</h3>
+        <ul>
+            <li><code>float</code>: 32-bitové desatinné číslo</li>
+            <li><code>double</code>: 64-bitové desatinné číslo</li>
+            <li><code>decimal</code>: 128-bitové desatinné číslo, používané hlavne pre finančné výpočty</li>
+        </ul>
+        <pre><code>
+float c = 3.14f;
+double d = 2.7182818284;
+decimal e = 1000.50m;
+    </code></pre>
+
+        <h3>Iné typy</h3>
+        <ul>
+            <li><code>bool</code>: logický typ, ktorý môže obsahovať hodnoty <code>true</code> alebo <code>false</code></li>
+            <li><code>char</code>: 16-bitový Unicode znak</li>
+            <li><code>string</code>: sekvencia znakov</li>
+        </ul>
+        <pre><code>
+bool jePravda = true;
+char pismeno = 'A';
+string sprava = "Ahoj, svet!";
+    </code></pre>
+
+        <h2>Práca s premennými</h2>
+
+        <h3>Priradenie hodnoty</h3>
+        <p>Premenné môžu byť inicializované pri deklarácii alebo neskôr.</p>
+        <pre><code>
+int pocet;
+pocet = 5;
+    </code></pre>
+
+        <h3>Operácie s premennými</h3>
+        <p>S premennými môžeme vykonávať rôzne operácie v závislosti od ich typov.</p>
+        <pre><code>
+int x = 10;
+int y = 20;
+int suma = x + y;
+
+bool vysledok = (x &gt;  y);
+    </code></pre>
+
+        <h3>Typová konverzia</h3>
+        <p>Typy môžeme explicitne alebo implicitne konvertovať.</p>
+        <pre><code>
+int cislo = 10;
+double desatinneCislo = cislo; // Implicitná konverzia
+
+double ineDesatinneCislo = 9.99;
+int celeCislo = (int)ineDesatinneCislo; // Explicitná konverzia
+    </code></pre>
+        
+
+        @if (IsQuizAvailable)
+        {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+        }
+        else
+        {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+        }
+    </div>
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "variables";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlVariables);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.lectionUrlOperations);
+    }
+
+}

@@ -28,6 +28,12 @@ public class QuizLoaderService : IQuizLoaderService
             case "firstprogram":
                 return AddFirstProgramQuestions();
                 break;
+            case "variables":
+                return AddVariableTypeQuestions();
+                break;
+            case "operators":
+                return AddOperatorQuestions();
+                break;
 
             default:
                 NavigationManager.NavigateTo("/notfound");
@@ -35,9 +41,7 @@ public class QuizLoaderService : IQuizLoaderService
         }
         return null;
     }
-
     
-
     private List<Question> AddIntroQuestions()
     {
         Question q1 = new Question
@@ -137,4 +141,127 @@ public class QuizLoaderService : IQuizLoaderService
 
         return new List<Question> { q1, q2, q3, q4, q5 };
     }
+    
+    private List<Question> AddVariableTypeQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Ako deklarujeme premennú typu int v C#?",
+        Options = new List<string>() { "int cislo;", "number cislo;", "integer cislo;", "int: cislo;" },
+        Answer = "int cislo;"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Ktorý z nasledujúcich typov je 64-bitové celé číslo so znamienkom?",
+        Options = new List<string>() { "int", "long", "short", "byte" },
+        Answer = "long"
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Ktorý typ premennej by ste použili na uloženie desatinného čísla s najvyššou presnosťou?",
+        Options = new List<string>() { "float", "double", "decimal", "int" },
+        Answer = "decimal"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Čo bude výsledkom nasledujúceho kódu?\n\n\nint a = 10;\nint b = 20;\nint suma = a + b;\n",
+        Options = new List<string>() { "10", "20", "30", "40" },
+        Answer = "30"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Ako deklarujeme a inicializujeme premennú typu string?",
+        Options = new List<string>() { "string sprava;", "string sprava = 'Ahoj!';", "string sprava = \"Ahoj!\";", "char sprava = \"Ahoj!\";" },
+        Answer = "string sprava = \"Ahoj!\";"
+    };
+
+    Question q6 = new Question
+    {
+        QuestionTitle = "Ktorý z nasledujúcich príkazov vykoná implicitnú konverziu?",
+        Options = new List<string>() { "int a = 10; double b = a;", "double a = 10.5; int b = a;", "int a = 10; float b = a;", "float a = 10.5f; int b = a;" },
+        Answer = "int a = 10; double b = a;"
+    };
+
+    Question q7 = new Question
+    {
+        QuestionTitle = "Akú hodnotu bude mať premenna `bool jePravda = (10 > 5);`?",
+        Options = new List<string>() { "true", "false", "null", "undefined" },
+        Answer = "true"
+    };
+
+    Question q8 = new Question
+    {
+        QuestionTitle = "Ktorý typ premennej by ste použili na uloženie jedného znaku?",
+        Options = new List<string>() { "char", "string", "bool", "byte" },
+        Answer = "char"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5, q6, q7, q8 };
+}
+private List<Question> AddOperatorQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Aký je výsledok nasledujúceho výrazu: `int a = 10; int b = 3; int c = a % b;`?",
+        Options = new List<string>() { "1", "2", "3", "0" },
+        Answer = "1"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Ktorý operátor sa používa na porovnanie rovnosti dvoch hodnôt?",
+        Options = new List<string>() { "=", "==", "===", "!=" },
+        Answer = "=="
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Aký bude výsledok nasledujúceho výrazu: `bool vysledok = (5 > 3) && (10 < 15);`?",
+        Options = new List<string>() { "true", "false", "null", "undefined" },
+        Answer = "true"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Čo znamená operátor `!` v C#?",
+        Options = new List<string>() { "Logické AND", "Logické OR", "Logické NOT", "Logické XOR" },
+        Answer = "Logické NOT"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Ktorý operátor sa používa na priradenie hodnoty premennej?",
+        Options = new List<string>() { "+=", "==", "=", "!=" },
+        Answer = "="
+    };
+
+    Question q6 = new Question
+    {
+        QuestionTitle = "Aký je výsledok nasledujúceho kódu?\n\n\nint x = 5;\nx *= 2;\n",
+        Options = new List<string>() { "5", "10", "15", "2" },
+        Answer = "10"
+    };
+
+    Question q7 = new Question
+    {
+        QuestionTitle = "Aký je výsledok nasledujúceho výrazu: `int x = 5; x++;`?",
+        Options = new List<string>() { "4", "5", "6", "7" },
+        Answer = "6"
+    };
+
+    Question q8 = new Question
+    {
+        QuestionTitle = "Čo bude výsledkom nasledujúceho výrazu?\n\n`\nbool a = true;\nbool b = false;\nbool vysledok = a || b;\n`",
+        Options = new List<string>() { "true", "false", "null", "undefined" },
+        Answer = "true"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5, q6, q7, q8 };
+}
 }

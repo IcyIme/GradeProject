@@ -29,6 +29,12 @@ namespace GradeProject.Services
                 case "firstprogram":
                     _navigationManager.NavigateTo(UrlData.lectionUrlFirstProgram);
                     break;
+                case "variables":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlVariables);
+                    break;
+                case"operators":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlOperations);
+                    break;
                 default:
                     _navigationManager.NavigateTo(""); // Navigate to home or another page
                     break;

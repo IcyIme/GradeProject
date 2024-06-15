@@ -16,5 +16,13 @@
         //first Program
         public static string lectionUrlFirstProgram = "/learn/FirstProgram";
         public static string quiUrlFirstProgram = "/q/firstprogram";
+        
+        //variables
+        public static string lectionUrlVariables = "/learn/Variables";
+        public static string quizUrlVariables = "/q/variables";
+        
+        //operators
+        public static string lectionUrlOperations = "/learn/Operators";
+        public static string quizUrlOperations = "/q/operators";
     }
 }
