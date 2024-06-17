@@ -34,6 +34,9 @@ public class QuizLoaderService : IQuizLoaderService
             case "operators":
                 return AddOperatorQuestions();
                 break;
+            case "loopandif":
+                return AddBranchingAndLoopQuestions();
+                break;
 
             default:
                 NavigationManager.NavigateTo("/notfound");
@@ -264,4 +267,76 @@ private List<Question> AddOperatorQuestions()
     // Add questions to the list
     return new List<Question> { q1, q2, q3, q4, q5, q6, q7, q8 };
 }
+
+private List<Question> AddBranchingAndLoopQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Čo je to if-else vetvenie v C#?",
+        Options = new List<string>() 
+        { 
+            "Cyklus, ktorý sa vykonáva, kým je podmienka pravdivá",
+            "Štruktúra, ktorá vykonáva rôzne časti kódu v závislosti od podmienky",
+            "Štruktúra, ktorá umožňuje opakované vykonávanie časti kódu",
+            "Štruktúra na prácu s kolekciami"
+        },
+        Answer = "Štruktúra, ktorá vykonáva rôzne časti kódu v závislosti od podmienky"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Aký je rozdiel medzi while a do-while cyklom?",
+        Options = new List<string>()
+        {
+            "While cyklus sa vykonáva aspoň raz, do-while cyklus nie",
+            "Do-while cyklus sa vykonáva aspoň raz, while cyklus nie",
+            "Oba sa vykonávajú aspoň raz",
+            "Žiaden rozdiel, oba sú rovnaké"
+        },
+        Answer = "Do-while cyklus sa vykonáva aspoň raz, while cyklus nie"
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Čo sa stane, ak v switch-case vetvení žiadny case nesúhlasí?",
+        Options = new List<string>()
+        {
+            "Kód sa zastaví s chybou",
+            "Vykoná sa default blok, ak existuje",
+            "Vykoná sa prvý case blok",
+            "Kód sa opakuje od začiatku"
+        },
+        Answer = "Vykoná sa default blok, ak existuje"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Aký je účel foreach cyklu v C#?",
+        Options = new List<string>()
+        {
+            "Iteruje cez všetky prvky v kolekcii alebo poli",
+            "Opakuje blok kódu určitý počet krát",
+            "Vykonáva kód len ak je podmienka pravdivá",
+            "Vykonáva kód aspoň raz"
+        },
+        Answer = "Iteruje cez všetky prvky v kolekcii alebo poli"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Ako sa deklaruje for cyklus v C#?",
+        Options = new List<string>()
+        {
+            "for (int i = 0; i < 10; i++)",
+            "foreach (int i in collection)",
+            "do { //code } while (condition)",
+            "while (condition) { //code }"
+        },
+        Answer = "for (int i = 0; i < 10; i++)"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5 };
+}
+
 }

@@ -24,5 +24,9 @@
         //operators
         public static string lectionUrlOperations = "/learn/Operators";
         public static string quizUrlOperations = "/q/operators";
+        
+        //loops and if statemant
+        public static string lectionUrlLoop = "/learn/loopandif";
+        public static string quizUrlLoop = "/q/loopandif";
     }
 }

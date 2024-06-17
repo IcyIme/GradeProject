@@ -1,0 +1,118 @@
+@page "/learn/loopandif"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Základy syntaxe a typov C#</PageTitle>
+
+<div class="container-sm">
+    <div class="bgtext">
+        <h1>Vetvenie a cykly v C#</h1>
+        <p>Vetvenie a cykly sú základné kontrolné štruktúry, ktoré umožňujú riadenie toku programu v závislosti od podmienok a opakované vykonávanie určitých častí kódu.</p>
+
+        <h2>If-else vetvenie</h2>
+        <p>If-else štruktúra umožňuje vykonanie rôznych častí kódu v závislosti od splnenia podmienky.</p>
+        <pre><code>int vek = 18;
+
+if (vek >= 18)
+{
+    Console.WriteLine("Si dospelý.");
+}
+else
+{
+    Console.WriteLine("Si neplnoletý.");
+}</code></pre>
+
+        <h2>Switch-case vetvenie</h2>
+        <p>Switch-case štruktúra umožňuje vyberať medzi rôznymi možnosťami na základe hodnoty premennej.</p>
+        <pre><code>int denVTyzdni = 3;
+
+switch (denVTyzdni)
+{
+    case 1:
+        Console.WriteLine("Pondelok");
+        break;
+    case 2:
+        Console.WriteLine("Utorok");
+        break;
+    case 3:
+        Console.WriteLine("Streda");
+        break;
+    default:
+        Console.WriteLine("Neplatný deň");
+        break;
+}</code></pre>
+
+        <h2>While cyklus</h2>
+        <p>While cyklus vykonáva určitý blok kódu, kým je podmienka pravdivá.</p>
+        <pre><code>int i = 1;
+while (i &lt;= 5)
+{
+    Console.WriteLine(i);
+    i++;
+}</code></pre>
+
+        <h2>Do-while cyklus</h2>
+        <p>Do-while cyklus vykonáva určitý blok kódu aspoň raz, potom sa opakuje, kým je podmienka pravdivá.</p>
+        <pre><code>int j = 1;
+do
+{
+    Console.WriteLine(j);
+    j++;
+} while (j &lt;= 5);</code></pre>
+
+        <h2>For cyklus</h2>
+        <p>For cyklus umožňuje špecifikovať inicializáciu, podmienku a iteráciu v jednom riadku.</p>
+        <pre><code>for (int k = 1; k &lt;= 5; k++)
+{
+    Console.WriteLine(k);
+}</code></pre>
+
+        <h2>Foreach cyklus</h2>
+        <p>Foreach cyklus iteruje cez všetky prvky v kolekcii alebo poli.</p>
+        <pre><code>string[] dni = { "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok" };
+
+foreach (string den in dni)
+{
+    Console.WriteLine(den);
+}</code></pre>
+
+        <h2>Záver</h2>
+        <p>Vetvenie a cykly sú neoddeliteľnou súčasťou programovania v C#. S ich pomocou môžete efektívne riadiť tok programu a opakovane vykonávať určité úlohy.</p>
+        
+
+        @if (IsQuizAvailable)
+        {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+        }
+        else
+        {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+        }
+    </div>
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "loopandif";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlLoop);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.lectionUrlOperations);
+    }
+
+}
