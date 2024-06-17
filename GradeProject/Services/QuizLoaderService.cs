@@ -37,7 +37,9 @@ public class QuizLoaderService : IQuizLoaderService
             case "loopandif":
                 return AddBranchingAndLoopQuestions();
                 break;
-
+            case "methods":
+                //todo add quiz
+                break;
             default:
                 NavigationManager.NavigateTo("/notfound");
                 break;

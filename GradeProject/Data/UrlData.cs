@@ -28,5 +28,9 @@
         //loops and if statemant
         public static string lectionUrlLoop = "/learn/loopandif";
         public static string quizUrlLoop = "/q/loopandif";
+        
+        //methods
+        public static string lectionUrlMethods = "/learn/methods";
+        public static string quizUrlMethods = "/q/methods";
     }
 }

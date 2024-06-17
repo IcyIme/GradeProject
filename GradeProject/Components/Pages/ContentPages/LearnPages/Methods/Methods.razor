@@ -1,4 +1,4 @@
-@page "/learn/loopandif"
+@page "/learn/methods"
 
 @inherits LearnPageBase
 @attribute [Authorize]
@@ -85,7 +85,7 @@ foreach (string den in dni)
 
         <h2>Záver</h2>
         <p>Vetvenie a cykly sú neoddeliteľnou súčasťou programovania v C#. S ich pomocou môžete efektívne riadiť tok programu a opakovane vykonávať určité úlohy.</p>
-        
+
 
         @if (IsQuizAvailable)
         {
@@ -100,19 +100,19 @@ foreach (string den in dni)
 
 @code {
 
-    protected override string GetLessonName()
-    {
-        return "loopandif";
-    }
+protected override string GetLessonName()
+{
+return "loopandif";
+}
 
-    private void Quiz()
-    {
-        NavigateToQuiz(UrlData.quizUrlLoop);
-    }
+private void Quiz()
+{
+NavigateToQuiz(UrlData.quizUrlLoop);
+}
 
-    private void NextLection()
-    {
-        NavigateToNextLesson(UrlData.lectionUrlMethods);
-    }
+private void NextLection()
+{
+NavigateToNextLesson(UrlData.lectionUrlOperations);
+}
 
 }

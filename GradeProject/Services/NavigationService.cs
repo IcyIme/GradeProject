@@ -38,6 +38,9 @@ namespace GradeProject.Services
                 case "loopandif":
                     _navigationManager.NavigateTo(UrlData.lectionUrlLoop);
                     break;
+                case "methods":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlMethods);
+                    break;
                 default:
                     _navigationManager.NavigateTo(""); // Navigate to home or another page
                     break;
