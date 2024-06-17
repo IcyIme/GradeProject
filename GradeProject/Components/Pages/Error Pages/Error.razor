@@ -1,10 +1,20 @@
 ﻿@page "/Error"
 
+@layout EmptyLayout
+@inject NavigationManager NavigationManager
+
 <PageTitle>❌ Error</PageTitle>
-
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">Pri spracovaní vašej požiadavky sa vyskytla chyba.</h2>
-
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center vh-100">
+        <RadzenImage Path="img/error.png" Style="width: 45rem;" AlternateText="C# LOGO" />
+        <div class="col-12 text-center">
+            <h2 class="text-danger">Pri spracovaní vašej požiadavky sa vyskytla chyba.</h2>
+            <RadzenColumn>
+                <RadzenButton Click=@(GoToHome) Text="Return to Home" ButtonStyle="ButtonStyle.Primary"/>
+            </RadzenColumn>
+        </div>
+    </div>
+</div>
 @if (ShowRequestId)
 {
     <p>
@@ -21,4 +31,9 @@
 
     protected override void OnInitialized() =>
         RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+    
+    private void GoToHome()
+    {
+        NavigationManager.NavigateTo("/", true);
+    }
 }
