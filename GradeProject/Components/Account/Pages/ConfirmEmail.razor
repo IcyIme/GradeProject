@@ -4,7 +4,8 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using GradeProject.Data
-
+@layout EmptyLayout
+@inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityRedirectManager RedirectManager
 
@@ -12,6 +13,17 @@
 
 <h1>Confirm email</h1>
 <StatusMessage Message="@statusMessage" />
+
+@if (!string.IsNullOrEmpty(statusMessage))
+{
+    <p>@statusMessage</p>
+    <p>Redirecting to the login page in 5 seconds...</p>
+    <script>
+        setTimeout(function() {
+            window.location.href = '@NavigationManager.ToAbsoluteUri("/Account/Login")';
+        }, 5000);
+    </script>
+}
 
 @code {
     private string? statusMessage;
