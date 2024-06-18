@@ -38,7 +38,7 @@ public class QuizLoaderService : IQuizLoaderService
                 return AddBranchingAndLoopQuestions();
                 break;
             case "methods":
-                //todo add quiz
+                return AddFunctionQuestions();
                 break;
             default:
                 NavigationManager.NavigateTo("/notfound");
@@ -335,6 +335,77 @@ private List<Question> AddBranchingAndLoopQuestions()
             "while (condition) { //code }"
         },
         Answer = "for (int i = 0; i < 10; i++)"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5 };
+}
+
+private List<Question> AddFunctionQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Čo je to funkcia (metóda) v C#?",
+        Options = new List<string>() 
+        { 
+            "Premenná, ktorá uchováva hodnoty",
+            "Blok kódu, ktorý vykonáva konkrétnu úlohu a môže byť volaný podľa potreby",
+            "Typ údajov pre čísla s desatinnou čiarkou",
+            "Operátor na porovnávanie hodnôt"
+        },
+        Answer = "Blok kódu, ktorý vykonáva konkrétnu úlohu a môže byť volaný podľa potreby"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Ako sa definuje funkcia v C#?",
+        Options = new List<string>()
+        {
+            "returnType NazovFunkcie(parametre) { // telo funkcie }",
+            "int premenná = hodnota;",
+            "public class MyClass { }",
+            "if (podmienka) { // telo podmienky }"
+        },
+        Answer = "returnType NazovFunkcie(parametre) { // telo funkcie }"
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Čo znamená kľúčové slovo 'void' pri definovaní funkcie?",
+        Options = new List<string>()
+        {
+            "Funkcia nevracia žiadnu hodnotu",
+            "Funkcia vracia celočíselnú hodnotu",
+            "Funkcia vracia reťazec",
+            "Funkcia sa nikdy nevykoná"
+        },
+        Answer = "Funkcia nevracia žiadnu hodnotu"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Ako zavoláte funkciu s názvom 'Scitaj', ktorá prijíma dva argumenty typu int?",
+        Options = new List<string>()
+        {
+            "Scitaj(int a, int b);",
+            "Scitaj(a, b);",
+            "int vysledok = Scitaj(5, 3);",
+            "return Scitaj(5, 3);"
+        },
+        Answer = "int vysledok = Scitaj(5, 3);"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Čo je to preťaženie funkcie v C#?",
+        Options = new List<string>()
+        {
+            "Definovanie viacerých funkcií s rovnakým názvom, ale rôznymi parametrami",
+            "Volanie tej istej funkcie viackrát",
+            "Používanie funkcie v inom projekte",
+            "Deklarovanie globálnej premennej"
+        },
+        Answer = "Definovanie viacerých funkcií s rovnakým názvom, ale rôznymi parametrami"
     };
 
     // Add questions to the list
