@@ -1,0 +1,12 @@
+code{
+    height: 100%;
+}
+.centered-image {
+    max-width: 100%;
+    margin: auto; /* Center the image if it is a block element */
+    display: block; /* Ensures the image is treated as a block-level element */
+}
+
+.centered-image img{
+    width: 120px;
+}
