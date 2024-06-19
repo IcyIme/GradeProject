@@ -10,7 +10,7 @@
 @inject INavigationService NavigationService
 @inject NotificationService NotificationService
 
-<PageTitle>Q</PageTitle>
+<PageTitle>Quiz time!</PageTitle>
 @if (_quizAvailable)
 {
     @if (Questions.Count != 0)
@@ -22,7 +22,7 @@
                         @if (questionIndex < Questions.Count())
                         {
                             <div class="app-title">
-                                @Id
+                                QUIZ TIME!
                             </div>
                             <div class="quiz-header">
                                 @Questions[questionIndex].QuestionTitle

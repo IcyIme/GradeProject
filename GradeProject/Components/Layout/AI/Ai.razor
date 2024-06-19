@@ -4,8 +4,8 @@
     <div id="container-floating">
         @*<div class="nd1 nds" @onclick="ToggleWindow"><img class="reminder" src="img/Icons/chatq.png" /></div>*@
         <div id="floating-button" @onclick="ToggleWindow">
-            <p class="plus">+</p>
-            <img class="edit" src="img/Icons/user.png">
+            <p class="plus">AI</p>
+            <img class="edit" src="img/Icons/chatq.png">
         </div>
     </div>
 
@@ -13,7 +13,7 @@
 @code {
     private async Task ToggleWindow()
     {
-        await DialogService.OpenAsync<AiCard>($"AI Asistent",
+        await DialogService.OpenAsync<AiCard>($"AI Asistent | version Alpha(0a1)",
             new Dictionary<string, object>() {},
             new DialogOptions() { Width = "800px", Height = "812px", Resizable = true });
     }

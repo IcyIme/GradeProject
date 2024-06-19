@@ -9,17 +9,22 @@
     </div>
     <div>
         <RadzenFormField Text="Tu zadaj svoj dotaz" class="w-100">
-            <RadzenTextBox @bind-Value="promptText" />
+            <RadzenTextBox @bind-Value="promptText" @onkeydown="HandleKeyDown" />
         </RadzenFormField>
         <br/>
         <br/>
         <RadzenButton Click="GenerateText">Odoslať</RadzenButton>
     </div>
 
-    @if (generatedText != null)
+    @if (promptText is not null)
     {
-        <div>
-            <label for="result">>>></label>
+        <div class="bubble right">
+            <p>@promptText</p>
+        </div>
+    }
+    @if (generatedText is not null)
+    {
+        <div class="bubble left">
             <p>@generatedText</p>
         </div>
     }
@@ -33,7 +38,7 @@
 
 </RadzenStack>
 
-@code{
+@code {
     private bool loading = false;
 
     private OpenAIAPI client;
@@ -52,12 +57,13 @@
     private async Task GenerateText()
     {
         loading = true;
+        generatedText = null;
         var parameters = new CompletionRequest
         {
             Model = "gpt-3.5-turbo-instruct",
             Prompt = "Odpovedaj iba dotazy ohľadne c# ak je dotaz na niečo iné nápis nerozumiem dotazu, dotaz na ktory sa pytam:" + promptText,
-            Temperature = 0.7,
-            MaxTokens = 400
+            Temperature = 0,
+            MaxTokens = 500
         };
 
         var response = await client.Completions.CreateCompletionAsync(parameters);
@@ -66,4 +72,11 @@
         loading = false;
     }
 
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await GenerateText();
+        }
+    }
 }
