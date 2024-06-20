@@ -32,5 +32,13 @@
         //methods
         public static string lectionUrlMethods = "/learn/methods";
         public static string quizUrlMethods = "/q/methods";
+        
+        //parameters
+        public static string lectionUrlParameters = "/learn/parameters";
+        public static string quizUrlParameters = "/q/parameters";
+        
+        //recursion
+        public static string lectionUrlRecursion = "/learn/recursion";
+        public static string quizUrlRecursion = "/q/recursion";
     }
 }

@@ -1,0 +1,97 @@
+@page "/learn/parameters"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Základy syntaxe a typov C#</PageTitle>
+
+    <div class="container-sm bgtext">
+        <h1>Parametre a návratové typy v C#</h1>
+        <p>V C# sú parametre a návratové typy kľúčovými prvkami definície funkcií. Umožňujú funkciám prijímať vstupy a vracať výstupy. Správne použitie parametrov a návratových typov je nevyhnutné pre písanie efektívneho a zrozumiteľného kódu.</p>
+
+        <h2>Parametre funkcií</h2>
+        <p>Parametre umožňujú funkciám prijímať vstupné hodnoty, ktoré môžu byť použité na vykonanie úloh v tele funkcie. Každý parameter musí mať svoj typ a názov.</p>
+        <pre><code>public void VypisSpravu(string sprava)
+{
+    Console.WriteLine(sprava);
+}</code></pre>
+        <p>Funkcia <code>VypisSpravu</code> prijíma jeden parameter typu <code>string</code> s názvom <code>sprava</code>.</p>
+
+        <h3>Predvolené hodnoty parametrov</h3>
+        <p>Parametre môžu mať predvolené hodnoty, ktoré sa použijú, ak nie sú odovzdané žiadne argumenty.</p>
+        <pre><code>public void VypisPozdrav(string meno = "neznámy")
+{
+    Console.WriteLine($"Ahoj, {meno}!");
+}</code></pre>
+        <p>Ak sa funkcia <code>VypisPozdrav</code> zavolá bez argumentov, použije predvolenú hodnotu <code>"neznámy"</code>.</p>
+
+        <h2>Návratové typy funkcií</h2>
+        <p>Návratový typ funkcie určuje typ hodnoty, ktorú funkcia vráti. Návratový typ sa špecifikuje pred názvom funkcie.</p>
+        <pre><code>public int Scitaj(int a, int b)
+{
+    return a + b;
+}</code></pre>
+        <p>Funkcia <code>Scitaj</code> má návratový typ <code>int</code> a vracia súčet dvoch celých čísel.</p>
+
+        <h3>Funkcie bez návratovej hodnoty</h3>
+        <p>Ak funkcia nevracia žiadnu hodnotu, použije sa kľúčové slovo <code>void</code>.</p>
+        <pre><code>public void Pozdrav()
+{
+    Console.WriteLine("Ahoj, svet!");
+}</code></pre>
+        <p>Funkcia <code>Pozdrav</code> nevykonáva žiadny návrat.</p>
+
+        <h3>Vrátanie viacerých hodnôt</h3>
+        <p>V C# môžete vrátiť viacero hodnôt pomocou <code>tuples</code> alebo objektov.</p>
+        <pre><code>public (int, int) ZiskajMinMax(int[] cisla)
+{
+    int min = cisla.Min();
+    int max = cisla.Max();
+    return (min, max);
+}</code></pre>
+        <p>Funkcia <code>ZiskajMinMax</code> vracia <code>tuple</code> s dvoma hodnotami - minimálnou a maximálnou hodnotou z poľa.</p>
+
+        <h2>Volanie funkcií s parametrami a návratovými typmi</h2>
+        <p>Pri volaní funkcie s parametrami je potrebné odovzdať argumenty v správnom poradí a type.</p>
+        <pre><code>int vysledok = Scitaj(5, 3);
+Console.WriteLine(vysledok); // Výstup: 8
+
+VypisPozdrav(); // Výstup: Ahoj, neznámy!
+VypisPozdrav("Peter"); // Výstup: Ahoj, Peter!</code></pre>
+
+        <h2>Záver</h2>
+        <p>Parametre a návratové typy sú základnými prvkami funkcií v C#. Umožňujú funkciám prijímať vstupy a vracať výstupy, čo zvyšuje modularizáciu a opätovnú použiteľnosť kódu. Správne používanie parametrov a návratových typov je dôležité pre písanie efektívneho a zrozumiteľného kódu.</p>
+        @if (IsQuizAvailable)
+        {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+        }
+        else
+        {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+        }
+    </div>
+
+@code {
+
+protected override string GetLessonName()
+{
+return "parameters";
+}
+
+private void Quiz()
+{
+NavigateToQuiz(UrlData.quizUrlParameters);
+}
+
+private void NextLection()
+{
+NavigateToNextLesson(UrlData.lectionUrlRecursion);
+}
+
+}

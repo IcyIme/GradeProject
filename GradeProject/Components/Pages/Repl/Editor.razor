@@ -2,36 +2,13 @@
 @attribute [Authorize]
 @inject DialogService DialogService
 
-<PageTitle>GRADE REPL 1b0</PageTitle>
-
 <style>
     #myEditor {
         height: 70vh; /* Set the height to 70% of the viewport height */
         width: 100%; /* Set the width to 100% */
     }
-    
-    .console-bg {
-        min-height: 70vh;
-        width: 100%;
-        color: black;
-        background-color: #f3f6f9;
-        padding-left: 10px;
-    }
-    
-    .console-scroll{
-        height: 70vh;
-        overflow: hidden;
-        overflow-y:scroll ;
-    }
-
-    .replgrid{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 1fr;
-        grid-column-gap: 0px;
-        grid-row-gap: 0px;
-    }
 </style>
+<PageTitle>GRADE REPL 1b0</PageTitle>
 
 <div class="replgrid">
     <div class="h-100 w-100">
