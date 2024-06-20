@@ -29,28 +29,6 @@
                 </div>
             </RadzenStack>
             <br />
-            <div class="bgtext">
-            <h3 class="text-center">Leaderboard</h3>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Name</th>
-                    <th>Stars</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var user in Leaderboard)
-                {
-                    <tr>
-                        <td><b>@(Leaderboard.IndexOf(user) + 1)</b></td>
-                        <td><RadzenGravatar Email="@user.Email" class="" /> @user.FullName</td>
-                        <td>✨@user.Score</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-            </div>
         }
         else
         {
@@ -100,23 +78,6 @@
 
     private ProfileModel Profile;
     private string[] GetLessons;
-    private List<ApplicationUser> Leaderboard;
-
-    private async Task ResetScores()
-    {
-        // Reset all users' scores to zero
-        var allUsers = UserManager.Users.ToList();
-        foreach (var userToUpdate in allUsers)
-        {
-            userToUpdate.Score = 0;
-            await UserManager.UpdateAsync(userToUpdate);
-        }
-
-        // Refresh the page or update any necessary state
-        // Get leaderboard data
-        Leaderboard = await GetLeaderboard();
-        StateHasChanged(); // Refresh the UI
-    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -141,16 +102,5 @@
                 GetLessons = applicationUser.CompletedLesson;
             }
         }
-
-        // Get leaderboard data
-        Leaderboard = await GetLeaderboard();
-    }
-
-    // Method to retrieve leaderboard data
-    private async Task<List<ApplicationUser>> GetLeaderboard()
-    {
-        // Retrieve the top users based on their scores
-        var topUsers = UserManager.Users.OrderByDescending(u => u.Score).Take(10).ToList();
-        return topUsers;
     }
 }

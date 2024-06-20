@@ -37,6 +37,9 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Components\Layout\SubMenu.razor" />
     <_ContentIncludedByDefault Remove="Components\OptionCard.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Leet\ProblemDetail.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Leet\ProblemList.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Leet\SolveProblem.razor" />
   </ItemGroup>
 
   <ItemGroup>

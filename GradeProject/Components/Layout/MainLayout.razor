@@ -23,8 +23,8 @@
     <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
         <RadzenPanelMenu>
             <RadzenPanelMenuItem Text="Domov" Icon="home" Path="/" />
+            <RadzenPanelMenuItem Text="Leaderboard" Icon="find_in_page" Path="/leaderboard"/>
             <RadzenPanelMenuItem Text="Code Playground {BETA}" Icon="description" Path="/repl/playground"/>
-            <RadzenPanelMenuItem Text="Vyzva {demo}" Icon="announcement" Path="/problems" />
             <RadzenPanelMenuItem Text="Kurz {ALPHA}" Icon="announcement" Path="/learn" />
             <AuthorizeView Roles="Admin">
                 <Authorized>
