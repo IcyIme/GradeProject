@@ -10,7 +10,7 @@
 @inject INavigationService NavigationService
 @inject NotificationService NotificationService
 
-<PageTitle>Q</PageTitle>
+<PageTitle>Quiz time!</PageTitle>
 @if (_quizAvailable)
 {
     @if (Questions.Count != 0)
@@ -18,11 +18,11 @@
         <RadzenColumn>
             <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="h-100">
                 <div class="container">
-                    <div class="quiz" style="max-width: 500px; margin: 0 auto;">
+                    <div class="quiz" style="min-width: 450px; max-width: 500px; margin: 0 auto;">
                         @if (questionIndex < Questions.Count())
                         {
                             <div class="app-title">
-                                Poďme precvičovať!
+                                QUIZ TIME!
                             </div>
                             <div class="quiz-header">
                                 @Questions[questionIndex].QuestionTitle

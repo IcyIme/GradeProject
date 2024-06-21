@@ -1,4 +1,6 @@
 ﻿using GradeProject.Data.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GradeProject.Services
 {
@@ -6,8 +8,19 @@ namespace GradeProject.Services
     {
         private readonly List<Problem> _problems = new List<Problem>
         {
-            new Problem { Id = 1, Title = "Two Sum", Description = "Given an array of integers...", Difficulty = "Easy" },
-            new Problem { Id = 2, Title = "Add Two Numbers", Description = "You are given two non-empty linked lists...", Difficulty = "Medium" },
+            new Problem 
+            {             
+                Id = 1,
+                Title = "Two Sum",
+                Description = "Given an array of integers, return indices of the two numbers such that they add up to a specific target.",
+                Difficulty = "Easy",
+                InitialCode = "using System;\n\npublic class Program\n{\n    public static void Main()\n    {\n \n    }\n}",
+                Result = new Resultse[]
+                {
+                    new Resultse { result = new string[] { "1", "2" } },
+                    new Resultse {result = new string[] {"0", "1"}}
+                }
+            },
             // Add more problems here...
         };
 

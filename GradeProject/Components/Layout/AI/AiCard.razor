@@ -1,0 +1,82 @@
+@using OpenAI_API
+@using OpenAI_API.Completions
+
+@inject IConfiguration Configuration
+
+<RadzenStack Gap="1rem" Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
+    <div class="centered-image">
+        <img src="img/Icons/ai.png"/>
+    </div>
+    <div>
+        <RadzenFormField Text="Tu zadaj svoj dotaz" class="w-100">
+            <RadzenTextBox @bind-Value="promptText" @onkeydown="HandleKeyDown" />
+        </RadzenFormField>
+        <br/>
+        <br/>
+        <RadzenButton Click="GenerateText">Odoslať</RadzenButton>
+    </div>
+
+    @if (promptText is not null)
+    {
+        <div class="bubble right">
+            <p>@promptText</p>
+        </div>
+    }
+    @if (generatedText is not null)
+    {
+        <div class="bubble left">
+            <p>@generatedText</p>
+        </div>
+    }
+    
+    @if (loading)
+    {
+        <div class="rz-m-12">
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+        </div>
+    }
+
+</RadzenStack>
+
+@code {
+    private bool loading = false;
+
+    private OpenAIAPI client;
+    private string promptText;
+    private string generatedText;
+    
+    private string apiKey;
+
+    protected override void OnInitialized()
+    {
+        apiKey = Configuration.GetValue<string>("OpenAI:ApiKey");
+
+        client = new OpenAIAPI(apiKey);
+    }
+
+    private async Task GenerateText()
+    {
+        loading = true;
+        generatedText = null;
+        var parameters = new CompletionRequest
+        {
+            Model = "gpt-3.5-turbo-instruct",
+            Prompt = "Odpovedaj iba dotazy ohľadne c# ak je dotaz na niečo iné nápis nerozumiem dotazu, dotaz na ktory sa pytam:" + promptText,
+            Temperature = 0,
+            MaxTokens = 500
+        };
+
+        var response = await client.Completions.CreateCompletionAsync(parameters);
+
+        generatedText = response.Completions[0].Text;
+        loading = false;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await GenerateText();
+        }
+    }
+}

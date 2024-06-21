@@ -1,0 +1,114 @@
+@page "/learn/methods"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Základy syntaxe a typov C#</PageTitle>
+
+    <div class="container-sm bgtext">
+        <h1>Definícia a volanie funkcií v C#</h1>
+        <p>Funkcie (metódy) sú základné stavebné kamene každého programu. Umožňujú zoskupiť bloky kódu, ktoré vykonávajú určitú úlohu, a potom tieto bloky kódu opakovane používať. V C# je definícia a volanie funkcií jednoduché a prehľadné.</p>
+
+        <h2>Definícia funkcie</h2>
+        <p>Funkcia sa definuje pomocou nasledujúcej syntaxe:</p>
+        <pre><code>returnType NazovFunkcie(parametre)
+{
+    // telo funkcie
+}</code></pre>
+        <p>Príklad definície funkcie, ktorá sčíta dve čísla a vráti výsledok:</p>
+        <pre><code>public int Scitaj(int a, int b)
+{
+    return a + b;
+}</code></pre>
+
+        <h2>Volanie funkcie</h2>
+        <p>Funkciu zavoláte pomocou jej názvu a odovzdaním potrebných argumentov:</p>
+        <pre><code>int vysledok = Scitaj(5, 3);
+Console.WriteLine(vysledok); // Výstup: 8</code></pre>
+
+        <h2>Funkcie s návratovou hodnotou</h2>
+        <p>Funkcie môžu vracať hodnotu pomocou kľúčového slova <code>return</code>. Typ návratovej hodnoty sa špecifikuje pred názvom funkcie.</p>
+        <pre><code>public double VypocitajObvod(double polomer)
+{
+    return 2 * Math.PI * polomer;
+}</code></pre>
+
+        <h2>Funkcie bez návratovej hodnoty</h2>
+        <p>Funkcie nemusia vracať hodnotu. V takom prípade používame kľúčové slovo <code>void</code>.</p>
+        <pre><code>public void Pozdrav()
+{
+    Console.WriteLine("Ahoj, svet!");
+}</code></pre>
+        <p>Volanie funkcie bez návratovej hodnoty:</p>
+        <pre><code>Pozdrav(); // Výstup: Ahoj, svet!</code></pre>
+
+        <h2>Funkcie s parametrami</h2>
+        <p>Funkcie môžu prijímať parametre, ktoré im umožňujú pracovať s rôznymi vstupmi.</p>
+        <pre><code>public void VypisSpravu(string sprava)
+{
+    Console.WriteLine(sprava);
+}</code></pre>
+        <p>Volanie funkcie s parametrom:</p>
+        <pre><code>VypisSpravu("Toto je vlastná správa."); // Výstup: Toto je vlastná správa.</code></pre>
+
+        <h2>Funkcie s predvolenými hodnotami parametrov</h2>
+        <p>Funkcie môžu mať parametre s predvolenými hodnotami, ktoré sa použijú, ak nie sú odovzdané žiadne argumenty.</p>
+        <pre><code>public void VypisPozdrav(string meno = "neznámy")
+{
+    Console.WriteLine($"Ahoj, {meno}!");
+}</code></pre>
+        <p>Volanie funkcie s a bez argumentu:</p>
+        <pre><code>VypisPozdrav(); // Výstup: Ahoj, neznámy!
+VypisPozdrav("Peter"); // Výstup: Ahoj, Peter!</code></pre>
+
+        <h2>Preťaženie funkcií</h2>
+        <p>V C# môžeme mať viacero funkcií s rovnakým názvom, ale rôznymi parametrami. Tento koncept sa nazýva preťaženie funkcií.</p>
+        <pre><code>public void Vypis(int cislo)
+{
+    Console.WriteLine($"Číslo: {cislo}");
+}
+
+public void Vypis(string text)
+{
+    Console.WriteLine($"Text: {text}");
+}</code></pre>
+        <p>Volanie preťažených funkcií:</p>
+        <pre><code>Vypis(42); // Výstup: Číslo: 42
+Vypis("Ahoj!"); // Výstup: Text: Ahoj!</code></pre>
+
+        <h2>Záver</h2>
+        <p>Funkcie sú kľúčovou súčasťou programovania v C#. Umožňujú modularizáciu kódu, znovupoužitie a uľahčujú čítanie a údržbu kódu. Správne používanie funkcií zlepší efektivitu vášho programovania a kvalitu kódu.</p>
+        @if (IsQuizAvailable)
+        {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+        }
+        else
+        {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+        }
+    </div>
+
+@code {
+
+protected override string GetLessonName()
+{
+return "methods";
+}
+
+private void Quiz()
+{
+NavigateToQuiz(UrlData.quizUrlMethods);
+}
+
+private void NextLection()
+{
+    NavigateToNextLesson(UrlData.lectionUrlParameters);
+}
+
+}

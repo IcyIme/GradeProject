@@ -1,0 +1,116 @@
+@page "/learn/recursion"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Základy syntaxe a typov C#</PageTitle>
+
+    <div class="container-sm bgtext">
+        <h1>Rekurzia v C#</h1>
+        <p>Rekurzia je technika, pri ktorej funkcia volá samu seba. Je užitočná pre riešenie problémov, ktoré môžu byť rozdelené na menšie, podobné problémy. V C# môžeme rekurziu využiť na elegantné riešenie úloh ako sú napríklad faktoriál, Fibonacciho postupnosť, alebo prehľadávanie stromových štruktúr.</p>
+
+        <h2>Základný príklad rekurzie: Faktoriál</h2>
+        <p>Faktoriál čísla je definovaný ako súčin všetkých kladných celých čísel menších alebo rovných tomuto číslu. Faktoriál nuly je definovaný ako 1.</p>
+        <p>Matematická definícia:</p>
+        <ul>
+            <li>0! = 1</li>
+            <li>n! = n &times; (n - 1)! pre n &gt; 0</li>
+        </ul>
+        <p>V C# môžeme túto definíciu priamo implementovať pomocou rekurzie.</p>
+        <pre><code>public int Faktorial(int n)
+{
+    if (n == 0)
+    {
+        return 1;
+    }
+    return n * Faktorial(n - 1);
+}</code></pre>
+        <p>V tejto implementácii je rekurzívna funkcia <code>Faktorial</code>, ktorá volá samu seba s argumentom <code>n - 1</code>, pokiaľ <code>n</code> nie je 0. Ak je <code>n</code> 0, vráti 1, čo je základný prípad rekurzie.</p>
+
+        <h2>Rekurzia: Fibonacciho postupnosť</h2>
+        <p>Fibonacciho postupnosť je ďalším klasickým príkladom rekurzie. V tejto postupnosti je každý prvok súčtom dvoch predchádzajúcich prvkov.</p>
+        <p>Matematická definícia:</p>
+        <ul>
+            <li>F(0) = 0</li>
+            <li>F(1) = 1</li>
+            <li>F(n) = F(n - 1) + F(n - 2) pre n &gt; 1</li>
+        </ul>
+        <p>Rekurzívna implementácia Fibonacciho postupnosti v C#:</p>
+        <pre><code>public int Fibonacci(int n)
+{
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    if (n == 1)
+    {
+        return 1;
+    }
+    return Fibonacci(n - 1) + Fibonacci(n - 2);
+}</code></pre>
+        <p>V tejto implementácii volá funkcia <code>Fibonacci</code> samu seba s argumentmi <code>n - 1</code> a <code>n - 2</code>, pokiaľ <code>n</code> nie je 0 alebo 1. Ak je <code>n</code> 0, vráti 0, a ak je <code>n</code> 1, vráti 1.</p>
+
+        <h2>Efektívnosť rekurzie</h2>
+        <p>Rekurzia je elegantná a často jednoduchšia na pochopenie, ale nie vždy je najefektívnejšia. Napríklad, rekurzívna implementácia Fibonacciho postupnosti má exponenciálnu časovú zložitosť. Pre lepšiu efektívnosť môžeme využiť techniky ako memoizácia alebo iteratívne prístupy.</p>
+        <p>Iteratívna implementácia Fibonacciho postupnosti:</p>
+        <pre><code>public int FibonacciIterativne(int n)
+{
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    if (n == 1)
+    {
+        return 1;
+    }
+
+    int a = 0;
+    int b = 1;
+    int c = 0;
+
+    for (int i = 2; i &lt;= n; i++)
+    {
+        c = a + b;
+        a = b;
+        b = c;
+    }
+
+    return c;
+}</code></pre>
+
+        <h2>Záver</h2>
+        <p>Rekurzia je mocný nástroj v programovaní, ktorý umožňuje riešiť komplexné problémy jednoduchým a prehľadným spôsobom. Avšak, je dôležité zvážiť efektívnosť a prípadné optimalizácie, aby sme predišli neefektívnym riešeniam.</p>
+        @if (IsQuizAvailable)
+        {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+        }
+        else
+        {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+        }
+    </div>
+
+@code {
+
+protected override string GetLessonName()
+{
+return "recursion";
+}
+
+private void Quiz()
+{
+NavigateToQuiz(UrlData.quizUrlRecursion);
+}
+
+private void NextLection()
+{
+NavigateToNextLesson(UrlData.home);
+}
+
+}

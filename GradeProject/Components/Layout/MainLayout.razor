@@ -1,3 +1,4 @@
+@using GradeProject.Components.Layout.AI
 @inherits LayoutComponentBase
 @inject UserManager<ApplicationUser> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -22,8 +23,8 @@
     <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
         <RadzenPanelMenu>
             <RadzenPanelMenuItem Text="Domov" Icon="home" Path="/" />
+            <RadzenPanelMenuItem Text="Leaderboard" Icon="find_in_page" Path="/leaderboard"/>
             <RadzenPanelMenuItem Text="Code Playground {BETA}" Icon="description" Path="/repl/playground"/>
-            <RadzenPanelMenuItem Text="Vyzva {demo}" Icon="announcement" Path="/problems" />
             <RadzenPanelMenuItem Text="Kurz {ALPHA}" Icon="announcement" Path="/learn" />
             <AuthorizeView Roles="Admin">
                 <Authorized>
@@ -43,7 +44,7 @@
         </div>
     </RadzenBody>
 
-
+    <Ai></Ai>
     <RadzenFooter>
         © @DateTime.Today.Year Grade - All Rights Reserved.
     </RadzenFooter>

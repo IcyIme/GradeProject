@@ -34,7 +34,18 @@ public class QuizLoaderService : IQuizLoaderService
             case "operators":
                 return AddOperatorQuestions();
                 break;
-
+            case "loopandif":
+                return AddBranchingAndLoopQuestions();
+                break;
+            case "methods":
+                return AddFunctionQuestions();
+                break;
+            case "parameters":
+                return AddParameterAndReturnTypeQuestions();
+                break;
+            case "recursion":
+                return AddRecursionQuestions();
+                break;
             default:
                 NavigationManager.NavigateTo("/notfound");
                 break;
@@ -264,4 +275,287 @@ private List<Question> AddOperatorQuestions()
     // Add questions to the list
     return new List<Question> { q1, q2, q3, q4, q5, q6, q7, q8 };
 }
+
+private List<Question> AddBranchingAndLoopQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Čo je to if-else vetvenie v C#?",
+        Options = new List<string>() 
+        { 
+            "Cyklus, ktorý sa vykonáva, kým je podmienka pravdivá",
+            "Štruktúra, ktorá vykonáva rôzne časti kódu v závislosti od podmienky",
+            "Štruktúra, ktorá umožňuje opakované vykonávanie časti kódu",
+            "Štruktúra na prácu s kolekciami"
+        },
+        Answer = "Štruktúra, ktorá vykonáva rôzne časti kódu v závislosti od podmienky"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Aký je rozdiel medzi while a do-while cyklom?",
+        Options = new List<string>()
+        {
+            "While cyklus sa vykonáva aspoň raz, do-while cyklus nie",
+            "Do-while cyklus sa vykonáva aspoň raz, while cyklus nie",
+            "Oba sa vykonávajú aspoň raz",
+            "Žiaden rozdiel, oba sú rovnaké"
+        },
+        Answer = "Do-while cyklus sa vykonáva aspoň raz, while cyklus nie"
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Čo sa stane, ak v switch-case vetvení žiadny case nesúhlasí?",
+        Options = new List<string>()
+        {
+            "Kód sa zastaví s chybou",
+            "Vykoná sa default blok, ak existuje",
+            "Vykoná sa prvý case blok",
+            "Kód sa opakuje od začiatku"
+        },
+        Answer = "Vykoná sa default blok, ak existuje"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Aký je účel foreach cyklu v C#?",
+        Options = new List<string>()
+        {
+            "Iteruje cez všetky prvky v kolekcii alebo poli",
+            "Opakuje blok kódu určitý počet krát",
+            "Vykonáva kód len ak je podmienka pravdivá",
+            "Vykonáva kód aspoň raz"
+        },
+        Answer = "Iteruje cez všetky prvky v kolekcii alebo poli"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Ako sa deklaruje for cyklus v C#?",
+        Options = new List<string>()
+        {
+            "for (int i = 0; i < 10; i++)",
+            "foreach (int i in collection)",
+            "do { //code } while (condition)",
+            "while (condition) { //code }"
+        },
+        Answer = "for (int i = 0; i < 10; i++)"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5 };
+}
+
+private List<Question> AddFunctionQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Čo je to funkcia (metóda) v C#?",
+        Options = new List<string>() 
+        { 
+            "Premenná, ktorá uchováva hodnoty",
+            "Blok kódu, ktorý vykonáva konkrétnu úlohu a môže byť volaný podľa potreby",
+            "Typ údajov pre čísla s desatinnou čiarkou",
+            "Operátor na porovnávanie hodnôt"
+        },
+        Answer = "Blok kódu, ktorý vykonáva konkrétnu úlohu a môže byť volaný podľa potreby"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Ako sa definuje funkcia v C#?",
+        Options = new List<string>()
+        {
+            "returnType NazovFunkcie(parametre) { // telo funkcie }",
+            "int premenná = hodnota;",
+            "public class MyClass { }",
+            "if (podmienka) { // telo podmienky }"
+        },
+        Answer = "returnType NazovFunkcie(parametre) { // telo funkcie }"
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Čo znamená kľúčové slovo 'void' pri definovaní funkcie?",
+        Options = new List<string>()
+        {
+            "Funkcia nevracia žiadnu hodnotu",
+            "Funkcia vracia celočíselnú hodnotu",
+            "Funkcia vracia reťazec",
+            "Funkcia sa nikdy nevykoná"
+        },
+        Answer = "Funkcia nevracia žiadnu hodnotu"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Ako zavoláte funkciu s názvom 'Scitaj', ktorá prijíma dva argumenty typu int?",
+        Options = new List<string>()
+        {
+            "Scitaj(int a, int b);",
+            "Scitaj(a, b);",
+            "int vysledok = Scitaj(5, 3);",
+            "return Scitaj(5, 3);"
+        },
+        Answer = "int vysledok = Scitaj(5, 3);"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Čo je to preťaženie funkcie v C#?",
+        Options = new List<string>()
+        {
+            "Definovanie viacerých funkcií s rovnakým názvom, ale rôznymi parametrami",
+            "Volanie tej istej funkcie viackrát",
+            "Používanie funkcie v inom projekte",
+            "Deklarovanie globálnej premennej"
+        },
+        Answer = "Definovanie viacerých funkcií s rovnakým názvom, ale rôznymi parametrami"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5 };
+}
+private List<Question> AddParameterAndReturnTypeQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Čo je to parameter vo funkcii v C#?",
+        Options = new List<string>() 
+        { 
+            "Premenná, ktorá uchováva hodnoty",
+            "Typ údajov pre čísla s desatinnou čiarkou",
+            "Logický typ, ktorý môže obsahovať hodnoty true alebo false",
+            "Vstupná hodnota, ktorá sa odovzdáva funkcii"
+        },
+        Answer = "Vstupná hodnota, ktorá sa odovzdáva funkcii"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Ako sa definuje parameter s predvolenou hodnotou vo funkcii v C#?",
+        Options = new List<string>()
+        {
+            "public void Vypis(string text = \"Ahoj\")",
+            "public void Vypis(string text)",
+            "public void Vypis(string text) = \"Ahoj\"",
+            "public void Vypis(string = \"Ahoj\")"
+        },
+        Answer = "public void Vypis(string text = \"Ahoj\")"
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Čo znamená návratový typ funkcie v C#?",
+        Options = new List<string>()
+        {
+            "Typ hodnoty, ktorú funkcia vracia",
+            "Názov funkcie",
+            "Počet parametrov funkcie",
+            "Názov triedy, v ktorej je funkcia definovaná"
+        },
+        Answer = "Typ hodnoty, ktorú funkcia vracia"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Ako zavoláte funkciu 'Scitaj', ktorá prijíma dva argumenty typu int a vracia int?",
+        Options = new List<string>()
+        {
+            "Scitaj(int a, int b);",
+            "Scitaj(a, b);",
+            "int vysledok = Scitaj(5, 3);",
+            "return Scitaj(5, 3);"
+        },
+        Answer = "int vysledok = Scitaj(5, 3);"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Ako vrátiť viacero hodnôt z funkcie v C#?",
+        Options = new List<string>()
+        {
+            "Pomocou kľúčového slova 'void'",
+            "Pomocou 'tuples' alebo objektov",
+            "Pomocou 'return' viackrát",
+            "Nie je možné vrátiť viacero hodnôt z funkcie"
+        },
+        Answer = "Pomocou 'tuples' alebo objektov"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5 };
+}
+private List<Question> AddRecursionQuestions()
+{
+    Question q1 = new Question
+    {
+        QuestionTitle = "Čo je to rekurzia v programovaní?",
+        Options = new List<string>()
+        {
+            "Technika, pri ktorej funkcia volá inú funkciu",
+            "Technika, pri ktorej funkcia volá samu seba",
+            "Technika, pri ktorej sa používa cyklus",
+            "Technika, pri ktorej sa používa viacnásobné priradenie"
+        },
+        Answer = "Technika, pri ktorej funkcia volá samu seba"
+    };
+
+    Question q2 = new Question
+    {
+        QuestionTitle = "Ktorá funkcia je správnym príkladom rekurzie?",
+        Options = new List<string>()
+        {
+            "public int Add(int a, int b) { return a + b; }",
+            "public int Faktorial(int n) { if (n == 0) return 1; return n * Faktorial(n - 1); }",
+            "public void Print() { for (int i = 0; i < 10; i++) { Console.WriteLine(i); } }",
+            "public int Multiply(int a, int b) { return a * b; }"
+        },
+        Answer = "public int Faktorial(int n) { if (n == 0) return 1; return n * Faktorial(n - 1); }"
+    };
+
+    Question q3 = new Question
+    {
+        QuestionTitle = "Čo je základný prípad v rekurzii?",
+        Options = new List<string>()
+        {
+            "Prípad, kedy funkcia volá inú funkciu",
+            "Prípad, kedy funkcia volá samu seba",
+            "Prípad, kedy funkcia prestane volať samu seba",
+            "Prípad, kedy funkcia používa cyklus"
+        },
+        Answer = "Prípad, kedy funkcia prestane volať samu seba"
+    };
+
+    Question q4 = new Question
+    {
+        QuestionTitle = "Ktorá z nasledujúcich funkcií počíta Fibonacciho číslo rekurzívne?",
+        Options = new List<string>()
+        {
+            "public int Fibonacci(int n) { if (n <= 0) return 0; if (n == 1) return 1; return Fibonacci(n - 1) + Fibonacci(n - 2); }",
+            "public int Fibonacci(int n) { int a = 0; int b = 1; for (int i = 2; i <= n; i++) { int c = a + b; a = b; b = c; } return b; }",
+            "public int Fibonacci(int n) { return n * 2; }",
+            "public int Fibonacci(int n) { if (n <= 1) return n; return n * Fibonacci(n - 1); }"
+        },
+        Answer = "public int Fibonacci(int n) { if (n <= 0) return 0; if (n == 1) return 1; return Fibonacci(n - 1) + Fibonacci(n - 2); }"
+    };
+
+    Question q5 = new Question
+    {
+        QuestionTitle = "Kedy je rekurzia neefektívna?",
+        Options = new List<string>()
+        {
+            "Keď má funkcia veľa základných prípadov",
+            "Keď má funkcia málo základných prípadov",
+            "Keď sa rekurzívne volanie neustále opakuje a riešenie problému sa nekončí",
+            "Keď funkcia používa veľa parametrov"
+        },
+        Answer = "Keď sa rekurzívne volanie neustále opakuje a riešenie problému sa nekončí"
+    };
+
+    // Add questions to the list
+    return new List<Question> { q1, q2, q3, q4, q5 };
+}
+
 }

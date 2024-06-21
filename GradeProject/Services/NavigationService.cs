@@ -35,6 +35,18 @@ namespace GradeProject.Services
                 case"operators":
                     _navigationManager.NavigateTo(UrlData.lectionUrlOperations);
                     break;
+                case "loopandif":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlLoop);
+                    break;
+                case "methods":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlMethods);
+                    break;
+                case "parameters":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlParameters);
+                    break;
+                case "recursion":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlRecursion);
+                    break;
                 default:
                     _navigationManager.NavigateTo(""); // Navigate to home or another page
                     break;

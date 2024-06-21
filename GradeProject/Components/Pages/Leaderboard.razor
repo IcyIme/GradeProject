@@ -1,0 +1,57 @@
+@page "/leaderboard"
+
+@inject UserManager<ApplicationUser> UserManager
+
+@attribute [Authorize]
+
+<PageTitle>Leaderboard</PageTitle>
+@if (LeaderboardData is not null)
+{
+    <div class="bgtext">
+        <h3 class="text-center">Global Leaderboard | TOP 100</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Stars</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var user in LeaderboardData)
+            {
+                <tr>
+                    <td><b>@(LeaderboardData.IndexOf(user) + 1)</b></td>
+                    <td><RadzenGravatar Email="@user.Email" class="" /> @user.FullName</td>
+                    <td>✨@user.Score</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="rz-m-12">
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    </div>
+}
+
+
+@code{
+    private List<ApplicationUser> LeaderboardData;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        LeaderboardData = await GetLeaderboard();
+    }
+
+    // Method to retrieve leaderboard data
+    private async Task<List<ApplicationUser>> GetLeaderboard()
+    {
+        // Retrieve the top users based on their scores
+        var topUsers = UserManager.Users.OrderByDescending(u => u.Score).Take(100).ToList();
+        return topUsers;
+    }
+
+}

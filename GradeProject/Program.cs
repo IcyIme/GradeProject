@@ -1,7 +1,6 @@
 using Blazor.Components;
 using GradeProject.Components;
 using GradeProject.Components.Account;
-using GradeProject.Components.Pages.Leet;
 using GradeProject.Data;
 using GradeProject.Services;
 using Microsoft.AspNetCore.Components.Authorization;
