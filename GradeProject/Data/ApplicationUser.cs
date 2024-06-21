@@ -1,3 +1,4 @@
+using GradeProject.Data.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace GradeProject.Data
@@ -10,7 +11,6 @@ namespace GradeProject.Data
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
         public int Score { get; set; }
-
         public string[]? CompletedLesson { get; set; }
         public string[]? CompletedQuiz { get; set; }
     }

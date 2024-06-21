@@ -8,7 +8,7 @@
 @if (LeaderboardData is not null)
 {
     <div class="bgtext">
-        <h3 class="text-center">Global Leaderboard</h3>
+        <h3 class="text-center">Global Leaderboard | TOP 100</h3>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -50,7 +50,7 @@ else
     private async Task<List<ApplicationUser>> GetLeaderboard()
     {
         // Retrieve the top users based on their scores
-        var topUsers = UserManager.Users.OrderByDescending(u => u.Score).Take(10).ToList();
+        var topUsers = UserManager.Users.OrderByDescending(u => u.Score).Take(100).ToList();
         return topUsers;
     }
 
