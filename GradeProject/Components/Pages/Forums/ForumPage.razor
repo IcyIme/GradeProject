@@ -1,0 +1,35 @@
+﻿// Pages/Rooms.razor
+@page "/rooms"
+@inject IForumService ForumService
+@inject NavigationManager NavigationManager
+
+<h3>Rooms</h3>
+
+@foreach (var room in rooms)
+{
+    <div>
+        <h4>@room.Title</h4>
+        <p>Owner: @room.OwnerId</p>
+        <ul>
+            @foreach (var comment in room.Comments)
+            {
+                <li>@comment.Content</li>
+            }
+        </ul>
+        <button @onclick="() => ShowRoomDetails(room.Id)">Details</button>
+    </div>
+}
+
+@code {
+    List<ForumRoom> rooms = new List<ForumRoom>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        rooms = await ForumService.GetRoomsAsync();
+    }
+
+    private void ShowRoomDetails(int roomId)
+    {
+        NavigationManager.NavigateTo($"/room/{roomId}");
+    }
+}

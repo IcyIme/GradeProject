@@ -1,3 +1,4 @@
+using GradeProject.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,5 +14,7 @@ namespace GradeProject.Data
         }
 
         // Other DbSet declarations can also be added here if needed
+        public DbSet<ForumRoom> ForumRooms { get; set; }
+        public DbSet<ForumComment> ForumComments { get; set; } 
     }
 }

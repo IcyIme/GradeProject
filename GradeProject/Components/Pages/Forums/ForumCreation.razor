@@ -1,0 +1,56 @@
+﻿@inject IForumService ForumService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@page "/roomc"
+@using System.Security.Claims
+
+<h3>Create New Room</h3>
+
+@if (string.IsNullOrEmpty(errorMessage))
+{
+    <form @onsubmit="CreateRoom">
+        <label>Title:</label>
+        <input type="text" @bind="newRoomTitle" />
+        <label>Problem Detail:</label>
+        <textarea @bind="newRoomDetail"></textarea>
+        <button type="submit">Create</button>
+    </form>
+}
+else
+{
+    <p style="color: red;">@errorMessage</p>
+}
+
+@code {
+    private string newRoomTitle;
+    private string newRoomDetail;
+    private string errorMessage;
+
+    private async Task CreateRoom()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(newRoomTitle))
+        {
+            errorMessage = "Title cannot be empty";
+            return;
+        }
+
+        var room = new ForumRoom
+        {
+            Title = newRoomTitle,
+            Detail = newRoomDetail
+        };
+
+        try
+        {
+            await ForumService.CreateRoomAsync(room, userId);
+            NavigationManager.NavigateTo($"/room/{room.Id}");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to create room: {ex.Message}";
+        }
+    }
+}
