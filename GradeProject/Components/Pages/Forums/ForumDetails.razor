@@ -3,19 +3,26 @@
 @inject IForumService ForumService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+
 <h3>Room Details</h3>
 
 @if (room != null)
 {
     <h4>@room.Title</h4>
     <p><strong>Detail:</strong> @room.Detail</p>
-    <p>Owner: @room.OwnerId</p>
+    <p>Owner: @userName</p>
 
     <h5>Comments:</h5>
     <ul>
         @foreach (var comment in room.Comments)
         {
-            <li>@comment.Content</li>
+            <li>
+                <strong>@comment.UserName:</strong> @comment.Content
+                @if (comment.UserId == userId)
+                {
+                    <button @onclick="() => DeleteComment(comment.Id)">Delete</button>
+                }
+            </li>
         }
     </ul>
 
@@ -37,15 +44,16 @@
 
     private ForumRoom room;
     private bool IsOwner;
+    private string userId;
     private string newCommentContent;
-
+    private string userName;
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var userId = authState.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        userId = authState.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
         room = await ForumService.GetRoomAsync(RoomId);
-
+        userName = await ForumService.GetUserNameAsync(room.OwnerId);
         if (room != null && room.OwnerId == userId)
         {
             IsOwner = true;
@@ -54,19 +62,27 @@
 
     private async Task AddComment()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var userId = authState.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-
         var comment = new ForumComment
             {
                 Content = newCommentContent,
                 RoomId = RoomId,
-                UserId = userId
+                UserId = userId,
+                UserName = await ForumService.GetUserNameAsync(userId)
             };
 
         await ForumService.AddCommentAsync(comment);
         room.Comments.Add(comment);
         newCommentContent = "";
+    }
+
+    private async Task DeleteComment(int commentId)
+    {
+        var comment = room.Comments.FirstOrDefault(c => c.Id == commentId);
+        if (comment != null && comment.UserId == userId)
+        {
+            await ForumService.DeleteCommentAsync(commentId);
+            room.Comments = room.Comments.Where(c => c.Id != commentId).ToList();
+        }
     }
 
     private async Task DeleteRoom()

@@ -1,31 +1,49 @@
-﻿// Pages/Rooms.razor
-@page "/rooms"
+﻿@page "/rooms"
 @inject IForumService ForumService
 @inject NavigationManager NavigationManager
 
-<h3>Rooms</h3>
+<div class="bgtext justify-content-center">
+    <h1>Menu miestnosti</h1>
+</div>
 
-@foreach (var room in rooms)
+@if (rooms != null)
 {
-    <div>
-        <h4>@room.Title</h4>
-        <p>Owner: @room.OwnerId</p>
-        <ul>
-            @foreach (var comment in room.Comments)
-            {
-                <li>@comment.Content</li>
-            }
-        </ul>
-        <button @onclick="() => ShowRoomDetails(room.Id)">Details</button>
+    @foreach (var room in rooms.OrderByDescending(r => r.DateOfCreation))
+    {
+        <div class="bgtext spacing">
+            <a @onclick="() => ShowRoomDetails(room.Id)">
+                <h2>@room.Title</h2>
+                <h5>@room.Detail</h5>
+                <p>@room.DateOfCreation.ToShortDateString()</p>
+                <p>Owner: @(userNames.ContainsKey(room.OwnerId) ? userNames[room.OwnerId] : "Loading...")</p>
+            </a>
+        </div>
+    }
+}
+else
+{
+    <div class="rz-m-12">
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
     </div>
 }
 
 @code {
-    List<ForumRoom> rooms = new List<ForumRoom>();
+    private List<ForumRoom> rooms = new List<ForumRoom>();
+    private Dictionary<string, string> userNames = new Dictionary<string, string>();
 
     protected override async Task OnInitializedAsync()
     {
         rooms = await ForumService.GetRoomsAsync();
+
+        // Načítanie mien používateľov pre každú miestnosť
+        foreach (var room in rooms)
+        {
+            if (!userNames.ContainsKey(room.OwnerId))
+            {
+                var userName = await ForumService.GetUserNameAsync(room.OwnerId);
+                userNames[room.OwnerId] = userName;
+            }
+        }
     }
 
     private void ShowRoomDetails(int roomId)

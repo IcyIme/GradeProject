@@ -1,6 +1,7 @@
 ﻿// Interfaces/IForumService.cs
 
 using GradeProject.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 public interface IForumService
@@ -12,15 +13,20 @@ public interface IForumService
     Task<bool> CanManageRoomAsync(int roomId, string userId);
     Task<int> CreateRoomAsync(ForumRoom room, string ownerId);
     Task<bool> DeleteRoomAsync(int roomId);
+    Task<List<ForumRoom>> GetRoomsCreatedByUserAsync(string userId);
+    Task DeleteCommentAsync(int commentId);
+    Task<string> GetUserNameAsync(string userId);
 }
 
 public class ForumService : IForumService
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public ForumService(ApplicationDbContext context)
+    public ForumService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     public async Task<List<ForumRoom>> GetRoomsAsync()
@@ -72,6 +78,29 @@ public class ForumService : IForumService
         }
 
         return false;
+    }
+
+    public async Task<List<ForumRoom>> GetRoomsCreatedByUserAsync(string userId)
+    {
+        return await _context.ForumRooms
+            .Where(room => room.OwnerId == userId)
+            .ToListAsync();
+    }
+
+    public async Task DeleteCommentAsync(int commentId)
+    {
+        var comment = await _context.ForumComments.FindAsync(commentId);
+        if (comment != null)
+        {
+            _context.ForumComments.Remove(comment);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<string> GetUserNameAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        return user?.UserName;
     }
 
 }

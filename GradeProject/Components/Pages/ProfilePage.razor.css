@@ -58,12 +58,6 @@ body {
 .theme-blue .profile-page .content__cover {
     background: linear-gradient(150deg, #0098f0 20%, #00f2c3 100%);
 }
-.profile-page .content__bull {
-    display: none;
-    height: 12rem;
-    position: relative;
-    overflow: hidden;
-}
 @media (max-width: 990px) {
     .profile-page .content__bull {
         display: block;
