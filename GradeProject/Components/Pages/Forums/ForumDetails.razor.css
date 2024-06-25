@@ -42,8 +42,9 @@ body {
 }
 
 .comment-list {
-    display:block;
-    width: 100%; /* Ensure the ul takes 100% width of its container */
-    list-style-type: none; /* Remove default list styles */
-    padding: 0; /* Remove default padding */
+    margin: 0;
+    display: grid;
+    gap: 2px;
+    font-family: system-ui, sans-serif;
+    font-size: 15px;
 }

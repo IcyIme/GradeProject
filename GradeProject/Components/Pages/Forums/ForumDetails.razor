@@ -1,17 +1,31 @@
-﻿@page "/room/{roomId:int}"
+﻿@page "/rooms/room/{roomId:int}"
+
 @using System.Security.Claims
+
 @inject IForumService ForumService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-<div class="container-sm">
+@inject DialogService DialogService
 
+<div class="container-sm">
+    <div class="">
+        <RadzenButton Text="Pridať Komentár" ButtonStyle="ButtonStyle.Primary" Click=@AddCommentDialog />
+    </div>
     @if (room != null)
     {
-        <div class="bgtext">
+        <div class="bgtext mt-2">
             <h4 style="text-align:center;">@room.Title</h4>
             <p class="wrap"> @((MarkupString)room.Detail)</p>
             <p style="text-align:center;">Owner: @userName</p>
+            <p style="text-align:center">OwnerID: @userId</p>
         </div>
+        
+        @if (loading)
+        {
+            <div class="rz-m-12">
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    </div>
+        }
 
         <h5>Comments:</h5>
         <div class="comment-list">
@@ -19,7 +33,7 @@
             {
                 <div class="bubble wrap @(comment.UserId == userId ? "right" : "left")">
                     <strong>@comment.UserName:</strong> <br/>
-                    <p>@comment.Content</p>
+                    <p>@((MarkupString)comment.Content)</p>
                     @if (comment.UserId == userId)
                     {
                         <br/>
@@ -28,12 +42,6 @@
                 </div>
             }
         </div>
-
-        <h5>Add a Comment:</h5>
-        <form @onsubmit="AddComment">
-            <textarea @bind="newCommentContent"></textarea>
-            <button type="submit">Add Comment</button>
-        </form>
 
         @if (!string.IsNullOrEmpty(errorMessage))
         {
@@ -48,7 +56,6 @@
     }
 </div>
 
-
 @code {
     [Parameter]
     public int RoomId { get; set; }
@@ -59,6 +66,7 @@
     private string newCommentContent;
     private string userName;
     private string errorMessage;
+    private bool loading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,7 +83,7 @@
 
     private async Task AddComment()
     {
-
+        loading = true;
         if (string.IsNullOrWhiteSpace(newCommentContent))
         {
             errorMessage = "Comment cannot be blank.";
@@ -91,9 +99,12 @@
                 UserName = await ForumService.GetUserNameAsync(userId)
             };
 
-        await ForumService.AddCommentAsync(comment);
+        
         room.Comments.Add(comment);
         newCommentContent = "";
+        await ForumService.AddCommentAsync(comment);
+        loading = false;
+        NavigationManager.Refresh(true);
     }
 
     private async Task DeleteComment(int commentId)
@@ -117,5 +128,19 @@
         {
             // Handle error or unauthorized deletion
         }
+    }
+
+    async Task AddCommentDialog()
+    {
+        var result = await DialogService.OpenAsync("Pridať Komentár", ds =>
+            @<RadzenStack Gap="1.5rem">
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                        <form @onsubmit="AddComment">
+                            <RadzenHtmlEditor @bind-Value=@newCommentContent style="height: 300px;"  UploadUrl="upload/image" />
+                            <br/>
+                            <RadzenButton type="submit" Click="() => ds.Close(true)">Pridať Komentár</RadzenButton>
+                        </form>
+        </RadzenStack>
+        </RadzenStack>);
     }
 }

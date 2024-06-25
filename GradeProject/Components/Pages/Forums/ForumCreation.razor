@@ -1,7 +1,7 @@
 ﻿@inject IForumService ForumService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-@page "/roomc"
+@page "/room/create"
 @using System.Security.Claims
 
 <h3>Create New Room</h3>
@@ -48,7 +48,7 @@ else
         try
         {
             await ForumService.CreateRoomAsync(room, userId);
-            NavigationManager.NavigateTo($"/room/{room.Id}");
+            NavigationManager.NavigateTo($"/rooms/room/{room.Id}");
         }
         catch (Exception ex)
         {

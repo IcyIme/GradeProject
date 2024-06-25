@@ -27,6 +27,7 @@ builder.Services.AddScoped<INavigationService, NavigationService>();
 builder.Services.AddSingleton<ProblemService>();
 builder.Services.AddCommandLine();
 builder.Services.AddScoped<IForumService,ForumService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
