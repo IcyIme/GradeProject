@@ -1,6 +1,7 @@
 ﻿// ForumRoom.cs
 
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Components;
 
 public class ForumRoom
 {

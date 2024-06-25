@@ -3,40 +3,51 @@
 @inject IForumService ForumService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+<div class="container-sm">
 
-<h3>Room Details</h3>
-
-@if (room != null)
-{
-    <h4>@room.Title</h4>
-    <p><strong>Detail:</strong> @room.Detail</p>
-    <p>Owner: @userName</p>
-
-    <h5>Comments:</h5>
-    <ul>
-        @foreach (var comment in room.Comments)
-        {
-            <li>
-                <strong>@comment.UserName:</strong> @comment.Content
-                @if (comment.UserId == userId)
-                {
-                    <button @onclick="() => DeleteComment(comment.Id)">Delete</button>
-                }
-            </li>
-        }
-    </ul>
-
-    <h5>Add a Comment:</h5>
-    <form @onsubmit="AddComment">
-        <textarea @bind="newCommentContent"></textarea>
-        <button type="submit">Add Comment</button>
-    </form>
-
-    @if (IsOwner)
+    @if (room != null)
     {
-        <button @onclick="DeleteRoom">Delete Room</button>
+        <div class="bgtext">
+            <h4 style="text-align:center;">@room.Title</h4>
+            <p class="wrap"> @((MarkupString)room.Detail)</p>
+            <p style="text-align:center;">Owner: @userName</p>
+        </div>
+
+        <h5>Comments:</h5>
+        <div class="comment-list">
+            @foreach (var comment in room.Comments.OrderByDescending(r => r.DateOfCreation))
+            {
+                <div class="bubble wrap @(comment.UserId == userId ? "right" : "left")">
+                    <strong>@comment.UserName:</strong> <br/>
+                    <p>@comment.Content</p>
+                    @if (comment.UserId == userId)
+                    {
+                        <br/>
+                        <RadzenButton Click="() => DeleteComment(comment.Id)"> delete</RadzenButton>
+                    }
+                </div>
+            }
+        </div>
+
+        <h5>Add a Comment:</h5>
+        <form @onsubmit="AddComment">
+            <textarea @bind="newCommentContent"></textarea>
+            <button type="submit">Add Comment</button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p class="text-danger">@errorMessage</p>
+        }
+
+
+        @if (IsOwner)
+        {
+            <button @onclick="DeleteRoom">Delete Room</button>
+        }
     }
-}
+</div>
+
 
 @code {
     [Parameter]
@@ -47,6 +58,8 @@
     private string userId;
     private string newCommentContent;
     private string userName;
+    private string errorMessage;
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -62,11 +75,19 @@
 
     private async Task AddComment()
     {
+
+        if (string.IsNullOrWhiteSpace(newCommentContent))
+        {
+            errorMessage = "Comment cannot be blank.";
+            return;
+        }
+
         var comment = new ForumComment
             {
                 Content = newCommentContent,
                 RoomId = RoomId,
                 UserId = userId,
+                DateOfCreation = DateTime.UtcNow,
                 UserName = await ForumService.GetUserNameAsync(userId)
             };
 

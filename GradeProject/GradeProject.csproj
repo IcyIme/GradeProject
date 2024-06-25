@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\Js\**" />
+    <Compile Remove="wwwroot\Videos\**" />
+    <Content Remove="wwwroot\Js\**" />
+    <Content Remove="wwwroot\Videos\**" />
+    <EmbeddedResource Remove="wwwroot\Js\**" />
+    <EmbeddedResource Remove="wwwroot\Videos\**" />
+    <None Remove="wwwroot\Js\**" />
+    <None Remove="wwwroot\Videos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Components\Layout\SubMenu.razor" />
     <Content Remove="Components\OptionCard.razor" />
   </ItemGroup>
@@ -49,8 +60,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\Js\" />
-    <Folder Include="wwwroot\Videos\" />
   </ItemGroup>
 
   <ItemGroup>

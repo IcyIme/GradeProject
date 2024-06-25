@@ -12,6 +12,7 @@
         <label>Title:</label>
         <input type="text" @bind="newRoomTitle" />
         <label>Problem Detail:</label>
+        <RadzenHtmlEditor @bind-Value=@newRoomDetail style="height: 300px;"  UploadUrl="upload/image" />
         <textarea @bind="newRoomDetail"></textarea>
         <button type="submit">Create</button>
     </form>

@@ -1,3 +1,15 @@
 ﻿.spacing{
     margin-top: 10px;
 }
+
+.bgt {
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.bgt:hover {
+        background-color: #F0F0F0;
+    }

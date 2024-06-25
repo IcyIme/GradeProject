@@ -10,10 +10,10 @@
 {
     @foreach (var room in rooms.OrderByDescending(r => r.DateOfCreation))
     {
-        <div class="bgtext spacing">
+        <div class="bgt spacing">
             <a @onclick="() => ShowRoomDetails(room.Id)">
                 <h2>@room.Title</h2>
-                <h5>@room.Detail</h5>
+                <h5>@((MarkupString) GetFirst10Words(room.Detail))...</h5>
                 <p>@room.DateOfCreation.ToShortDateString()</p>
                 <p>Owner: @(userNames.ContainsKey(room.OwnerId) ? userNames[room.OwnerId] : "Loading...")</p>
             </a>
@@ -49,5 +49,17 @@ else
     private void ShowRoomDetails(int roomId)
     {
         NavigationManager.NavigateTo($"/room/{roomId}");
+    }
+
+    private string GetFirst10Words(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+
+        var words = text.Split(' ');
+        if (words.Length <= 10)
+        {
+            return text;
+        }
+        return string.Join(' ', words.Take(10)) + "...";
     }
 }
