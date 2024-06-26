@@ -50,12 +50,12 @@
                                 <label for="fullname">Celé meno</label>
                                 <ValidationMessage For="() => Input.FullName" class="text-danger" />
                             </div>
-
+@* 
                             <div class="form-floating mb-3">
                                 <InputDate @bind-Value="Input.DateOfBirth" class="form-control" placeholder="Date of Birth" />
                                 <label for="dob">Dátum narodenia</label>
                                 <ValidationMessage For="() => Input.DateOfBirth" class="text-danger" />
-                            </div>
+                            </div> *@
 
                             <div class="form-floating mb-3">
                                 <InputSelect @bind-Value="Input.Gender" class="form-control" aria-required="true" placeholder="Select Gender">
@@ -91,7 +91,6 @@
     {
         var user = CreateUser();
         user.FullName = Input.FullName;
-        user.DateOfBirth = Input.DateOfBirth;
         user.Gender = Input.Gender;
         user.Score = 0;
         user.CompletedLesson = null;
@@ -173,9 +172,9 @@
         [Display(Name = "Full Name")]
         public string FullName { get; set; } = "";
 
-        [Required]
-        [Display(Name = "Date of Birth")]
-        public DateTime DateOfBirth { get; set; } = DateTime.Today;
+        // [Required]
+        // [Display(Name = "Date of Birth")]
+        // public DateTime DateOfBirth { get; set; } = DateTime.Today;
 
         [Required]
         [Display(Name = "Gender")]
