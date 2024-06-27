@@ -1,26 +1,21 @@
 ﻿@inject IForumService ForumService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-@page "/room/create"
+@page "/rooms/create"
 @using System.Security.Claims
 
-<h3>Create New Room</h3>
-
-@if (string.IsNullOrEmpty(errorMessage))
-{
-    <form @onsubmit="CreateRoom">
-        <label>Title:</label>
-        <input type="text" @bind="newRoomTitle" />
-        <label>Problem Detail:</label>
-        <RadzenHtmlEditor @bind-Value=@newRoomDetail style="height: 300px;"  UploadUrl="upload/image" />
-        <textarea @bind="newRoomDetail"></textarea>
-        <button type="submit">Create</button>
-    </form>
-}
-else
-{
-    <p style="color: red;">@errorMessage</p>
-}
+    <div class="bgtext">
+        <form @onsubmit="CreateRoom">
+            <label>Názov</label> <br/>
+            <RadzenTextBox type="text" @bind-value="newRoomTitle" MaxLength="40"></RadzenTextBox><br/>
+            <br/>
+            <label>Detail problému</label><br />
+            <RadzenHtmlEditor @bind-Value=@newRoomDetail style="height: 400px;"  UploadUrl="upload/image" /> <br/>
+            <p style="color: red;">@errorMessage</p>
+            <RadzenButton type="submit" Text="Vytvoriť"></RadzenButton>
+        </form>
+    </div>
+    
 
 @code {
     private string newRoomTitle;
@@ -34,7 +29,7 @@ else
 
         if (string.IsNullOrEmpty(newRoomTitle))
         {
-            errorMessage = "Title cannot be empty";
+            errorMessage = "Názov nemôže byť prázdny";
             return;
         }
 

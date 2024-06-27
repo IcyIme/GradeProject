@@ -7,54 +7,63 @@
 @inject NavigationManager NavigationManager
 @inject DialogService DialogService
 
-<div class="container-sm">
-    <div class="">
-        <RadzenButton Text="Pridať Komentár" ButtonStyle="ButtonStyle.Primary" Click=@AddCommentDialog />
-    </div>
-    @if (room != null)
-    {
-        <div class="bgtext mt-2">
-            <h4 style="text-align:center;">@room.Title</h4>
-            <p class="wrap"> @((MarkupString)room.Detail)</p>
-            <p style="text-align:center;">Owner: @userName</p>
-            <p style="text-align:center">OwnerID: @userId</p>
-        </div>
-        
-        @if (loading)
-        {
-            <div class="rz-m-12">
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
-    </div>
-        }
-
-        <h5>Comments:</h5>
-        <div class="comment-list">
-            @foreach (var comment in room.Comments.OrderByDescending(r => r.DateOfCreation))
+@if (load)
+{
+    <div class="container-sm">
+        <div class="">
+            <RadzenButton Text="Pridať Komentár" ButtonStyle="ButtonStyle.Primary" Click=@AddCommentDialog />
+            @if (IsOwner)
             {
-                <div class="bubble wrap @(comment.UserId == userId ? "right" : "left")">
-                    <strong>@comment.UserName:</strong> <br/>
-                    <p>@((MarkupString)comment.Content)</p>
-                    @if (comment.UserId == userId)
-                    {
-                        <br/>
-                        <RadzenButton Click="() => DeleteComment(comment.Id)"> delete</RadzenButton>
-                    }
-                </div>
+                <RadzenButton Text="Zmazať miestnosť" ButtonStyle="ButtonStyle.Danger" Click="DeleteRoom" />
             }
         </div>
 
-        @if (!string.IsNullOrEmpty(errorMessage))
+        @if (room != null)
         {
-            <p class="text-danger">@errorMessage</p>
-        }
+            <div class="bgtext mt-2">
+                <h4 style="text-align:center;">@room.Title</h4>
+                <p class="wrap"> @((MarkupString)room.Detail)</p>
+                <p style="text-align:center;">Owner: @userName</p>
+                <p style="text-align:center">OwnerID: @userId</p>
+            </div>
+        
+            @if (loading)
+            {
+                <div class="rz-m-12">
+                    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+                </div>
+            }
+            <div class="comment-list">
+                @foreach (var comment in room.Comments.OrderByDescending(r => r.DateOfCreation))
+                {
+                    <div class="bubble wrap @(comment.UserId == userId ? "right" : "left")">
+                        <strong>@comment.UserName:</strong> <br/>
+                        <p>@((MarkupString)comment.Content)</p>
+                        @if (comment.UserId == userId)
+                        {
+                            <br/>
+                            <RadzenButton Click="() => DeleteComment(comment.Id)"> delete</RadzenButton>
+                        }
+                    </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="text-danger">@errorMessage</p>
+            }
 
 
-        @if (IsOwner)
-        {
-            <button @onclick="DeleteRoom">Delete Room</button>
+        
         }
-    }
-</div>
+    </div>
+}
+else
+{
+    <div class="rz-m-12">
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    </div>
+}
 
 @code {
     [Parameter]
@@ -67,7 +76,7 @@
     private string userName;
     private string errorMessage;
     private bool loading = false;
-
+    private bool load = false;
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -79,6 +88,8 @@
         {
             IsOwner = true;
         }
+
+        load = true;
     }
 
     private async Task AddComment()

@@ -2,7 +2,9 @@
 @inject IForumService ForumService
 @inject NavigationManager NavigationManager
 
-<div class="bgtext justify-content-center">
+<RadzenButton Text="vytvoriť miestnosť" Click="CreateRoom"></RadzenButton>
+
+<div class="bgtext justify-content-center mt-2">
     <h1>Menu miestnosti</h1>
 </div>
 
@@ -61,5 +63,10 @@ else
             return text;
         }
         return string.Join(' ', words.Take(10)) + "...";
+    }
+
+    private void CreateRoom()
+    {
+        NavigationManager.NavigateTo("/rooms/create");
     }
 }
