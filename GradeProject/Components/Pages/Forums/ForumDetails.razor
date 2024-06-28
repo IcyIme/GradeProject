@@ -12,9 +12,9 @@
     <div class="container-sm">
         <div class="">
             <RadzenButton Text="Pridať Komentár" ButtonStyle="ButtonStyle.Primary" Click=@AddCommentDialog />
-            @if (IsOwner)
+            @if (IsOwner || IsAdmin)
             {
-                <RadzenButton Text="Zmazať miestnosť" ButtonStyle="ButtonStyle.Danger" Click="DeleteRoom" />
+                <RadzenButton Text="Zmazať miestnosť" ButtonStyle="ButtonStyle.Danger" Click=@DeleteRoom />
             }
         </div>
 
@@ -26,7 +26,7 @@
                 <p style="text-align:center;">Owner: @userName</p>
                 <p style="text-align:center">OwnerID: @userId</p>
             </div>
-        
+
             @if (loading)
             {
                 <div class="rz-m-12">
@@ -34,15 +34,15 @@
                 </div>
             }
             <div class="comment-list">
-                @foreach (var comment in room.Comments.OrderByDescending(r => r.DateOfCreation))
+                @foreach (var comment in precomputedComments.OrderByDescending(r => r.Comment.DateOfCreation))
                 {
-                    <div class="bubble wrap @(comment.UserId == userId ? "right" : "left")">
-                        <strong>@comment.UserName:</strong> <br/>
-                        <p>@((MarkupString)comment.Content)</p>
-                        @if (comment.UserId == userId)
+                    <div class="bubble wrap @(comment.Comment.UserId == userId ? "right" : "left")">
+                        <strong>@(comment.IsAdmin ? "System Admin" : comment.Comment.UserName):</strong> <br />
+                        <p>@((MarkupString)comment.Comment.Content)</p>
+                        @if (comment.Comment.UserId == userId || IsAdmin)
                         {
-                            <br/>
-                            <RadzenButton Click="() => DeleteComment(comment.Id)"> delete</RadzenButton>
+                            <br />
+                            <RadzenButton Click="() => DeleteComment(comment.Comment.Id)"> delete</RadzenButton>
                         }
                     </div>
                 }
@@ -52,9 +52,6 @@
             {
                 <p class="text-danger">@errorMessage</p>
             }
-
-
-        
         }
     </div>
 }
@@ -71,25 +68,50 @@ else
 
     private ForumRoom room;
     private bool IsOwner;
+    private bool IsAdmin;
     private string userId;
     private string newCommentContent;
     private string userName;
     private string errorMessage;
     private bool loading = false;
     private bool load = false;
+    private List<CommentWithAdminStatus> precomputedComments;
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        userId = authState.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = authState.User;
+        userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
 
         room = await ForumService.GetRoomAsync(RoomId);
         userName = await ForumService.GetUserNameAsync(room.OwnerId);
+
         if (room != null && room.OwnerId == userId)
         {
             IsOwner = true;
         }
 
+        IsAdmin = user?.IsInRole("Admin") ?? false; // Assuming you have roles implemented
+
+        // Precompute comments with admin status
+        precomputedComments = await GetCommentsWithAdminStatus(room.Comments);
+
         load = true;
+    }
+
+    private async Task<List<CommentWithAdminStatus>> GetCommentsWithAdminStatus(IEnumerable<ForumComment> comments)
+    {
+        var commentList = new List<CommentWithAdminStatus>();
+        foreach (var comment in comments)
+        {
+            var isAdmin = await ForumService.IsUserAdmin(comment.UserId);
+            commentList.Add(new CommentWithAdminStatus
+                    {
+                        Comment = comment,
+                        IsAdmin = isAdmin
+                    });
+        }
+        return commentList;
     }
 
     private async Task AddComment()
@@ -97,21 +119,26 @@ else
         loading = true;
         if (string.IsNullOrWhiteSpace(newCommentContent))
         {
-            errorMessage = "Comment cannot be blank.";
+            errorMessage = "Poznámka nemôže byť prázdna.";
+            loading = false;
             return;
         }
 
         var comment = new ForumComment
-            {
-                Content = newCommentContent,
-                RoomId = RoomId,
-                UserId = userId,
-                DateOfCreation = DateTime.UtcNow,
-                UserName = await ForumService.GetUserNameAsync(userId)
-            };
+                {
+                    Content = newCommentContent,
+                    RoomId = RoomId,
+                    UserId = userId,
+                    DateOfCreation = DateTime.UtcNow,
+                    UserName = IsAdmin ? "Admin" : await ForumService.GetUserNameAsync(userId)
+                };
 
-        
         room.Comments.Add(comment);
+        precomputedComments.Add(new CommentWithAdminStatus
+                {
+                    Comment = comment,
+                    IsAdmin = IsAdmin
+                });
         newCommentContent = "";
         await ForumService.AddCommentAsync(comment);
         loading = false;
@@ -121,16 +148,17 @@ else
     private async Task DeleteComment(int commentId)
     {
         var comment = room.Comments.FirstOrDefault(c => c.Id == commentId);
-        if (comment != null && comment.UserId == userId)
+        if (comment != null && (comment.UserId == userId || IsAdmin))
         {
             await ForumService.DeleteCommentAsync(commentId);
             room.Comments = room.Comments.Where(c => c.Id != commentId).ToList();
+            precomputedComments = precomputedComments.Where(c => c.Comment.Id != commentId).ToList();
         }
     }
 
     private async Task DeleteRoom()
     {
-        if (await ForumService.CanManageRoomAsync(RoomId, room.OwnerId))
+        if (IsOwner || IsAdmin)
         {
             await ForumService.DeleteRoomAsync(RoomId);
             NavigationManager.NavigateTo("/rooms");
@@ -141,17 +169,28 @@ else
         }
     }
 
+    private async Task<bool> IsCommentAuthorAdmin(string commentUserId)
+    {
+        return await ForumService.IsUserAdmin(commentUserId);
+    }
+
     async Task AddCommentDialog()
     {
         var result = await DialogService.OpenAsync("Pridať Komentár", ds =>
-            @<RadzenStack Gap="1.5rem">
-                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
-                        <form @onsubmit="AddComment">
-                            <RadzenHtmlEditor @bind-Value=@newCommentContent style="height: 300px;"  UploadUrl="upload/image" />
-                            <br/>
-                            <RadzenButton type="submit" Click="() => ds.Close(true)">Pridať Komentár</RadzenButton>
-                        </form>
+    @<RadzenStack Gap="1.5rem">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+            <form @onsubmit="AddComment">
+                <RadzenHtmlEditor @bind-Value=@newCommentContent style="height: 300px;" UploadUrl="upload/image" />
+                <br />
+                <RadzenButton type="submit" Click="() => ds.Close(true)">Pridať Komentár</RadzenButton>
+            </form>
         </RadzenStack>
-        </RadzenStack>);
+    </RadzenStack>);
+    }
+
+    private class CommentWithAdminStatus
+    {
+        public ForumComment Comment { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

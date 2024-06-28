@@ -16,17 +16,20 @@ public interface IForumService
     Task<List<ForumRoom>> GetRoomsCreatedByUserAsync(string userId);
     Task DeleteCommentAsync(int commentId);
     Task<string> GetUserNameAsync(string userId);
+    Task<bool> IsUserAdmin(string userId);
 }
 
 public class ForumService : IForumService
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public ForumService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+    public ForumService(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public async Task<List<ForumRoom>> GetRoomsAsync()
@@ -101,6 +104,16 @@ public class ForumService : IForumService
     {
         var user = await _userManager.FindByIdAsync(userId);
         return user?.UserName;
+    }
+
+    public async Task<bool> IsUserAdmin(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return false;
+        }
+        return await _userManager.IsInRoleAsync(user, "Admin");
     }
 
 }
