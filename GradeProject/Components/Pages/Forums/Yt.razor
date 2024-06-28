@@ -1,0 +1,36 @@
+﻿@page "/yt"
+@inject YouTubeApiService YouTubeService
+
+<h3>Latest YouTube Videos</h3>
+
+@if (videos == null)
+{
+    <p>Loading...</p>
+}
+else if (!videos.Any())
+{
+    <p>No videos found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var video in videos)
+        {
+            <li>
+                <h4>@video.Title</h4>
+                <p>@video.Description</p>
+                <img src="@video.ThumbnailUrl" alt="Thumbnail" />
+                <a href="@video.VideoUrl" target="_blank">Watch on YouTube</a>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<YouTubeVideo> videos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        videos = await YouTubeService.GetLatestVideosAsync();
+    }
+}

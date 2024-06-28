@@ -1,4 +1,5 @@
 using Blazor.Components;
+using Google.Apis.YouTube.v3;
 using GradeProject.Components;
 using GradeProject.Components.Account;
 using GradeProject.Data;
@@ -28,6 +29,8 @@ builder.Services.AddSingleton<ProblemService>();
 builder.Services.AddCommandLine();
 builder.Services.AddScoped<IForumService,ForumService>();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSingleton<YouTubeApiService>();
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
