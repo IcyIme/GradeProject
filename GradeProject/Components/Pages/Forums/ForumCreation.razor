@@ -1,7 +1,11 @@
-﻿@inject IForumService ForumService
+﻿@page "/rooms/create"
+
+@inject IForumService ForumService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-@page "/rooms/create"
+
+@attribute [Authorize]
+
 @using System.Security.Claims
 
     <div class="bgtext">
