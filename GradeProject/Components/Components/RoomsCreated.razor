@@ -1,0 +1,75 @@
+﻿@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IForumService ForumService
+@inject NavigationManager NavigationManager
+
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+
+<div class="bgtext">
+    <h1 class="mb-2 text-center">Prispevky</h1>
+</div>
+
+@if (CreatedRooms != null)
+{
+    <div class="container-sm">
+        @if (CreatedRooms.Any())
+        {
+            @foreach (var room in CreatedRooms.OrderByDescending(r => r.DateOfCreation))
+            {
+                <div @onclick="() => ShowRoomDetails(room.Id)" class="bgt spacing">
+                    <a>@room.Title - @((MarkupString)room.Detail)</a><br>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No rooms created yet.</p>
+        }
+    </div>
+}
+else
+{
+    <div class="rz-m-12">
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string userId { get; set; }
+
+    private List<ForumRoom> CreatedRooms;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApplicationUser applicationUser = null;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            applicationUser = await UserManager.FindByIdAsync(userId);
+        }
+        else
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user?.Identity?.Name != null)
+            {
+                applicationUser = await UserManager.FindByNameAsync(user.Identity.Name);
+            }
+        }
+
+        if (applicationUser != null)
+        {
+            CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(applicationUser.Id);
+        }
+    }
+
+    private void ShowRoomDetails(int roomId)
+    {
+        NavigationManager.NavigateTo($"/rooms/room/{roomId}");
+    }
+}

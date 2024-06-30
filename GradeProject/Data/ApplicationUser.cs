@@ -12,6 +12,7 @@ namespace GradeProject.Data
         public int Score { get; set; }
         public string[]? CompletedLesson { get; set; }
         public string[]? CompletedQuiz { get; set; }
+        public string Status { get; set; }
     }
 
 }

@@ -27,10 +27,11 @@ body {
     flex-direction: column;
     max-width: 800px;
     width: 100%;
+    max-height: 700px;
     position: relative;
     z-index: 2;
-    margin: auto;
-    padding: 2rem;
+    margin: 2rem auto 2rem auto;
+    padding: 3rem;
     background: #fff;
     border-radius: 2rem;
     box-shadow: 0 15px 35px rgba(50,50,93,0.1), 0 5px 15px rgba(0,0,0,0.07);
