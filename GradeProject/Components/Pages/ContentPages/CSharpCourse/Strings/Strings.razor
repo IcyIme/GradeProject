@@ -1,0 +1,100 @@
+﻿@page "/learn/string"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Manipulácia s reťazcami v C#</PageTitle>
+<div class="container-sm bgtext">
+    <h1>Manipulácia s reťazcami v C#</h1>
+    <h2>Práca s reťazcami</h2>
+    <p>Reťazce môžeme deklarovať a inicializovať rôznymi spôsobmi:</p>
+    <pre>
+<code>
+string pozdrav = "Ahoj, svet!";
+string prazdnyRetazec = "";
+string viacRiadkovyRetazec = "Toto je viacriadkový
+reťazec v C#.";
+</code>
+    </pre>
+    <h3>Dĺžka reťazca</h3>
+    <p>Na získanie dĺžky reťazca použijeme vlastnosť <code>Length</code>:</p>
+    <pre>
+<code>
+int dlzka = pozdrav.Length; // Výsledok bude 10
+</code>
+    </pre>
+    <h3>Prístup k znakom</h3>
+    <p>Jednotlivé znaky reťazca môžeme získať pomocou indexácie:</p>
+    <pre>
+<code>
+char prvyZnak = pozdrav[0]; // 'A'
+char poslednyZnak = pozdrav[pozdrav.Length - 1]; // '!'
+</code>
+    </pre>
+    <h2>Formátovanie reťazcov</h2>
+    <h3>String Interpolation</h3>
+    <p>String interpolation umožňuje vkladať premenné priamo do reťazca:</p>
+    <pre>
+<code>
+string meno = "John";
+int vek = 30;
+string interpolovanyRetazec = $"Ahoj, moje meno je {meno} a mám {vek} rokov.";
+</code>
+    </pre>
+    <h3>String.Format</h3>
+    <p>Metóda <code>String.Format</code> umožňuje formátovať reťazce pomocou zástupných znakov:</p>
+    <pre>
+<code>
+string formatovanyRetazec = string.Format("Ahoj, moje meno je {0} a mám {1} rokov.", meno, vek);
+</code>
+    </pre>
+    <h2>Vyhľadávanie a nahradzovanie v reťazcoch</h2>
+    <h3>Vyhľadávanie</h3>
+    <p>Na vyhľadávanie podreťazcov používame metódy ako <code>IndexOf</code>, <code>LastIndexOf</code> a <code>Contains</code>:</p>
+    <pre>
+<code>
+bool obsahuje = pozdrav.Contains("svet"); // true
+int index = pozdrav.IndexOf("svet"); // 6
+</code>
+    </pre>
+    <h3>Nahradzovanie</h3>
+    <p>Metóda <code>Replace</code> nahradí všetky výskyty určitého podreťazca iným podreťazcom:</p>
+    <pre>
+<code>
+string novyPozdrav = pozdrav.Replace("svet", "programátor"); // "Ahoj, programátor!"
+</code>
+    </pre>
+    @if (IsQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "string";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlString);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.lectionUrlInput);
+    }
+
+}

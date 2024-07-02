@@ -48,5 +48,17 @@
         //data types
         public static string lectionUrlDataTypes = "/learn/datatypes";
         public static string quizUrlDataTypes = "q/cs/datatypes";
+
+        //oop
+        public static string lectionUrlOop = "/learn/oop";
+        public static string quizUrlOop = "q/cs/oop";
+
+        //string
+        public static string lectionUrlString = "/learn/string";
+        public static string quizUrlString = "q/cs/string";
+
+        //input
+        public static string lectionUrlInput = "/learn/input";
+        public static string quizUrlInput = "q/cs/input";
     }
 }

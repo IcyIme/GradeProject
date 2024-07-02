@@ -55,6 +55,14 @@ public class QuizLoaderService : IQuizLoaderService
                     case "datatypes":
                         return AddCollectionsQuestions();
 
+                    case "oop":
+                        return AddOOPQuestions();
+
+                    case "string":
+                        return AddStringManipulationQuestions();
+
+                    case "input":
+                        return AddIOQuestions();
                     default:
                         NavigationManager.NavigateTo("/notfound");
                         break;
@@ -789,6 +797,130 @@ private List<Question> AddRecursionQuestions()
 
         // Add questions to the list
         return new List<Question> { q1, q2, q3, q4, q5, q6, q7, q8 };
+    }
+    private List<Question> AddOOPQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Čo je trieda v C#?",
+            Options = new List<string>() { "Šablóna alebo blueprint pre objekty", "Premenná", "Metóda", "Kolekcia dát" },
+            Answer = "Šablóna alebo blueprint pre objekty"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Čo je objekt v C#?",
+            Options = new List<string>() { "Inštancia triedy", "Premenná", "Metóda", "Kolekcia dát" },
+            Answer = "Inštancia triedy"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Čo je konštruktor?",
+            Options = new List<string>() { "Špeciálna metóda na inicializáciu objektov", "Šablóna alebo blueprint pre objekty", "Premenná", "Metóda na ukončenie programu" },
+            Answer = "Špeciálna metóda na inicializáciu objektov"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Čo je zapúzdrenie (encapsulation)?",
+            Options = new List<string>() { "Skrytie interných detailov objektu", "Dedenie vlastností a metód", "Použitie rovnakého mena pre rôzne metódy", "Vytváranie nových objektov" },
+            Answer = "Skrytie interných detailov objektu"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Čo je dedičnosť (inheritance)?",
+            Options = new List<string>() { "Kopírovanie kódu z jednej triedy do druhej", "Schopnosť jednej triedy dediť vlastnosti a metódy inej triedy", "Použitie rovnakého mena pre rôzne metódy", "Skrytie interných detailov objektu" },
+            Answer = "Schopnosť jednej triedy dediť vlastnosti a metódy inej triedy"
+        };
+
+        Question q6 = new Question
+        {
+            QuestionTitle = "Čo je polymorfizmus?",
+            Options = new List<string>() { "Schopnosť používať rovnaký kód pre rôzne objekty", "Vytváranie nových objektov", "Dedenie vlastností a metód", "Skrytie interných detailov objektu" },
+            Answer = "Schopnosť používať rovnaký kód pre rôzne objekty"
+        };
+
+        return new List<Question> { q1, q2, q3, q4, q5, q6 };
+    }
+    private List<Question> AddStringManipulationQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Akú vlastnosť použijete na zistenie dĺžky reťazca v C#?",
+            Options = new List<string>() { "Size", "Length", "Count", "Capacity" },
+            Answer = "Length"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Akú metódu použijete na nahradenie podreťazca iným podreťazcom v C#?",
+            Options = new List<string>() { "Replace", "Change", "Swap", "Substitute" },
+            Answer = "Replace"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Ako sa volá technika, ktorá umožňuje vkladať premenné priamo do reťazca?",
+            Options = new List<string>() { "String Concatenation", "String Interpolation", "String Formatting", "String Parsing" },
+            Answer = "String Interpolation"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Ktorá z nasledujúcich metód vyhľadáva podreťazec v reťazci?",
+            Options = new List<string>() { "Search", "Find", "IndexOf", "Locate" },
+            Answer = "IndexOf"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Ako v C# vytvoríte prázdny reťazec?",
+            Options = new List<string>() { "string prazdny = '';", "string prazdny = ' '", "string prazdny = \"\";", "string prazdny = null;" },
+            Answer = "string prazdny = \"\";"
+        };
+
+        return new List<Question> { q1, q2, q3, q4, q5 };
+    }
+    private List<Question> AddIOQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Ktorá metóda sa používa na čítanie všetkého textu zo súboru v C#?",
+            Options = new List<string>() { "ReadAll", "ReadText", "ReadFile", "ReadAllText" },
+            Answer = "ReadAllText"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Akú metódu použijete na vypísanie textu na konzolu bez prechodu na nový riadok?",
+            Options = new List<string>() { "Console.Write", "Console.WriteLine", "Console.Print", "Console.Output" },
+            Answer = "Console.Write"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Ako načítate celé číslo z konzoly?",
+            Options = new List<string>() { "int.Parse(Console.ReadLine())", "Convert.ToInt32(Console.ReadLine())", "int.Parse(Console.Read())", "a alebo b" },
+            Answer = "a alebo b"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Aká je správna syntax na zápis viacerých riadkov do súboru v C#?",
+            Options = new List<string>() { "File.WriteLines(\"subor.txt\", riadky)", "File.WriteAllLines(\"subor.txt\", riadky)", "File.WriteAllText(\"subor.txt\", riadky)", "File.AppendAllLines(\"subor.txt\", riadky)" },
+            Answer = "File.WriteAllLines(\"subor.txt\", riadky)"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Ktorá z týchto metód je vhodná na čítanie jednotlivých riadkov textu zo súboru?",
+            Options = new List<string>() { "ReadLines", "ReadAllLines", "ReadEachLine", "ReadLineByLine" },
+            Answer = "ReadAllLines"
+        };
+
+        return new List<Question> { q1, q2, q3, q4, q5 };
     }
 
 }

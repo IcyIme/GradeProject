@@ -1,0 +1,228 @@
+﻿@page "/learn/oop"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Triedy a objekty</PageTitle>
+<div class="container-sm bgtext">
+    <h1>Objektovo orientované programovanie (OOP)</h1>
+    <h2>Triedy a objekty</h2>
+    <p>Objektovo orientované programovanie (OOP) je paradigmatický prístup k programovaniu, ktorý organizuje kód do objektov. Triedy a objekty sú základné stavebné kamene OOP v jazyku C#.</p>
+
+    <h3>Triedy</h3>
+    <p> trieda je šablóna alebo blueprint, ktorá definuje vlastnosti (premenné) a metódy (funkcie) objektov. Môžete si predstaviť triedu ako plán budovy, ktorý definuje, ako má budova vyzerať a ako sa má správať.</p>
+
+    <pre><code>csharp
+public class Auto
+{
+    // Vlastnosti
+    public string Znacka { get; set; }
+    public string Model { get; set; }
+    public int RokVyroby { get; set; }
+
+    // Metóda
+    public void Start()
+    {
+        Console.WriteLine("Auto štartuje...");
+    }
+}
+</code></pre>
+
+    <h3>Objekty</h3>
+    <p>Objekt je inštancia triedy. Keď vytvoríte objekt, používa štruktúru a správanie definované v triede.</p>
+
+    <pre><code>csharp
+public class Program
+{
+    public static void Main()
+    {
+        // Vytvorenie objektu triedy Auto
+        Auto mojeAuto = new Auto();
+        mojeAuto.Znacka = "Škoda";
+        mojeAuto.Model = "Octavia";
+        mojeAuto.RokVyroby = 2020;
+
+        // Volanie metódy objektu
+        mojeAuto.Start();
+    }
+}
+</code></pre>
+
+    <h3>Konstruktory</h3>
+    <p>Konstruktor je špeciálna metóda triedy, ktorá sa volá pri vytváraní objektu. Konstruktor môže inicializovať vlastnosti objektu.</p>
+
+    <pre><code>csharp
+public class Auto
+{
+    // Vlastnosti
+    public string Znacka { get; set; }
+    public string Model { get; set; }
+    public int RokVyroby { get; set; }
+
+    // Konstruktor
+    public Auto(string znacka, string model, int rokVyroby)
+    {
+        Znacka = znacka;
+        Model = model;
+        RokVyroby = rokVyroby;
+    }
+
+    // Metóda
+    public void Start()
+    {
+        Console.WriteLine("Auto štartuje...");
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Vytvorenie objektu pomocou konstruktora
+        Auto mojeAuto = new Auto("Škoda", "Octavia", 2020);
+
+        // Volanie metódy objektu
+        mojeAuto.Start();
+    }
+}
+</code></pre>
+
+    <h3>Zapúzdrenie</h3>
+    <p>Zapúzdrenie (encapsulation) je OOP princíp, ktorý skrýva interné detaily objektu a poskytuje prístup k vlastnostiam a metódam objektu prostredníctvom verejných metód.</p>
+
+    <pre><code>csharp
+public class BankovyUcet
+{
+    // Súkromná vlastnosť
+    private double zostatok;
+
+    // Verejná metóda na vkladanie peňazí
+    public void VlozPeniaze(double suma)
+    {
+        if (suma > 0)
+        {
+            zostatok += suma;
+        }
+    }
+
+    // Verejná metóda na získanie zostatku
+    public double ZiskajZostatok()
+    {
+        return zostatok;
+    }
+}
+</code></pre>
+
+    <h3>Dedičnosť</h3>
+    <p>Dedičnosť (inheritance) je OOP princíp, ktorý umožňuje jednej triede (potomok) dediť vlastnosti a metódy inej triedy (rodič).</p>
+
+    <pre><code>csharp
+// Rodičovská trieda
+public class Zviera
+{
+    public void Jedz()
+    {
+        Console.WriteLine("Zviera je...");
+    }
+}
+
+// Potomkovská trieda
+public class Pes : Zviera
+{
+    public void Stekaj()
+    {
+        Console.WriteLine("Pes šteká...");
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Vytvorenie objektu triedy Pes
+        Pes mojPes = new Pes();
+        mojPes.Jedz();  // Volanie metódy rodičovskej triedy
+        mojPes.Stekaj();  // Volanie metódy potomkovskej triedy
+    }
+}
+</code></pre>
+
+    <h3>Polymorfizmus</h3>
+    <p>Polymorfizmus je OOP princíp, ktorý umožňuje volanie metód v objektoch odvodených tried rôznymi spôsobmi pomocou referencie rodičovskej triedy.</p>
+
+    <pre><code>csharp
+public class Zviera
+{
+    public virtual void VydajZvuk()
+    {
+        Console.WriteLine("Zviera vydáva zvuk...");
+    }
+}
+
+public class Pes : Zviera
+{
+    public override void VydajZvuk()
+    {
+        Console.WriteLine("Pes šteká...");
+    }
+}
+
+public class Macka : Zviera
+{
+    public override void VydajZvuk()
+    {
+        Console.WriteLine("Mačka mňaučí...");
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Zviera mojeZviera;
+
+        mojeZviera = new Pes();
+        mojeZviera.VydajZvuk();  // Pes šteká...
+
+        mojeZviera = new Macka();
+        mojeZviera.VydajZvuk();  // Mačka mňaučí...
+    }
+}
+</code></pre>
+
+    <h2>Záver</h2>
+    <p>Objektovo orientované programovanie v C# poskytuje robustné nástroje pre tvorbu zložitého softvéru. Pochopenie základných konceptov OOP, ako sú triedy, objekty, zapúzdrenie, dedičnosť a polymorfizmus, je kľúčové pre efektívne využívanie jazyka C#.</p>
+    @if (IsQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "oop";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlOop);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.lectionUrlString);
+    }
+
+}

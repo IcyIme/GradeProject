@@ -53,6 +53,15 @@ namespace GradeProject.Services
                 case "datatypes":
                     _navigationManager.NavigateTo(UrlData.lectionUrlDataTypes);
                     break;
+                case "oop":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlOop);
+                    break;
+                case "string":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlString);
+                    break;
+                case "input":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlInput);
+                    break;
                 default:
                     _navigationManager.NavigateTo(""); // Navigate to home or another page
                     break;

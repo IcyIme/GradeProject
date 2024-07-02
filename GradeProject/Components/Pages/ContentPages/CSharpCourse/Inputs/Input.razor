@@ -1,0 +1,90 @@
+﻿@page "/learn/input"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Vstup a výstup</PageTitle>
+<div class="container-sm bgtext">
+    <h1>Vstup a výstup v C#</h1>
+
+    <h2>Čítanie a zápis zo súborov</h2>
+    <p>C# poskytuje robustné možnosti pre prácu so súbormi pomocou tried v <code>System.IO</code> namespace. Môžete ľahko čítať a zapisovať textové aj binárne súbory.</p>
+
+    <h3>Čítanie textového súboru</h3>
+    <p>Na čítanie obsahu textového súboru môžeme použiť metódu <code>File.ReadAllText</code> alebo <code>File.ReadAllLines</code>:</p>
+    <pre>
+<code>
+using System.IO;
+
+string obsah = File.ReadAllText("subor.txt");
+string[] riadky = File.ReadAllLines("subor.txt");
+</code>
+    </pre>
+
+    <h3>Zápis do textového súboru</h3>
+    <p>Na zápis obsahu do textového súboru môžeme použiť metódu <code>File.WriteAllText</code> alebo <code>File.WriteAllLines</code>:</p>
+    <pre>
+<code>
+using System.IO;
+
+File.WriteAllText("subor.txt", "Toto je nový obsah.");
+File.WriteAllLines("subor.txt", new string[] { "Riadok 1", "Riadok 2", "Riadok 3" });
+</code>
+    </pre>
+
+    <h2>Práca s konzolovým vstupom a výstupom</h2>
+
+    <h3>Konzolový výstup</h3>
+    <p>Konzolový výstup je realizovaný pomocou metódy <code>Console.WriteLine</code> alebo <code>Console.Write</code>:</p>
+    <pre>
+<code>
+Console.WriteLine("Ahoj, svet!"); // Vypíše text a prejde na nový riadok
+Console.Write("Zadaj svoje meno: "); // Vypíše text bez prechodu na nový riadok
+</code>
+    </pre>
+
+    <h3>Konzolový vstup</h3>
+    <p>Konzolový vstup je realizovaný pomocou metódy <code>Console.ReadLine</code> alebo <code>Console.Read</code>:</p>
+    <pre>
+<code>
+Console.Write("Zadaj svoje meno: ");
+string meno = Console.ReadLine();
+
+Console.Write("Zadaj svoj vek: ");
+int vek = int.Parse(Console.ReadLine());
+</code>
+    </pre>
+    @if (IsQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "input";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlInput);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.home);
+    }
+
+}
