@@ -59,7 +59,7 @@
                     <a class="button" @onclick="onClickRedirect">
                         <div class="button__border"></div>
                         <div class="button__bg"></div>
-                        <p class="button__text">@ButtonLessonText()</p>
+                        <p class="button__text">Zobraziť Kurzy</p>
                     </a>
                 </div>
             }
@@ -82,28 +82,9 @@ else
     private int pos;
     private bool IsProfileOwner = false;
 
-    private string ButtonLessonText()
-    {
-        if (GetLessons == null)
-        {
-            return "Začnite sa učiť!";
-        }
-        else
-        {
-            return $"Pokračujte v lekcii {GetLessons[GetLessons.Length - 1]}!";
-        }
-    }
-
     private void onClickRedirect()
     {
-        if (GetLessons == null)
-        {
-            NavigationManager.NavigateTo("/learn");
-        }
-        else
-        {
-            NavigationService.Navigator(GetLessons[GetLessons.Length - 1]);
-        }
+        NavigationManager.NavigateTo("/Courses");
     }
 
     public class ProfileModel
@@ -118,7 +99,6 @@ else
     }
 
     private ProfileModel Profile;
-    private string[] GetLessons;
 
     protected override async Task OnInitializedAsync()
     {
@@ -152,12 +132,9 @@ else
                     Email = applicationUser.Email,
                     Status = applicationUser.Status, // Fetch Status from user data
                 };
-            GetLessons = applicationUser.CompletedLesson;
             pos = GetLeaderboardPositionAsync(Profile.Score);
             prom = GetPonnuns();
         }
-
-        
     }
 
     private int GetLeaderboardPositionAsync(int score)
@@ -206,7 +183,7 @@ else
                     <form @onsubmit="UpdateStatus">
                         <RadzenHtmlEditor @bind-Value=@Profile.Status style="height: 300px;" UploadUrl="upload/image" />
                         <br />
-                        <RadzenButton type="submit" Click="() => ds.Close(true)">Pridať Komentár</RadzenButton>
+                <RadzenButton type="submit" Click="() => ds.Close(true)">Zmeniť status</RadzenButton>
         </form>
         </RadzenStack>
         </RadzenStack>);

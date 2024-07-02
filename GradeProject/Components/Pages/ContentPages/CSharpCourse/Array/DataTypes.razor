@@ -1,0 +1,142 @@
+﻿@page "/learn/datatypes"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Použitie kolekcií (List, Dictionary, atď.)</PageTitle>
+<div class="container-sm bgtext">
+  <h1>Použitie kolekcií v C#</h1>
+    <p>V C# ponúka knižnica <code>System.Collections.Generic</code> rôzne typy kolekcií, ktoré umožňujú efektívne ukladanie a spracovanie dát. Medzi najčastejšie používané kolekcie patria <code>List&lt;T&gt;</code>, <code>Dictionary&lt;TKey, TValue&gt;</code>, <code>Queue&lt;T&gt;</code> a <code>Stack&lt;T&gt;</code>. Tieto kolekcie sú generické, čo znamená, že môžete špecifikovať typ prvkov, ktoré budú obsahovať.</p>
+    
+    <h2>List&lt;T&gt;</h2>
+    <p><code>List&lt;T&gt;</code> je dynamická kolekcia, ktorá umožňuje ukladanie prvkov rovnakého typu. Môžete pridávať, odstraňovať a pristupovať k prvkom pomocou indexov.</p>
+    <pre><code>csharp
+// Vytvorenie zoznamu celých čísel
+List&lt;int&gt; cisla = new List&lt;int&gt;();
+
+// Pridanie prvkov do zoznamu
+cisla.Add(1);
+cisla.Add(2);
+cisla.Add(3);
+
+// Prístup k prvku podľa indexu
+int prveCislo = cisla[0];
+
+// Odstránenie prvku zo zoznamu
+cisla.Remove(2);
+
+// Iterácia cez všetky prvky v zozname
+foreach (int cislo in cisla)
+{
+    Console.WriteLine(cislo);
+}
+</code></pre>
+
+    <h2>Dictionary&lt;TKey, TValue&gt;</h2>
+    <p><code>Dictionary&lt;TKey, TValue&gt;</code> je kolekcia párov kľúč-hodnota, ktorá umožňuje rýchly prístup k hodnotám na základe kľúča.</p>
+    <pre><code>csharp
+// Vytvorenie slovníka s kľúčom string a hodnotou int
+Dictionary&lt;string, int&gt; slovnik = new Dictionary&lt;string, int&gt;();
+
+// Pridanie párov kľúč-hodnota do slovníka
+slovnik.Add("jeden", 1);
+slovnik.Add("dva", 2);
+slovnik.Add("tri", 3);
+
+// Prístup k hodnote na základe kľúča
+int hodnota = slovnik["dva"];
+
+// Odstránenie páru kľúč-hodnota zo slovníka
+slovnik.Remove("jeden");
+
+// Iterácia cez všetky páry kľúč-hodnota v slovníku
+foreach (KeyValuePair&lt;string, int&gt; par in slovnik)
+{
+    Console.WriteLine($"Kľúč: {par.Key}, Hodnota: {par.Value}");
+}
+</code></pre>
+
+    <h2>Queue&lt;T&gt;</h2>
+    <p><code>Queue&lt;T&gt;</code> je FIFO (First-In-First-Out) kolekcia, ktorá umožňuje pridávanie prvkov na koniec a odstraňovanie prvkov z prednej strany.</p>
+    <pre><code>csharp
+// Vytvorenie fronty celých čísel
+Queue&lt;int&gt; fronta = new Queue&lt;int&gt;();
+
+// Pridanie prvkov do fronty
+fronta.Enqueue(1);
+fronta.Enqueue(2);
+fronta.Enqueue(3);
+
+// Odstránenie a získanie prvého prvku z fronty
+int prveCislo = fronta.Dequeue();
+
+// Získanie prvého prvku bez odstránenia
+int druheCislo = fronta.Peek();
+
+// Iterácia cez všetky prvky vo fronte
+foreach (int cislo in fronta)
+{
+    Console.WriteLine(cislo);
+}
+</code></pre>
+
+    <h2>Stack&lt;T&gt;</h2>
+    <p><code>Stack&lt;T&gt;</code> je LIFO (Last-In-First-Out) kolekcia, ktorá umožňuje pridávanie a odstraňovanie prvkov z vrcholu zásobníka.</p>
+    <pre><code>csharp
+// Vytvorenie zásobníka celých čísel
+Stack&lt;int&gt; zasobnik = new Stack&lt;int&gt;();
+
+// Pridanie prvkov do zásobníka
+zasobnik.Push(1);
+zasobnik.Push(2);
+zasobnik.Push(3);
+
+// Odstránenie a získanie vrchného prvku zo zásobníka
+int prveCislo = zasobnik.Pop();
+
+// Získanie vrchného prvku bez odstránenia
+int druheCislo = zasobnik.Peek();
+
+// Iterácia cez všetky prvky v zásobníku
+foreach (int cislo in zasobnik)
+{
+    Console.WriteLine(cislo);
+}
+</code></pre>
+
+    <h2>Záver</h2>
+    <p>Kolekcie v C# sú mocným nástrojom pre efektívne ukladanie a spracovanie dát. Správne používanie kolekcií, ako sú <code>List&lt;T&gt;</code>, <code>Dictionary&lt;TKey, TValue&gt;</code>, <code>Queue&lt;T&gt;</code> a <code>Stack&lt;T&gt;</code>, vám umožní písať kód, ktorý je flexibilný, čitateľný a efektívny.</p>
+    @if (IsQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "array";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlDataTypes);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.home);
+    }
+
+}

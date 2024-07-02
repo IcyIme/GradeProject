@@ -47,6 +47,12 @@ namespace GradeProject.Services
                 case "recursion":
                     _navigationManager.NavigateTo(UrlData.lectionUrlRecursion);
                     break;
+                case "array":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlArray);
+                    break;
+                case "datatypes":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlDataTypes);
+                    break;
                 default:
                     _navigationManager.NavigateTo(""); // Navigate to home or another page
                     break;

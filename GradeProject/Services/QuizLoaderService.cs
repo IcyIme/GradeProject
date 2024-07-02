@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 public interface IQuizLoaderService
 {
-    Task<List<Question>> LoadQuestionsAsync(string id);
+    Task<List<Question>> LoadQuestionsAsync(string id, string course);
 }
 
 public class QuizLoaderService : IQuizLoaderService
@@ -15,41 +15,56 @@ public class QuizLoaderService : IQuizLoaderService
         NavigationManager = navigationManager;
     }
 
-    public async Task<List<Question>> LoadQuestionsAsync(string id)
+    public async Task<List<Question>> LoadQuestionsAsync(string id, string course)
     {
-        switch (id)
+        switch (course)
         {
-            case "intro":
-                return AddIntroQuestions();
-                break;
-            case "instalation":
-                return AddInsQuestions();
-                break;
-            case "firstprogram":
-                return AddFirstProgramQuestions();
-                break;
-            case "variables":
-                return AddVariableTypeQuestions();
-                break;
-            case "operators":
-                return AddOperatorQuestions();
-                break;
-            case "loopandif":
-                return AddBranchingAndLoopQuestions();
-                break;
-            case "methods":
-                return AddFunctionQuestions();
-                break;
-            case "parameters":
-                return AddParameterAndReturnTypeQuestions();
-                break;
-            case "recursion":
-                return AddRecursionQuestions();
+            case "cs":
+                switch (id)
+                {
+                    case "intro":
+                        return AddIntroQuestions();
+                        
+                    case "instalation":
+                        return AddInsQuestions();
+                        
+                    case "firstprogram":
+                        return AddFirstProgramQuestions();
+                        
+                    case "variables":
+                        return AddVariableTypeQuestions();
+                        
+                    case "operators":
+                        return AddOperatorQuestions();
+                    
+                    case "loopandif":
+                        return AddBranchingAndLoopQuestions();
+
+                    case "methods":
+                        return AddFunctionQuestions();
+
+                    case "parameters":
+                        return AddParameterAndReturnTypeQuestions();
+
+                    case "recursion":
+                        return AddRecursionQuestions();
+
+                    case "array":
+                        return AddArrayQuestions();
+
+                    case "datatypes":
+                        return AddCollectionsQuestions();
+
+                    default:
+                        NavigationManager.NavigateTo("/notfound");
+                        break;
+                } 
                 break;
             default:
                 NavigationManager.NavigateTo("/notfound");
                 break;
         }
+        
         return null;
     }
     
@@ -557,5 +572,223 @@ private List<Question> AddRecursionQuestions()
     // Add questions to the list
     return new List<Question> { q1, q2, q3, q4, q5 };
 }
+    private List<Question> AddArrayQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Čo je jednorozmerné pole?",
+            Options = new List<string>()
+        {
+            "Pole s jedným riadkom a viacerými stĺpcami",
+            "Pole s viacerými riadkami a jedným stĺpcom",
+            "Lineárny zoznam prvkov rovnakého typu",
+            "Pole s viacerými rozmermi"
+        },
+            Answer = "Lineárny zoznam prvkov rovnakého typu"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Ako deklarujete jednorozmerné pole celých čísel s 5 prvkami v C#?",
+            Options = new List<string>()
+        {
+            "int[] pole = new int(5);",
+            "int[5] pole;",
+            "int[] pole = new int[5];",
+            "int pole = new int[5];"
+        },
+            Answer = "int[] pole = new int[5];"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Ako priradíte hodnotu 10 prvému prvku poľa 'pole'?",
+            Options = new List<string>()
+        {
+            "pole[1] = 10;",
+            "pole[0] = 10;",
+            "pole[10] = 0;",
+            "pole = 10;"
+        },
+            Answer = "pole[0] = 10;"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Čo je dvojrozmerné pole?",
+            Options = new List<string>()
+        {
+            "Pole s jedným riadkom",
+            "Pole s jedným stĺpcom",
+            "Tabuľka hodnôt s riadkami a stĺpcami",
+            "Pole s tromi rozmermi"
+        },
+            Answer = "Tabuľka hodnôt s riadkami a stĺpcami"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Ako deklarujete dvojrozmerné pole s 2 riadkami a 3 stĺpcami v C#?",
+            Options = new List<string>()
+        {
+            "int[,] matica = new int(2, 3);",
+            "int[2, 3] matica;",
+            "int[,] matica = new int[2, 3];",
+            "int[,] matica = new int[3, 2];"
+        },
+            Answer = "int[,] matica = new int[2, 3];"
+        };
+
+        Question q6 = new Question
+        {
+            QuestionTitle = "Ako priradíte hodnotu 5 prvku v druhom riadku a prvom stĺpci dvojrozmerného poľa 'matica'?",
+            Options = new List<string>()
+        {
+            "matica[0, 1] = 5;",
+            "matica[1, 0] = 5;",
+            "matica[1, 1] = 5;",
+            "matica[0, 0] = 5;"
+        },
+            Answer = "matica[1, 0] = 5;"
+        };
+
+        Question q7 = new Question
+        {
+            QuestionTitle = "Čo sú zubaté polia?",
+            Options = new List<string>()
+        {
+            "Polia s rôznou dĺžkou riadkov",
+            "Polia s rovnakou dĺžkou riadkov",
+            "Polia s viacerými rozmermi",
+            "Polia s jedným rozmerom"
+        },
+            Answer = "Polia s rôznou dĺžkou riadkov"
+        };
+
+        Question q8 = new Question
+        {
+            QuestionTitle = "Ako deklarujete zubaté pole celých čísel v C#?",
+            Options = new List<string>()
+        {
+            "int[][] zubatePole = new int[3];",
+            "int[,] zubatePole = new int[3][];",
+            "int[][] zubatePole = new int[3][];",
+            "int[3][] zubatePole;"
+        },
+            Answer = "int[][] zubatePole = new int[3][];"
+        };
+
+        // Add questions to the list
+        return new List<Question> { q1, q2, q3, q4, q5, q6, q7, q8 };
+    }
+    private List<Question> AddCollectionsQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Čo je `List<T>` v C#?",
+            Options = new List<string>()
+        {
+            "Statická kolekcia prvkov rovnakého typu",
+            "Dynamická kolekcia prvkov rôzneho typu",
+            "Dynamická kolekcia prvkov rovnakého typu",
+            "Statická kolekcia prvkov rôzneho typu"
+        },
+            Answer = "Dynamická kolekcia prvkov rovnakého typu"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Ako pridáte prvok do `List<int>` s názvom 'cisla'?",
+            Options = new List<string>()
+        {
+            "cisla.Add(5);",
+            "cisla.Append(5);",
+            "cisla.Insert(5);",
+            "cisla.Push(5);"
+        },
+            Answer = "cisla.Add(5);"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Čo je `Dictionary<TKey, TValue>` v C#?",
+            Options = new List<string>()
+        {
+            "Kolekcia párov kľúč-hodnota",
+            "Kolekcia hodnôt bez kľúčov",
+            "Dynamická kolekcia bez kľúčov",
+            "Statická kolekcia párov kľúč-hodnota"
+        },
+            Answer = "Kolekcia párov kľúč-hodnota"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Ako odstránite prvok so zadaným kľúčom z `Dictionary<string, int>` s názvom 'slovnik'?",
+            Options = new List<string>()
+        {
+            "slovnik.Remove('kluc');",
+            "slovnik.Delete('kluc');",
+            "slovnik.Clear('kluc');",
+            "slovnik.Pop('kluc');"
+        },
+            Answer = "slovnik.Remove('kluc');"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Aký typ kolekcie je `Queue<T>`?",
+            Options = new List<string>()
+        {
+            "LIFO (Last-In-First-Out)",
+            "FIFO (First-In-First-Out)",
+            "Dynamická kolekcia bez poradia",
+            "Statická kolekcia bez poradia"
+        },
+            Answer = "FIFO (First-In-First-Out)"
+        };
+
+        Question q6 = new Question
+        {
+            QuestionTitle = "Ako pridáte prvok do `Queue<int>` s názvom 'fronta'?",
+            Options = new List<string>()
+        {
+            "fronta.Add(5);",
+            "fronta.Push(5);",
+            "fronta.Enqueue(5);",
+            "fronta.Insert(5);"
+        },
+            Answer = "fronta.Enqueue(5);"
+        };
+
+        Question q7 = new Question
+        {
+            QuestionTitle = "Aký typ kolekcie je `Stack<T>`?",
+            Options = new List<string>()
+        {
+            "FIFO (First-In-First-Out)",
+            "LIFO (Last-In-First-Out)",
+            "Dynamická kolekcia bez poradia",
+            "Statická kolekcia bez poradia"
+        },
+            Answer = "LIFO (Last-In-First-Out)"
+        };
+
+        Question q8 = new Question
+        {
+            QuestionTitle = "Ako odstránite a získate vrchný prvok zo `Stack<int>` s názvom 'zasobnik'?",
+            Options = new List<string>()
+        {
+            "zasobnik.Remove();",
+            "zasobnik.Pop();",
+            "zasobnik.Dequeue();",
+            "zasobnik.Clear();"
+        },
+            Answer = "zasobnik.Pop();"
+        };
+
+        // Add questions to the list
+        return new List<Question> { q1, q2, q3, q4, q5, q6, q7, q8 };
+    }
 
 }

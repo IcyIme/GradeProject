@@ -23,11 +23,11 @@
     </RadzenHeader>
     <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
         <RadzenPanelMenu>
-            <RadzenPanelMenuItem Text="Domov" Icon="home" Path="/" />
+            <RadzenPanelMenuItem Text="Domov" Icon="home" Path="/profile" />
             <RadzenPanelMenuItem Text="Leaderboard" Icon="find_in_page" Path="/leaderboard"/>
             <RadzenPanelMenuItem Text="Forum" Icon="line_weight" Path="/rooms" />
             <RadzenPanelMenuItem Text="Code Playground" Icon="description" Path="/repl/playground"/>
-            <RadzenPanelMenuItem Text="C# Kurz" Icon="announcement" Path="/learn" />
+            <RadzenPanelMenuItem Text="Kurzy" Icon="announcement" Path="/Courses" />
             <AuthorizeView Roles="Admin">
                 <Authorized>
                     <RadzenPanelMenuItem Text="Admin Panel" icon="" Path="/admin"></RadzenPanelMenuItem>

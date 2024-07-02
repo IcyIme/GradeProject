@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Components\Pages\ContentPages\Courses.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
     <PackageReference Include="BlazorMonaco" Version="3.2.0" />
     <PackageReference Include="Blzr.Components.CommandLine" Version="5.0.0" />
@@ -53,6 +57,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Components\Layout\SubMenu.razor" />
     <_ContentIncludedByDefault Remove="Components\OptionCard.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\ContentPages\Courses.razor" />
     <_ContentIncludedByDefault Remove="Components\Pages\Leet\ProblemDetail.razor" />
     <_ContentIncludedByDefault Remove="Components\Pages\Leet\ProblemList.razor" />
     <_ContentIncludedByDefault Remove="Components\Pages\Leet\SolveProblem.razor" />
@@ -72,9 +77,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Components\Pages\ContentPages\LearnPages\IntroductionPages\FirstProgram.razor" />
-    <AdditionalFiles Include="Components\Pages\ContentPages\LearnPages\IntroductionPages\Instalation.razor" />
-    <AdditionalFiles Include="Components\Pages\ContentPages\LearnPages\IntroductionPages\Intro.razor" />
+    <AdditionalFiles Include="Components\Pages\ContentPages\CSharpCourse\IntroductionPages\FirstProgram.razor" />
+    <AdditionalFiles Include="Components\Pages\ContentPages\CSharpCourse\IntroductionPages\Instalation.razor" />
+    <AdditionalFiles Include="Components\Pages\ContentPages\CSharpCourse\IntroductionPages\Intro.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\ContentPages\Courses.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components\Pages\ContentPages\Courses.razor.css" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-@page "/q/{Id}"
+@page "/q/{Course}/{Id}"
 
 @layout QuizLayout
 
@@ -102,6 +102,7 @@ else
 
 @code {
     [Parameter] public string Id { get; set; }
+    [Parameter] public string Course { get; set; }
 
     private bool _updateSuccessful = false;
     private bool _updateError = false;
@@ -111,7 +112,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Questions = await QuizLoaderService.LoadQuestionsAsync(Id);
+        Questions = await QuizLoaderService.LoadQuestionsAsync(Id, Course);
         try
         {
             _quizAvailable = await QuizService.IsQuizAvailable(Id);

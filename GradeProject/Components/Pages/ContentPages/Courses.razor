@@ -1,0 +1,57 @@
+﻿@page "/Courses"
+
+@inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject INavigationService NavigationService
+@inject IForumService ForumService
+@inject DialogService DialogService
+
+<div class="bgtext justify-content-center mt-2">
+    <h1>Kurzy</h1>
+</div>
+
+<div class="bgt spacing" @onclick="onClickCSharpRedirect">
+        <h2>C# (CSharp) Kurz</h2>
+        <p>Naučte sa základy programovania v populárnom jazyku C# od základov.</p>
+        <div class="content__button">
+            <a class="button" @onclick="csharpCourse">
+            Od začiatku
+            </a>
+        </div>
+</div>
+
+@code{
+    private string[] GetLessons;
+
+    private void csharpCourse()
+    {
+        NavigationManager.NavigateTo("/learn");
+    }
+
+    protected override async Task OnInitializedAsync()
+    { 
+        ApplicationUser applicationUser = null;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user?.Identity?.Name != null)
+        {
+            applicationUser = await UserManager.FindByNameAsync(user.Identity.Name);
+        }
+        GetLessons = applicationUser.CompletedLesson;
+    }
+
+    private void onClickCSharpRedirect()
+    {
+        if (GetLessons == null)
+        {
+            NavigationManager.NavigateTo("/learn");
+        }
+        else
+        {
+            NavigationService.Navigator(GetLessons[GetLessons.Length - 1]);
+        }
+    }
+
+}

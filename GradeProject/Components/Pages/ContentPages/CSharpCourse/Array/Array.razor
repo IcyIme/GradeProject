@@ -1,0 +1,117 @@
+﻿@page "/learn/array"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Jednorozmerné a viacrozmerné polia</PageTitle>
+<div class="container-sm bgtext">
+<h1>Jednorozmerné a viacrozmerné polia v C#</h1>
+<p>Pole je kolekcia prvkov rovnakého typu, ktoré sú uložené v pamäti v súvislom bloku. V C# môžeme definovať jednorozmerné, viacrozmerné a zubaté polia.</p>
+
+<h2>Jednorozmerné polia</h2>
+<p>Jednorozmerné pole je najjednoduchší typ poľa, ktorý predstavuje lineárny zoznam prvkov. Definícia a použitie jednorozmerného poľa v C# vyzerá nasledovne:</p>
+<pre><code><span class="keyword">int</span>[] pole = <span class="keyword">new</span> <span class="keyword">int</span>[5]; <span class="comment">// Pole s 5 prvkami</span>
+
+pole[0] = 10; <span class="comment">// Priradenie hodnoty prvému prvku</span>
+pole[1] = 20;
+pole[2] = 30;
+pole[3] = 40;
+pole[4] = 50;
+
+<span class="comment">// Iterácia cez pole</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; pole.Length; i++)
+{
+<span class="keyword">Console</span>.WriteLine(pole[i]);
+}
+</code></pre>
+
+<h2>Viacrozmerné polia</h2>
+<p>Viacrozmerné polia sú polia s viacerými rozmermi. Najbežnejšie sú dvojrozmerné polia, ktoré môžeme chápať ako tabuľku hodnôt (matica).</p>
+
+<h2>Dvojrozmerné polia</h2>
+<p>Dvojrozmerné pole je deklarované pomocou dvojice zátvoriek. Príklad dvojrozmerného poľa:</p>
+<pre><code><span class="keyword">int</span>[,] matica = <span class="keyword">new</span> <span class="keyword">int</span>[2, 3]; <span class="comment">// 2 riadky a 3 stĺpce</span>
+
+matica[0, 0] = 1; <span class="comment">// Priradenie hodnôt prvkom</span>
+matica[0, 1] = 2;
+matica[0, 2] = 3;
+matica[1, 0] = 4;
+matica[1, 1] = 5;
+matica[1, 2] = 6;
+
+<span class="comment">// Iterácia cez dvojrozmerné pole</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; matica.GetLength(0); i++)
+{
+<span class="keyword">for</span> (<span class="keyword">int</span> j = 0; j &lt; matica.GetLength(1); j++)
+    {
+<span class="keyword">Console</span>.Write(matica[i, j] + <span class="string">" "</span>);
+    }
+<span class="keyword">Console</span>.WriteLine();
+}
+</code></pre>
+
+<h2>Zubaté polia</h2>
+<p>Zubaté polia sú polia polí, kde jednotlivé vnútorné polia môžu mať rôzne dĺžky. Deklarácia a použitie zubatého poľa:</p>
+<pre><code><span class="keyword">int</span>[]<span class="keyword">[]</span> zubatePole = <span class="keyword">new</span> <span class="keyword">int</span>[3][]; <span class="comment">// Pole troch polí</span>
+
+zubatePole[0] = <span class="keyword">new</span> <span class="keyword">int</span>[2]; <span class="comment">// Prvé vnútorné pole s dĺžkou 2</span>
+zubatePole[1] = <span class="keyword">new</span> <span class="keyword">int</span>[3]; <span class="comment">// Druhé vnútorné pole s dĺžkou 3</span>
+zubatePole[2] = <span class="keyword">new</span> <span class="keyword">int</span>[4]; <span class="comment">// Tretie vnútorné pole s dĺžkou 4</span>
+
+<span class="comment">// Priradenie hodnôt</span>
+zubatePole[0][0] = 1;
+zubatePole[0][1] = 2;
+
+zubatePole[1][0] = 3;
+zubatePole[1][1] = 4;
+zubatePole[1][2] = 5;
+
+zubatePole[2][0] = 6;
+zubatePole[2][1] = 7;
+zubatePole[2][2] = 8;
+zubatePole[2][3] = 9;
+
+<span class="comment">// Iterácia cez zubaté pole</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; zubatePole.Length; i++)
+{
+<span class="keyword">for</span> (<span class="keyword">int</span> j = 0; j &lt; zubatePole[i].Length; j++)
+    {
+<span class="keyword">Console</span>.Write(zubatePole[i][j] + <span class="string">" "</span>);
+    }
+<span class="keyword">Console</span>.WriteLine();
+}
+</code></pre>
+    @if (IsQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "array";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlArray);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.lectionUrlDataTypes);
+    }
+
+}

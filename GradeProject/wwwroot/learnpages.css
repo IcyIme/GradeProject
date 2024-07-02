@@ -16,3 +16,33 @@ pre {
 code {
     font-family: Consolas, monospace;
 }
+
+pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+code {
+    font-family: Consolas, 'Courier New', monospace;
+    color: #333;
+}
+
+.keyword {
+    color: #0000FF;
+    font-weight: bold;
+}
+
+.type {
+    color: #2B91AF;
+    font-weight: bold;
+}
+
+.comment {
+    color: #008000;
+}
+
+.string {
+    color: #A31515;
+}
