@@ -4,6 +4,7 @@
     {
         //home
         public static string home = "/";
+        public static string completedCourse = "/CompletedCourse";
 
         //intro
         public static string lectionUrlIntro = "/learn/intro";
@@ -60,5 +61,13 @@
         //input
         public static string lectionUrlInput = "/learn/input";
         public static string quizUrlInput = "q/cs/input";
+
+        //try catch
+        public static string lectionUrltrycatch= "/learn/trycatch";
+        public static string quizUrltrycatch = "q/cs/trycatch";
+
+        //async
+        public static string lectionUrlAsync = "/learn/async";
+        public static string quizUrlAync = "q/cs/async";
     }
 }

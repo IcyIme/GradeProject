@@ -62,6 +62,12 @@ namespace GradeProject.Services
                 case "input":
                     _navigationManager.NavigateTo(UrlData.lectionUrlInput);
                     break;
+                case "trycatch":
+                    _navigationManager.NavigateTo(UrlData.lectionUrltrycatch);
+                    break;
+                case "async":
+                    _navigationManager.NavigateTo(UrlData.lectionUrlAsync);
+                    break;
                 default:
                     _navigationManager.NavigateTo(""); // Navigate to home or another page
                     break;

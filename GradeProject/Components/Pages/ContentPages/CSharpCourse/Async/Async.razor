@@ -1,0 +1,119 @@
+﻿@page "/learn/async"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Asynchronné programovanie</PageTitle>
+<div class="container-sm bgtext">
+    <h1>Asynchronné programovanie v C#</h1>
+
+    <h2>Asynchronné metódy a čakanie na výsledok</h2>
+    <p>Asynchronné metódy umožňujú vykonávanie časovo náročných operácií (napríklad I/O operácií) bez blokovania hlavného vlákna. Takéto metódy sa deklarujú pomocou kľúčového slova <code>async</code> a výsledok sa čaká pomocou kľúčového slova <code>await</code>.</p>
+
+    <h3>Základná syntax asynchronnej metódy</h3>
+    <pre>
+<code>
+public async Task&lt;int&gt; AsynchronnaMetoda()
+{
+    await Task.Delay(1000); // Simulácia časovo náročnej operácie
+    return 42;
+}
+</code>
+    </pre>
+
+    <h3>Volanie asynchronnej metódy</h3>
+    <pre>
+<code>
+public async Task VolajAsynchronnuMetodu()
+{
+    int vysledok = await AsynchronnaMetoda();
+    Console.WriteLine(vysledok);
+}
+</code>
+    </pre>
+
+    <h2>Práca s vláknami a paralelizmus</h2>
+    <p>Práca s vláknami a paralelným spracovaním umožňuje vykonávať viacero úloh súčasne, čo zlepšuje výkon aplikácie. C# poskytuje niekoľko mechanizmov na prácu s vláknami a paralelným spracovaním.</p>
+
+    <h3>Vytváranie a spúšťanie vlákien</h3>
+    <pre>
+<code>
+public void VykonajUlohu()
+{
+    Console.WriteLine("Vlákno spustené");
+}
+
+public void SpustiVlakno()
+{
+    Thread vlakno = new Thread(new ThreadStart(VykonajUlohu));
+    vlakno.Start();
+}
+</code>
+    </pre>
+
+    <h3>Práca s triedou Task</h3>
+    <pre>
+<code>
+public async Task&lt;string&gt; NacitajDataAsync()
+{
+    return await Task.Run(() =>
+    {
+        Thread.Sleep(2000); // Simulácia časovo náročnej úlohy
+        return "Data načítané";
+    });
+}
+
+public async Task VolajNacitajData()
+{
+    string data = await NacitajDataAsync();
+    Console.WriteLine(data);
+}
+</code>
+    </pre>
+
+    <h3>Paralelné spracovanie</h3>
+    <pre>
+<code>
+public void VykonajUlohyParalelne()
+{
+    Parallel.For(0, 10, i =>
+    {
+        Console.WriteLine($"Úloha {i} vykonaná vo vlákne {Thread.CurrentThread.ManagedThreadId}");
+    });
+}
+</code>
+    </pre>
+    @if (IsQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "async";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrlAync);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.completedCourse);
+    }
+
+}

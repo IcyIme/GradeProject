@@ -1,0 +1,118 @@
+﻿@page "/learn/trycatch"
+
+@inherits LearnPageBase
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ILessonService LessonService
+@inject IQuizService QuizService
+<head>
+    <link href="learnpages.css" rel="stylesheet" />
+</head>
+<PageTitle>Ošetrenie výnimiek</PageTitle>
+<div class="container-sm bgtext">
+    <h1>Ošetrenie výnimiek v C#</h1>
+
+    <h2>Práca s výnimkami</h2>
+    <p>Výnimky sú objekty, ktoré signalizujú výnimočné situácie, ktoré nastali počas behu programu. V C# sú výnimky reprezentované triedou <code>Exception</code> a jej potomkami.</p>
+
+    <h2>Blok try-catch-finally</h2>
+    <p>Bloky <code>try</code>, <code>catch</code> a <code>finally</code> umožňujú zachytávať a spracovávať výnimky.</p>
+
+    <ul>
+        <li><strong>try</strong>: Obsahuje kód, ktorý môže vyvolať výnimku.</li>
+        <li><strong>catch</strong>: Slúži na zachytenie a spracovanie výnimiek.</li>
+        <li><strong>finally</strong>: Tento blok sa vykoná vždy, bez ohľadu na to, či bola výnimka vyvolaná alebo nie. Je vhodný na uvoľnenie zdrojov.</li>
+    </ul>
+
+    <h3>Základné použitie try-catch</h3>
+    <pre>
+<code>
+try
+{
+    int deleno = 10;
+    int nulou = 0;
+    int vysledok = deleno / nulou; // Toto spôsobí výnimku
+}
+catch (DivideByZeroException ex)
+{
+    Console.WriteLine("Výnimka: Delenie nulou nie je povolené.");
+    Console.WriteLine(ex.Message);
+}
+</code>
+    </pre>
+
+    <h3>Použitie finally</h3>
+    <p>Blok <code>finally</code> sa použije na vykonanie činností, ktoré je potrebné vykonať bez ohľadu na to, či došlo k výnimke alebo nie.</p>
+    <pre>
+<code>
+FileStream fs = null;
+try
+{
+    fs = new FileStream("subor.txt", FileMode.Open);
+    // Operácie so súborom
+}
+catch (FileNotFoundException ex)
+{
+    Console.WriteLine("Súbor nebol nájdený.");
+    Console.WriteLine(ex.Message);
+}
+finally
+{
+    if (fs != null)
+    {
+        fs.Close();
+    }
+}
+</code>
+    </pre>
+
+    <h3>Zachytávanie viacerých výnimiek</h3>
+    <p>Môžete zachytiť viacero typov výnimiek pomocou viacerých blokov <code>catch</code>.</p>
+    <pre>
+<code>
+try
+{
+    int[] pole = { 1, 2, 3 };
+    Console.WriteLine(pole[5]); // Toto spôsobí výnimku
+}
+catch (IndexOutOfRangeException ex)
+{
+    Console.WriteLine("Výnimka: Index je mimo rozsahu poľa.");
+    Console.WriteLine(ex.Message);
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Všeobecná výnimka.");
+    Console.WriteLine(ex.Message);
+}
+</code>
+    </pre>
+    @if (IsQuizAvailable)
+    {
+        <RadzenButton Click="Quiz" Text="Pokračovať na kvíz" ButtonStyle="ButtonStyle.Primary" />
+    }
+    else
+    {
+        <RadzenButton Click="NextLection" Text="Pokračovať na ďalšiu lekciu" ButtonStyle="ButtonStyle.Primary" />
+    }
+</div>
+
+@code {
+
+    protected override string GetLessonName()
+    {
+        return "trycatch";
+    }
+
+    private void Quiz()
+    {
+        NavigateToQuiz(UrlData.quizUrltrycatch);
+    }
+
+    private void NextLection()
+    {
+        NavigateToNextLesson(UrlData.lectionUrlAsync);
+    }
+
+}

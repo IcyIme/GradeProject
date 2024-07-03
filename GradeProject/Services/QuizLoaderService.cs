@@ -63,6 +63,13 @@ public class QuizLoaderService : IQuizLoaderService
 
                     case "input":
                         return AddIOQuestions();
+
+                    case "trycatch":
+                        return AddExceptionHandlingQuestions();
+
+                    case "async":
+                        return AddAsyncProgrammingQuestions();
+
                     default:
                         NavigationManager.NavigateTo("/notfound");
                         break;
@@ -918,6 +925,84 @@ private List<Question> AddRecursionQuestions()
             QuestionTitle = "Ktorá z týchto metód je vhodná na čítanie jednotlivých riadkov textu zo súboru?",
             Options = new List<string>() { "ReadLines", "ReadAllLines", "ReadEachLine", "ReadLineByLine" },
             Answer = "ReadAllLines"
+        };
+
+        return new List<Question> { q1, q2, q3, q4, q5 };
+    }
+    private List<Question> AddExceptionHandlingQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Ktorý blok sa vykoná vždy, bez ohľadu na to, či bola vyvolaná výnimka?",
+            Options = new List<string>() { "try", "catch", "finally", "none of the above" },
+            Answer = "finally"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Ako sa volá výnimka vyvolaná pri pokuse o delenie nulou?",
+            Options = new List<string>() { "DivideByZeroException", "NullReferenceException", "IndexOutOfRangeException", "ArithmeticException" },
+            Answer = "DivideByZeroException"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Aká je správna syntax na zachytenie výnimky, keď index poľa je mimo rozsah?",
+            Options = new List<string>() { "catch (ArrayIndexOutOfBoundsException ex)", "catch (IndexOutOfRangeException ex)", "catch (OutOfBoundsException ex)", "catch (Exception ex)" },
+            Answer = "catch (IndexOutOfRangeException ex)"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Ktorá trieda je základnou triedou pre všetky výnimky v C#?",
+            Options = new List<string>() { "Exception", "Error", "RuntimeException", "Throwable" },
+            Answer = "Exception"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Aká je správna syntax na použitie bloku finally?",
+            Options = new List<string>() { "finally { // code }", "final { // code }", "finalize { // code }", "lastly { // code }" },
+            Answer = "finally { // code }"
+        };
+
+        return new List<Question> { q1, q2, q3, q4, q5 };
+    }
+    private List<Question> AddAsyncProgrammingQuestions()
+    {
+        Question q1 = new Question
+        {
+            QuestionTitle = "Čo umožňuje asynchronné programovanie v C#?",
+            Options = new List<string>() { "Vykonávanie viacerých operácií súčasne bez blokovania hlavného vlákna", "Rýchlejšie kompilovanie kódu", "Zlepšenie čitateľnosti kódu", "Zjednodušenie práce s dátovými typmi" },
+            Answer = "Vykonávanie viacerých operácií súčasne bez blokovania hlavného vlákna"
+        };
+
+        Question q2 = new Question
+        {
+            QuestionTitle = "Ako sa deklaruje asynchronná metóda v C#?",
+            Options = new List<string>() { "Pomocou kľúčového slova async", "Pomocou kľúčového slova await", "Pomocou kľúčového slova async a await", "Pomocou kľúčového slova parallel" },
+            Answer = "Pomocou kľúčového slova async"
+        };
+
+        Question q3 = new Question
+        {
+            QuestionTitle = "Čo robí kľúčové slovo await v asynchronnej metóde?",
+            Options = new List<string>() { "Deklaruje asynchronnú metódu", "Spúšťa úlohu na novom vlákne", "Čaká na dokončenie asynchronnej operácie", "Vytvára nové vlákno" },
+            Answer = "Čaká na dokončenie asynchronnej operácie"
+        };
+
+        Question q4 = new Question
+        {
+            QuestionTitle = "Ako sa v C# vytvára nové vlákno?",
+            Options = new List<string>() { "Pomocou triedy Thread", "Pomocou triedy Task", "Pomocou kľúčového slova async", "Pomocou kľúčového slova await" },
+            Answer = "Pomocou triedy Thread"
+        };
+
+        Question q5 = new Question
+        {
+            QuestionTitle = "Ktorá trieda umožňuje paralelné spracovanie úloh?",
+            Options = new List<string>() { "Thread", "Task", "Parallel", "Async" },
+            Answer = "Parallel"
         };
 
         return new List<Question> { q1, q2, q3, q4, q5 };
