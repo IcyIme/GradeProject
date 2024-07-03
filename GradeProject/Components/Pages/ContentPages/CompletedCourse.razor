@@ -1,7 +1,22 @@
 ﻿@page "/CompletedCourse"
 
-<h3>dokoncil si kurz</h3>
+@inject NavigationManager NavigationManager
 
+<div class="bg">
+    <div class="bgtext">
+        <div class="content__title">
+            <h1>Blahoželám dokončil si kurz</h1>
+        </div>
+
+        <div class="content__button">
+            <RadzenButton Text="Domov" Click="onClickRedirect"/>
+        </div>
+    </div>
+</div>
 @code {
 
+    private void onClickRedirect()
+    {
+        NavigationManager.NavigateTo(UrlData.home);
+    }
 }
