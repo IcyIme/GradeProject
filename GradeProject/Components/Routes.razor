@@ -1,11 +1,32 @@
 ﻿@using GradeProject.Components.Account.Shared
-<ViewTransitionRouter AppAssembly="typeof(Program).Assembly">
-    <Found Context="routeData">
-        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
-            <NotAuthorized>
-                <RedirectToLogin />
-            </NotAuthorized>
-        </AuthorizeRouteView>
-        <FocusOnNavigate RouteData="routeData" Selector="[autofocus]" />
-    </Found>
-</ViewTransitionRouter>
+<MediaQueryList>
+    <ViewTransitionRouter AppAssembly="typeof(Program).Assembly">
+        <Found Context="routeData">
+            @if (isMobile)
+            {
+                <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.EmptyLayoutWithBg)">
+                    <NotAuthorized>
+                        <RedirectToLogin/>
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+                <FocusOnNavigate RouteData="routeData" Selector="[autofocus]"/>
+            }
+            else
+            {
+                <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+                    <NotAuthorized>
+                        <RedirectToLogin/>
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+                <FocusOnNavigate RouteData="routeData" Selector="[autofocus]"/>
+            }
+            
+        </Found>
+    </ViewTransitionRouter>
+    <MediaQuery Media="(max-width: 500px)" @bind-Matches="isMobile" />
+</MediaQueryList>
+
+                @code
+                {
+                    private bool isMobile;
+                }

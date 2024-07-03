@@ -1,4 +1,5 @@
 using Blazor.Components;
+using BlazorPro.BlazorSize;
 using Google.Apis.YouTube.v3;
 using GradeProject.Components;
 using GradeProject.Components.Account;
@@ -29,6 +30,8 @@ builder.Services.AddSingleton<ProblemService>();
 builder.Services.AddCommandLine();
 builder.Services.AddScoped<IForumService,ForumService>();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddMediaQueryService();
 
 builder.Services.AddSingleton<YouTubeApiService>();
 builder.Services.AddAuthentication(options =>

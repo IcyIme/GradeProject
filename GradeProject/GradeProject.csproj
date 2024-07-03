@@ -30,6 +30,7 @@
   <ItemGroup>
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
     <PackageReference Include="BlazorMonaco" Version="3.2.0" />
+    <PackageReference Include="BlazorPro.BlazorSize" Version="8.0.0" />
     <PackageReference Include="Blzr.Components.CommandLine" Version="5.0.0" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.68.0.3421" />
     <PackageReference Include="MailKit" Version="4.6.0" />
