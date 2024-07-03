@@ -1,0 +1,26 @@
+﻿@inherits LayoutComponentBase
+
+<body>
+@Body
+<div class="bottom-bar">
+    <ion-icon name="home-outline" class="@GetIconClass("home-outline")" @onclick='() => Change("home-outline")'></ion-icon>
+    <ion-icon name="folder-outline" class="@GetIconClass("folder-outline")" @onclick='() => Change("folder-outline")'></ion-icon>
+    <ion-icon name="add-circle-outline" class="@GetIconClass("add-circle-outline")" @onclick='() => Change("add-circle-outline")'></ion-icon>
+    <ion-icon name="person-outline" class="@GetIconClass("person-outline")" @onclick='() => Change("person-outline")'></ion-icon>
+    <ion-icon name="image-outline" class="@GetIconClass("image-outline")" @onclick='() => Change("image-outline")'></ion-icon>
+</div>
+</body>
+
+@code {
+    private string activeIcon = "add-circle-outline";
+
+    private void Change(string iconName)
+    {
+        activeIcon = iconName;
+    }
+
+    private string GetIconClass(string iconName)
+    {
+        return iconName == activeIcon ? "icon active" : "icon";
+    }
+}

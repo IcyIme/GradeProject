@@ -4,7 +4,7 @@
         <Found Context="routeData">
             @if (isMobile)
             {
-                <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.EmptyLayoutWithBg)">
+                <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MobileLayout)">
                     <NotAuthorized>
                         <RedirectToLogin/>
                     </NotAuthorized>
@@ -23,7 +23,7 @@
             
         </Found>
     </ViewTransitionRouter>
-    <MediaQuery Media="(max-width: 500px)" @bind-Matches="isMobile" />
+    <MediaQuery Media="(max-width: 600px)" @bind-Matches="isMobile" />
 </MediaQueryList>
 
                 @code
