@@ -1,26 +1,65 @@
 ﻿@inherits LayoutComponentBase
-
-<body>
-@Body
-<div class="bottom-bar">
-    <ion-icon name="home-outline" class="@GetIconClass("home-outline")" @onclick='() => Change("home-outline")'></ion-icon>
-    <ion-icon name="folder-outline" class="@GetIconClass("folder-outline")" @onclick='() => Change("folder-outline")'></ion-icon>
-    <ion-icon name="add-circle-outline" class="@GetIconClass("add-circle-outline")" @onclick='() => Change("add-circle-outline")'></ion-icon>
-    <ion-icon name="person-outline" class="@GetIconClass("person-outline")" @onclick='() => Change("person-outline")'></ion-icon>
-    <ion-icon name="image-outline" class="@GetIconClass("image-outline")" @onclick='() => Change("image-outline")'></ion-icon>
+@using GradeProject.Components.Layout.AI
+@inject NavigationManager NavigationManager
+<RadzenComponents />
+<RadzenDialog />
+<RadzenNotification />
+<RadzenTooltip />
+<RadzenContextMenu />
+<body style="background-image: url(/Background/bg5.jpg)">
+<div class="content">
+    @Body
 </div>
+<nav class="mobile-nav">
+    <Ai></Ai>
+    
+    <input type="radio" id="home1" name="nav" checked="checked" class="radio-icon" @onclick="Home">
+    <label for="home1" class="bloc-icon">
+        <img src="/Icons/NavIcons/home.svg" alt="Home 1">
+    </label>
+    <input type="radio" id="home2" name="nav" class="radio-icon" @onclick="LeaderBoard">
+    <label for="home2" class="bloc-icon">
+        <img src="/Icons/NavIcons/lead.svg" alt="Home 2">
+    </label>
+    <input type="radio" id="home3" name="nav" class="radio-icon" @onclick="Forum">
+    <label for="home3" class="bloc-icon">
+        <img src="/Icons/NavIcons/list-outline.svg" alt="Home 3">
+    </label>
+    <input type="radio" id="home4" name="nav" class="radio-icon" @onclick="CodePlayground">
+    <label for="home4" class="bloc-icon">
+        <img src="/Icons/NavIcons/code-slash-outline.svg" alt="Home 4">
+    </label>
+    <input type="radio" id="home5" name="nav" class="radio-icon" @onclick="Course">
+    <label for="home5" class="bloc-icon">
+        <img src="Icons/NavIcons/book-outline.svg" alt="Home 5">
+    </label>
+</nav>
 </body>
 
-@code {
-    private string activeIcon = "add-circle-outline";
-
-    private void Change(string iconName)
+@code
+{
+    private void Home()
     {
-        activeIcon = iconName;
+        NavigationManager.NavigateTo("/profile");
     }
 
-    private string GetIconClass(string iconName)
+    private void LeaderBoard()
     {
-        return iconName == activeIcon ? "icon active" : "icon";
+        NavigationManager.NavigateTo("/leaderboard");
+    }
+
+    private void Forum()
+    {
+        NavigationManager.NavigateTo("/rooms");
+    }
+
+    private void CodePlayground()
+    {
+        NavigationManager.NavigateTo("/repl/playground");
+    }
+
+    private void Course()
+    {
+        NavigationManager.NavigateTo("/Courses");
     }
 }

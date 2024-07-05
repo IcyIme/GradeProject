@@ -230,3 +230,14 @@ body{
     margin: auto;
     right: 20px;
 }
+
+/* Media query for mobile screens */
+@media screen and (max-width: 600px) {
+    #floating-button {
+        bottom: 60px; /* Move the button higher */
+    }
+
+    #container-floating {
+        bottom: 60px; /* Move the container higher */
+    }
+}
