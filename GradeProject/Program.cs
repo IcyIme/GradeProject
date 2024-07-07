@@ -48,7 +48,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.UseSqlite(connectionString));
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

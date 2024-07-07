@@ -48,12 +48,6 @@ else
         {
             CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(User.Id);
         }
-        else
-        {
-            // If User is null, attempt to fetch the current user
-            var currentUser = await UserManager.GetUserAsync();
-            CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(currentUser.Id);
-        }
     }
 
     private void ShowRoomDetails(int roomId)
