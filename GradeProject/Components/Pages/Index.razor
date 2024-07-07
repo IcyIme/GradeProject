@@ -1,8 +1,10 @@
 ﻿@page "/index"
-
+@using Radzen
+@using GradeProject.Components.Layout
 @inject NavigationManager NavigationManager
 
-<body>
+@layout EmptyLayoutWithBg
+
 <section class="h-100">
     <div class="container h-100">
         <div class="row justify-content-sm-center h-100">
@@ -18,21 +20,31 @@
                         </div>
                     </div>
                 </div>
-                <p class="text-center bgtext">© @DateTime.Today.Year Grade - All Rights Reserved.</p>
+                <p class="text-center bgtext">© @DateTime.Now.Year Grade - All Rights Reserved.</p>
             </div>
         </div>
     </div>
 </section>
-</body>
 
 @code {
+    [Parameter, SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; } = "/";
+
     private void RedirectToLogin()
     {
-        NavigationManager.NavigateTo("Account/Login");
+        // Debug logging
+        Console.WriteLine("Redirecting to login page.");
+        NavigationManager.NavigateTo("/Account/Login", true);
     }
 
     private void RedirectToRegister()
     {
-        NavigationManager.NavigateTo("Account/Register");
+        // Debug logging
+        Console.WriteLine("Redirecting to register page with ReturnUrl: " + ReturnUrl);
+        var uri = NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?>
+        {
+            ["ReturnUrl"] = ReturnUrl
+        });
+        NavigationManager.NavigateTo(uri, true);
     }
 }

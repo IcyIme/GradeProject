@@ -1,4 +1,4 @@
-﻿body {
+﻿.page {
     background-image: url(/Background/bg5.jpg);
     background-size: cover; /* Adjusts the image to cover the entire element */
     background-repeat: no-repeat; /* Prevents the image from repeating */

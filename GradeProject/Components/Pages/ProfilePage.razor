@@ -10,6 +10,7 @@
 @attribute [Authorize]
 
 <PageTitle>Profil</PageTitle>
+
 @if (Profile != null)
 {
     <div class="profile-page">
@@ -37,12 +38,12 @@
                 }
                 else
                 {
-                    <br/>
+                    <br />
                 }
             </div>
             <div class="content__title">
                 <h1>@Profile.FullName</h1>
-                <span>@prom</span> <br/>
+                <span>@prom</span> <br />
                 <span>@Profile.Id</span>
             </div>
 
@@ -81,26 +82,9 @@ else
     private string prom;
     private int pos;
     private bool IsProfileOwner = false;
-
-    private void onClickRedirect()
-    {
-        NavigationManager.NavigateTo("/Courses");
-    }
-
-    public class ProfileModel
-    {
-        public string Id { get; set; }
-        public string FullName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; }
-        public int Score { get; set; }
-        public string Email { get; set; }
-        public string Status { get; set; } // Added Status property
-    }
-
     private ProfileModel Profile;
 
-    protected override async Task OnInitializedAsync()
+    private async Task LoadProfileAsync()
     {
         ApplicationUser applicationUser = null;
 
@@ -123,30 +107,30 @@ else
         if (applicationUser != null)
         {
             Profile = new ProfileModel
-                {
-                    Id = applicationUser.Id,
-                    FullName = applicationUser.FullName,
-                    // DateOfBirth = applicationUser.DateOfBirth,
-                    Gender = applicationUser.Gender,
-                    Score = applicationUser.Score,
-                    Email = applicationUser.Email,
-                    Status = applicationUser.Status, // Fetch Status from user data
-                };
-            pos = GetLeaderboardPositionAsync(Profile.Score);
-            prom = GetPonnuns();
+            {
+                Id = applicationUser.Id,
+                FullName = applicationUser.FullName,
+                Gender = applicationUser.Gender,
+                Score = applicationUser.Score,
+                Email = applicationUser.Email,
+                Status = applicationUser.Status, // Fetch Status from user data
+            };
+
+            pos = await GetLeaderboardPositionAsync(Profile.Score);
+            prom = GetPronouns();
         }
     }
 
-    private int GetLeaderboardPositionAsync(int score)
+    private async Task<int> GetLeaderboardPositionAsync(int score)
     {
         // Mock logic to get the leaderboard position
-        var allUsers = UserManager.Users.ToList();
+        var allUsers = await UserManager.Users.ToListAsync();
         var rankedUsers = allUsers.OrderByDescending(u => u.Score).ToList();
         var position = rankedUsers.FindIndex(u => u.Score == score) + 1;
         return position;
     }
 
-    private string GetPonnuns()
+    private string GetPronouns()
     {
         return Profile?.Gender switch
         {
@@ -183,9 +167,30 @@ else
                     <form @onsubmit="UpdateStatus">
                         <RadzenHtmlEditor @bind-Value=@Profile.Status style="height: 300px;" UploadUrl="upload/image" />
                         <br />
-                <RadzenButton type="submit" Click="() => ds.Close(true)">Zmeniť status</RadzenButton>
-        </form>
-        </RadzenStack>
-        </RadzenStack>);
+                        <RadzenButton type="submit" Click="() => ds.Close(true)">Zmeniť status</RadzenButton>
+                    </form>
+                </RadzenStack>
+            </RadzenStack>);
+    }
+
+    private void onClickRedirect()
+    {
+        NavigationManager.NavigateTo("/Courses");
+    }
+
+    public class ProfileModel
+    {
+        public string Id { get; set; }
+        public string FullName { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Gender { get; set; }
+        public int Score { get; set; }
+        public string Email { get; set; }
+        public string Status { get; set; } // Added Status property
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProfileAsync();
     }
 }
