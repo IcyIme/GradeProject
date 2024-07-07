@@ -37,34 +37,22 @@ else
 }
 
 @code {
-
     [Parameter]
-    public string userId { get; set; }
+    public ApplicationUser User { get; set; }
 
     private List<ForumRoom> CreatedRooms;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        ApplicationUser applicationUser = null;
-
-        if (!string.IsNullOrEmpty(userId))
+        if (User != null)
         {
-            applicationUser = await UserManager.FindByIdAsync(userId);
+            CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(User.Id);
         }
         else
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user?.Identity?.Name != null)
-            {
-                applicationUser = await UserManager.FindByNameAsync(user.Identity.Name);
-            }
-        }
-
-        if (applicationUser != null)
-        {
-            CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(applicationUser.Id);
+            // If User is null, attempt to fetch the current user
+            var currentUser = await UserManager.GetUserAsync();
+            CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(currentUser.Id);
         }
     }
 
