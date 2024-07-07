@@ -6,7 +6,37 @@
 <RadzenNotification />
 <RadzenTooltip />
 <RadzenContextMenu />
-
+@if(isMobile){
+    <body style="background-image: url(/Background/bg5.jpg)">
+<div class="content">
+    @Body
+</div>
+<nav class="mobile-nav">
+    <Ai></Ai>
+    
+    <input type="radio" id="home1" name="nav" checked="checked" class="radio-icon" @onclick="Home">
+    <label for="home1" class="bloc-icon">
+        <img src="/Icons/NavIcons/home.svg" alt="Home 1">
+    </label>
+    <input type="radio" id="home2" name="nav" class="radio-icon" @onclick="LeaderBoard">
+    <label for="home2" class="bloc-icon">
+        <img src="/Icons/NavIcons/lead.svg" alt="Home 2">
+    </label>
+    <input type="radio" id="home3" name="nav" class="radio-icon" @onclick="Forum">
+    <label for="home3" class="bloc-icon">
+        <img src="/Icons/NavIcons/list-outline.svg" alt="Home 3">
+    </label>
+    <input type="radio" id="home4" name="nav" class="radio-icon" @onclick="CodePlayground">
+    <label for="home4" class="bloc-icon">
+        <img src="/Icons/NavIcons/code-slash-outline.svg" alt="Home 4">
+    </label>
+    <input type="radio" id="home5" name="nav" class="radio-icon" @onclick="Course">
+    <label for="home5" class="bloc-icon">
+        <img src="Icons/NavIcons/book-outline.svg" alt="Home 5">
+    </label>
+</nav>
+</body>
+}else{
 <RadzenLayout class="bg">
     <RadzenHeader>
         <div class="d-flex justify-content-between align-items-center">
@@ -50,10 +80,11 @@
         © @DateTime.Today.Year Grade - All Rights Reserved.
     </RadzenFooter>
 </RadzenLayout>
-
-
+}
+<MediaQuery Media="(max-width: 600px)" @bind-Matches="isMobile" />
 @code {
     bool sidebar1Expanded = true;
+    private bool isMobile;
 }
 
 <div id="blazor-error-ui">

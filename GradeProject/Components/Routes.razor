@@ -3,7 +3,7 @@
 <MediaQueryList>
     <ViewTransitionRouter AppAssembly="typeof(Program).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="routeData" DefaultLayout="@(isMobile ? typeof(Layout.MobileLayout) : typeof(Layout.MainLayout))">
+            <AuthorizeRouteView RouteData="routeData" DefaultLayout="@typeof(Layout.MainLayout)">
                 <NotAuthorized>
                     <RedirectToLogin/>
                 </NotAuthorized>
@@ -11,9 +11,9 @@
             <FocusOnNavigate RouteData="routeData" Selector="[autofocus]"/>
         </Found>
     </ViewTransitionRouter>
-    <MediaQuery Media="(max-width: 600px)" @bind-Matches="isMobile" />
+    
 </MediaQueryList>
 
 @code {
-    private bool isMobile;
+    
 }
