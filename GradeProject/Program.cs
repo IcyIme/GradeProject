@@ -8,6 +8,7 @@ using GradeProject.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Radzen;
 
 
@@ -28,9 +29,9 @@ builder.Services.AddScoped<IQuizLoaderService, QuizLoaderService>();
 builder.Services.AddScoped<INavigationService, NavigationService>();
 builder.Services.AddSingleton<ProblemService>();
 builder.Services.AddCommandLine();
-builder.Services.AddScoped<IForumService,ForumService>();
+builder.Services.AddTransient<IForumService,ForumService>();
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddScoped<UserProfileService>();
 builder.Services.AddMediaQueryService();
 
 builder.Services.AddSingleton<YouTubeApiService>();
@@ -42,14 +43,18 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 //    options.UseSqlServer(connectionString));
 
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.UseSqlite(connectionString));
-
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+
+
+
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

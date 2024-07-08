@@ -41,12 +41,21 @@ else
     public ApplicationUser User { get; set; }
 
     private List<ForumRoom> CreatedRooms;
+    private SemaphoreSlim semaphore = new SemaphoreSlim(1); // Semaphore for ensuring single execution
 
     protected override async Task OnParametersSetAsync()
     {
-        if (User != null)
+        await semaphore.WaitAsync();
+        try
         {
-            CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(User.Id);
+            if (User != null)
+            {
+                CreatedRooms = await ForumService.GetRoomsCreatedByUserAsync(User.Id);
+            }
+        }
+        finally
+        {
+            semaphore.Release();
         }
     }
 

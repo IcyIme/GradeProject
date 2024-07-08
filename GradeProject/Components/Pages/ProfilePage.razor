@@ -1,11 +1,8 @@
 @page "/profile/{userId?}"
 @using Microsoft.EntityFrameworkCore
-
-@inject UserManager<ApplicationUser> UserManager
+@inject UserProfileService UserProfileService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
-@inject INavigationService NavigationService
-@inject IForumService ForumService
 @inject DialogService DialogService
 
 @attribute [Authorize]
@@ -38,12 +35,12 @@
                 }
                 else
                 {
-                    <br/>
+                    <br />
                 }
             </div>
             <div class="content__title">
                 <h1>@Profile.FullName</h1>
-                <span>@prom</span> <br/>
+                <span>@prom</span> <br />
                 <span>@Profile.Id</span>
             </div>
 
@@ -83,111 +80,51 @@ else
     private int pos;
     private bool IsProfileOwner = false;
 
-
     private void onClickRedirect()
     {
         NavigationManager.NavigateTo("/Courses");
     }
 
-    public class ProfileModel
-    {
-        public string Id { get; set; }
-        public string FullName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; }
-        public int Score { get; set; }
-        public string Email { get; set; }
-        public string Status { get; set; } // Added Status property
-    }
-
     private ApplicationUser Profile;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        ApplicationUser applicationUser = null;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
 
-        if (!string.IsNullOrEmpty(userId))
+        Profile = await UserProfileService.GetUserProfileAsync(userId, user);
+        if (Profile != null)
         {
-            applicationUser = await UserManager.FindByIdAsync(userId);
-        }
-        else
-        {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user?.Identity?.Name != null)
-            {
-                applicationUser = await UserManager.FindByNameAsync(user.Identity.Name);
-                IsProfileOwner = true;
-            }
-        }
-
-        if (applicationUser != null)
-        {
-            Profile = new ApplicationUser()
-                {
-                    Id = applicationUser.Id,
-                    FullName = applicationUser.FullName,
-                    // DateOfBirth = applicationUser.DateOfBirth,
-                    Gender = applicationUser.Gender,
-                    Score = applicationUser.Score,
-                    Email = applicationUser.Email,
-                    Status = applicationUser.Status, // Fetch Status from user data
-                };
-            pos = GetLeaderboardPositionAsync(Profile.Score);
-            prom = GetPonnuns();
-        }
-    }
-
-    private int GetLeaderboardPositionAsync(int score)
-    {
-        // Mock logic to get the leaderboard position
-        var allUsers = UserManager.Users.ToList();
-        var rankedUsers = allUsers.OrderByDescending(u => u.Score).ToList();
-        var position = rankedUsers.FindIndex(u => u.Score == score) + 1;
-        return position;
-    }
-
-    private string GetPonnuns()
-    {
-        return Profile?.Gender switch
-        {
-            "Male" => "On/Jeho",
-            "Female" => "Ona/Jej",
-            "PreferNotToSay" => "Oni/Ich",
-            _ => "none"
-        };
-    }
-
-    private async Task UpdateStatus()
-    {
-        var user = await UserManager.FindByIdAsync(Profile.Id);
-        if (user != null)
-        {
-            user.Status = Profile.Status;
-            var result = await UserManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                // Optionally, show a success message or update the UI
-            }
-            else
-            {
-                // Handle the error
-            }
+            IsProfileOwner = string.IsNullOrEmpty(userId);
+            pos = await UserProfileService.GetLeaderboardPositionAsync(Profile.Score);
+            prom = UserProfileService.GetPronouns(Profile.Gender);
         }
     }
 
     async Task AddStatusDialog()
     {
         var result = await DialogService.OpenAsync("Zmeniť status", ds =>
-            @<RadzenStack Gap="1.5rem">
-                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
-                    <form @onsubmit="UpdateStatus">
-                        <RadzenHtmlEditor @bind-Value=@Profile.Status style="height: 300px;" UploadUrl="upload/image" />
-                        <br />
+    @<RadzenStack Gap="1.5rem">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+            <form @onsubmit="UpdateStatus">
+                <RadzenHtmlEditor @bind-Value=@Profile.Status style="height: 300px;" UploadUrl="upload/image" />
+                <br />
                 <RadzenButton type="submit" Click="() => ds.Close(true)">Zmeniť status</RadzenButton>
-        </form>
+            </form>
         </RadzenStack>
-        </RadzenStack>);
+    </RadzenStack>);
+    }
+
+    private async Task UpdateStatus()
+    {
+        try
+        {
+            await UserProfileService.UpdateStatusAsync(Profile, Profile.Status);
+            NavigationManager.Refresh(true);
+        }
+        catch (Exception ex)
+        {
+            // Handle exception, possibly show an error message to the user
+        }
     }
 }

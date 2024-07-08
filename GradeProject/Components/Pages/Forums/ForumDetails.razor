@@ -144,7 +144,7 @@ else
         newCommentContent = "";
         await ForumService.AddCommentAsync(comment);
         loading = false;
-        NavigationManager.Refresh(true);
+        NavigationManager.Refresh();
     }
 
     private async Task DeleteComment(int commentId)

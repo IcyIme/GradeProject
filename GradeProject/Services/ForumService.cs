@@ -61,7 +61,7 @@ public class ForumService : IForumService
         var room = await _context.ForumRooms.FindAsync(roomId);
         return room.OwnerId == userId;
     }
-    // Services/ForumService.cs
+
     public async Task<int> CreateRoomAsync(ForumRoom room, string ownerId)
     {
         room.OwnerId = ownerId;
@@ -69,6 +69,7 @@ public class ForumService : IForumService
         await _context.SaveChangesAsync();
         return room.Id;
     }
+
     public async Task<bool> DeleteRoomAsync(int roomId)
     {
         var room = await _context.ForumRooms.FindAsync(roomId);
@@ -115,5 +116,4 @@ public class ForumService : IForumService
         }
         return await _userManager.IsInRoleAsync(user, "Admin");
     }
-
 }

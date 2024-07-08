@@ -36,6 +36,7 @@ namespace GradeProject.Migrations
                     Score = table.Column<int>(type: "integer", nullable: false),
                     CompletedLesson = table.Column<string[]>(type: "text[]", nullable: true),
                     CompletedQuiz = table.Column<string[]>(type: "text[]", nullable: true),
+                    Status = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),

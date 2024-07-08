@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GradeProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240626181843_init")]
+    [Migration("20240708174043_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -152,6 +152,9 @@ namespace GradeProject.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
