@@ -1,0 +1,26 @@
+﻿@if (isLoaded)
+{
+    @ChildContent
+}
+else
+{
+    <div id="preloader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div> 
+}
+
+@code {
+    bool isLoaded;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(250); // TODO actual initialization job
+        isLoaded = true;
+    }
+}
