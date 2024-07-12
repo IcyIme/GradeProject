@@ -9,7 +9,7 @@
     <h3>Payment</h3>
 
     <ul>
-        @foreach(var item in _productInCard)
+        @foreach (var item in _productInCard)
         {
             <li>@item.name - @item.price</li>
         }
@@ -18,9 +18,9 @@
     <hr />
 
     <label> total ammount: @_productInCard.Sum(p => p.price).ToString("C")</label>
-    <hr/>
+    <hr />
     <form method="post" @formname="checkout-form" @onsubmit="checkoutAsync">
-        <AntiforgeryToken/>
+        <AntiforgeryToken />
         <button type="submit" class="btn btn-sm btn-primary">Pay now</button>
     </form>
 </div>
@@ -33,9 +33,7 @@
     {
         _productInCard = new Product[]
         {
-            new Product { id = 1, name = "Product 1", price = 1 },
-            new Product { id = 2, name = "Product 2", price = 2 },
-            new Product { id = 3, name = "Product 3", price = 30 },
+            new Product { id = 1, name = "Premium Tier", price = 15 },
         };
         base.OnInitialized();
     }
@@ -45,28 +43,28 @@
         var domain = NavigationManager.BaseUri.TrimEnd('/');
 
         var lineItems = _productInCard.Select(p => new SessionLineItemOptions
-        {
-            Quantity = 1,
-            PriceData = new SessionLineItemPriceDataOptions()
             {
-                Currency = "eur",
-                UnitAmountDecimal = p.price * 100,
-                ProductData = new SessionLineItemPriceDataProductDataOptions()
+                Quantity = 1,
+                PriceData = new SessionLineItemPriceDataOptions()
                 {
-                    Name = p.name,
+                    Currency = "eur",
+                    UnitAmountDecimal = p.price * 100,
+                    ProductData = new SessionLineItemPriceDataProductDataOptions()
+                    {
+                        Name = p.name,
+                    }
                 }
-            }
-        }).ToList();
+            }).ToList();
 
         var options = new SessionCreateOptions
-        {
-            LineItems = lineItems,
-            Mode = "payment",
-            SuccessUrl = domain + "/PaymentSuccess?sessionId={CHECKOUT_SESSION_ID}",
-            CancelUrl = domain,
-        };
+            {
+                LineItems = lineItems,
+                Mode = "payment",
+                SuccessUrl = domain + "/PaymentSuccess?sessionId={CHECKOUT_SESSION_ID}",
+                CancelUrl = domain,
+            };
 
-        
+
 
         var service = new SessionService();
         Session session = await service.CreateAsync(options);

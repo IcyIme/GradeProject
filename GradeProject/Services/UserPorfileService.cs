@@ -57,7 +57,26 @@ public class UserProfileService
         }
     }
 
-    public string GetPronouns(string gender)
+    public async Task<string> GetUserTierAsync(ApplicationUser user)
+    {
+        bool isPremium = await _userManager.IsInRoleAsync(user, "Premium");
+        bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+        if (isPremium)
+        {
+            return "Premium Tier";
+        }
+        else if (isAdmin)
+        {
+            return "System Account";
+        }
+        else
+        {
+            return "Free Tier";
+        }
+    }
+
+    public async Task<string> GetPronounsAsync(string gender)
     {
         return gender switch
         {

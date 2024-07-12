@@ -94,7 +94,7 @@ using(var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     
-    var roles = new string[] { "Admin", "Premium", "Sponsor" };
+    var roles = new string[] { "Admin", "Premium" };
     foreach (var role in roles)
     {
         if (!roleManager.Roles.Any(r => r.Name == role))
