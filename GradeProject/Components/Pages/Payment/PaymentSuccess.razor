@@ -1,0 +1,61 @@
+﻿@page "/PaymentSuccess"
+
+@using Stripe.Checkout
+
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="bgtext">
+    <h3>Payment Success</h3>
+    <p>Hi, @_customerName!</p>
+    <p>Your account has been upgraded to Premium.</p>
+</div>
+
+@code {
+    [SupplyParameterFromQuery(Name = "sessionId")]
+    public string SessionId { get; set; }
+
+    private string _customerName = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var service = new SessionService();
+        var session = await service.GetAsync(SessionId);
+
+        // Verify if the payment was successful
+        if (session.PaymentStatus == "paid")
+        {
+            _customerName = session.CustomerDetails.Name;
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var currentUser = await UserManager.GetUserAsync(user);
+
+                if (currentUser != null)
+                {
+                    var result = await UserManager.AddToRoleAsync(currentUser, "premium");
+
+                    if (result.Succeeded)
+                    {
+                        // Optionally, you can log the success or perform other actions here
+                        Console.WriteLine("User role updated to Premium.");
+                    }
+                    else
+                    {
+                        // Handle errors here
+                        Console.WriteLine("Failed to update user role.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Handle the case where the payment was not successful
+            NavigationManager.NavigateTo("/PaymentFailed");
+        }
+    }
+}

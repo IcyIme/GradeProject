@@ -49,6 +49,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
     <PackageReference Include="OpenAI" Version="1.11.0" />
     <PackageReference Include="Radzen.Blazor" Version="4.32.11" />
+    <PackageReference Include="Stripe.net" Version="45.3.0" />
     <PackageReference Include="Toolbelt.Blazor.ViewTransition" Version="1.0.3" />
   </ItemGroup>
 

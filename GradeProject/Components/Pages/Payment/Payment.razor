@@ -1,0 +1,83 @@
+﻿@page "/payment"
+@using Azure
+@using Microsoft.AspNetCore.Mvc
+@using Stripe
+@using Stripe.Checkout
+
+@inject NavigationManager NavigationManager
+<div class="bgtext">
+    <h3>Payment</h3>
+
+    <ul>
+        @foreach(var item in _productInCard)
+        {
+            <li>@item.name - @item.price</li>
+        }
+    </ul>
+
+    <hr />
+
+    <label> total ammount: @_productInCard.Sum(p => p.price).ToString("C")</label>
+    <hr/>
+    <form method="post" @formname="checkout-form" @onsubmit="checkoutAsync">
+        <AntiforgeryToken/>
+        <button type="submit" class="btn btn-sm btn-primary">Pay now</button>
+    </form>
+</div>
+
+@code {
+
+    private Product[] _productInCard = [];
+
+    protected override void OnInitialized()
+    {
+        _productInCard = new Product[]
+        {
+            new Product { id = 1, name = "Product 1", price = 1 },
+            new Product { id = 2, name = "Product 2", price = 2 },
+            new Product { id = 3, name = "Product 3", price = 30 },
+        };
+        base.OnInitialized();
+    }
+
+    private async Task checkoutAsync()
+    {
+        var domain = NavigationManager.BaseUri.TrimEnd('/');
+
+        var lineItems = _productInCard.Select(p => new SessionLineItemOptions
+        {
+            Quantity = 1,
+            PriceData = new SessionLineItemPriceDataOptions()
+            {
+                Currency = "eur",
+                UnitAmountDecimal = p.price * 100,
+                ProductData = new SessionLineItemPriceDataProductDataOptions()
+                {
+                    Name = p.name,
+                }
+            }
+        }).ToList();
+
+        var options = new SessionCreateOptions
+        {
+            LineItems = lineItems,
+            Mode = "payment",
+            SuccessUrl = domain + "/PaymentSuccess?sessionId={CHECKOUT_SESSION_ID}",
+            CancelUrl = domain,
+        };
+
+        
+
+        var service = new SessionService();
+        Session session = await service.CreateAsync(options);
+
+        NavigationManager.NavigateTo(session.Url);
+    }
+
+    class Product
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public decimal price { get; set; }
+    }
+}

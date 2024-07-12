@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Radzen;
+using Stripe;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,8 +34,10 @@ builder.Services.AddTransient<IForumService,ForumService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<UserProfileService>();
 builder.Services.AddMediaQueryService();
-
 builder.Services.AddSingleton<YouTubeApiService>();
+
+StripeConfiguration.ApiKey = "sk_test_51PbRIKEMmORADTdsXcajjZYaAMxmuNC9XpZySpTAzY4S3lp1Y4quN3UVGGE9a7Rq4rbwz1XMiTREzM9QigWrcHqJ00b1WVwkZI";
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -51,11 +54,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-
-
-
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -67,7 +65,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();
-
+StripeConfiguration.ApiKey = app.Configuration.GetValue<string>("StripeAPIKey");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -91,4 +89,42 @@ app.MapRazorComponents<App>()
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 app.UseStatusCodePagesWithRedirects("/notfound");
+
+using(var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    
+    var roles = new string[] { "Admin", "Premium", "Sponsor" };
+    foreach (var role in roles)
+    {
+        if (!roleManager.Roles.Any(r => r.Name == role))
+        {
+            roleManager.CreateAsync(new IdentityRole(role)).Wait();
+        }
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    string Email = "peter.odrobinak@outlook.sk";
+    string Password = "Peter9871.";
+
+    if(userManager.FindByEmailAsync(Email).Result == null)
+    {
+        ApplicationUser user = new ApplicationUser();
+        user.FullName = "Peter Odrobinak";
+        user.Gender = "Male";
+        user.UserName = Email;
+        user.Email = Email;
+        user.EmailConfirmed = true;
+
+        IdentityResult result = userManager.CreateAsync(user, Password).Result;
+
+        if (result.Succeeded)
+        {
+            userManager.AddToRoleAsync(user, "Admin").Wait();
+        }
+    }
+}
 app.Run();
