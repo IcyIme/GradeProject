@@ -1,17 +1,22 @@
+/* Basic layout and flex properties */
 .page {
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100vh; /* Full viewport height */
 }
 
+/* Ensure the main content takes up available space */
 main {
     flex: 1;
 }
 
+/* Sidebar styling for larger screens */
 .sidebar {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
 }
 
+/* Top row styling */
 .top-row {
     background-color: #f7f7f7;
     border-bottom: 1px solid #d6d5d5;
@@ -21,31 +26,84 @@ main {
     align-items: center;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+/* Styling for links and buttons in the top row */
+.top-row ::deep a,
+.top-row ::deep .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+}
 
-        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-            text-decoration: underline;
-        }
+.top-row ::deep a:hover,
+.top-row ::deep .btn-link:hover {
+    text-decoration: underline;
+}
 
-        .top-row ::deep a:first-child {
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.top-row ::deep a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
+/* Hide sidebar toggle and footer on mobile */
+.sidebar-toggle {
+    display: block; /* Default to show */
+}
+
+.footer {
+    display: block; /* Default to show */
+}
+
+.bottom-nav{
+    display: none;
+}
+
+/* Mobile styles */
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
     }
 
-        .top-row ::deep a, .top-row ::deep .btn-link {
-            margin-left: 0;
-        }
+    .top-row ::deep a,
+    .top-row ::deep .btn-link {
+        margin-left: 0;
+    }
+
+    /* Bottom navigation for mobile */
+    .bottom-nav {
+        display: block;
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 3.5rem;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 1;
+    }
+
+    .bottom-nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .bottom-nav a:hover {
+        text-decoration: underline;
+    }
+
+    .sidebar-toggle {
+        display: none; /* Hide sidebar toggle on mobile */
+    }
+
+    .footer {
+        display: none; /* Hide footer on mobile */
+    }
 }
 
+/* Desktop styles */
 @media (min-width: 641px) {
     .page {
         flex-direction: row;
@@ -64,11 +122,11 @@ main {
         z-index: 1;
     }
 
-        .top-row.auth ::deep a:first-child {
-            flex: 1;
-            text-align: right;
-            width: 0;
-        }
+    .top-row.auth ::deep a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
 
     .top-row, article {
         padding-left: 2rem !important;
@@ -76,6 +134,7 @@ main {
     }
 }
 
+/* Error UI styling */
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -88,9 +147,9 @@ main {
     z-index: 1000;
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

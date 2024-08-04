@@ -3,4 +3,5 @@
     background-size: cover; /* Adjusts the image to cover the entire element */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: center; /* Centers the image */
+    height: 100vh;
 }

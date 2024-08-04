@@ -11,7 +11,10 @@
     <RadzenHeader>
         <div class="d-flex justify-content-between align-items-center">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-                <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
+                <!-- Sidebar Toggle (Hidden on mobile) -->
+                <div class="sidebar-toggle">
+                    <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
+                </div>
                 <RadzenImage Path="/img/logo2.png" Style="max-width:8rem" AlternateText="community" />
                 <RadzenLabel Text="v1a0" Style="font-size:10px" />
             </RadzenStack>
@@ -20,7 +23,9 @@
             </div>
         </div>
     </RadzenHeader>
-    <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+
+    <!-- Sidebar for larger screens -->
+    <RadzenSidebar @bind-Expanded="@sidebar1Expanded" class="sidebar">
         <RadzenPanelMenu>
             <RadzenPanelMenuItem Text="Domov" Icon="home" Path="/profile" />
             <RadzenPanelMenuItem Text="Leaderboard" Icon="find_in_page" Path="/leaderboard" />
@@ -37,27 +42,39 @@
             Version: 1a0
         </div>
     </RadzenSidebar>
-    <RadzenBody Style="background-image: url(/Background/bg5.jpg);
-    background-size: cover;
-        ">
+
+    <RadzenBody Style="background-image: url(/Background/bg5.jpg); background-size: cover;">
         <div class="rz-p-4">
             @Body
         </div>
     </RadzenBody>
 
     <Ai></Ai>
-    <RadzenFooter>
-        © @DateTime.Today.Year Grade - All Rights Reserved.
-    </RadzenFooter>
+
+    <!-- Footer (Hidden on mobile) -->
+    <div class="footer">
+        <RadzenFooter>
+            © @DateTime.Today.Year Grade - All Rights Reserved.
+        </RadzenFooter>
+    </div>
 </RadzenLayout>
 
+<!-- Mobile Bottom Navigation -->
+<div class="bottom-nav">
+    <a href="/profile">Home</a>
+    <a href="/leaderboard">Leaderboard</a>
+    <a href="/rooms">Forum</a>
+    <a href="/repl/playground">Playground</a>
+    <a href="/Courses">Courses</a>
+</div>
 
-@code {
-    bool sidebar1Expanded = true;
-}
-
+<!-- Blazor Error UI -->
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+bool sidebar1Expanded = true;
+}
