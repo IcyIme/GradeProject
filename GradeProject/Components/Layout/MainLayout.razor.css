@@ -59,6 +59,44 @@ main {
 
 /* Mobile styles */
 @media (max-width: 640.98px) {
+
+    .content {
+        flex: 1;
+        padding-bottom: 65px; /* Ensure content is above the mobile-nav */
+        box-sizing: border-box; /* Include padding in the element's total width and height */
+    }
+
+    .mobile-nav {
+         /* Ensure it's above other elements */
+    }
+
+    .radio-icon {
+        display: none;
+    }
+
+    .bloc-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .bloc-icon img {
+        width: 30px;
+    }
+
+    @media screen and (min-width: 600px) {
+        .mobile-nav {
+            display: none;
+        }
+    }
+
+    /* Additional styles to indicate a selected state */
+    .radio-icon:checked + .bloc-icon {
+        background-color: #e0e0e0; /* Example of a background change */
+        border-radius: 5px; /* Example of a border radius */
+    }
+    
     .top-row {
         justify-content: space-between;
     }
@@ -70,17 +108,14 @@ main {
 
     /* Bottom navigation for mobile */
     .bottom-nav {
-        display: block;
-        background-color: #333;
-        color: white;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        height: 3.5rem;
+        background: #F1F1F1;
         position: fixed;
         bottom: 0;
+        height: 65px;
         width: 100%;
-        z-index: 1;
+        display: flex;
+        justify-content: space-around;
+        z-index: 1000;
     }
 
     .bottom-nav a {
