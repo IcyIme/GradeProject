@@ -4,7 +4,8 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject DialogService DialogService
-
+@inject UserManager<ApplicationUser> UserManager
+@using Stripe.Checkout
 @attribute [Authorize]
 
 <PageTitle>Profil</PageTitle>
@@ -60,6 +61,14 @@
                         <div class="button__bg"></div>
                         <p class="button__text">Zobraziť Kurzy</p>
                     </a>
+                    @if (!IsPremium)
+                    {
+                        <a class="button" @onclick="onClickRedirectToPayment">
+                            <div class="button__border"></div>
+                            <div class="button__bg"></div>
+                            <p class="button__text">Kúpiť premium</p>
+                        </a>
+                    }
                 </div>
             }
         </div>
@@ -81,19 +90,52 @@ else
     private string tier;
     private int pos;
     private bool IsProfileOwner = false;
+    private bool IsPremium = false;
 
+    
+    [SupplyParameterFromQuery(Name = "sessionId")]
+    public string? SessionId { get; set; }
+
+    private string _customerName = string.Empty;
+    
     private void onClickRedirect()
     {
         NavigationManager.NavigateTo("/Courses",true);
     }
 
+    private void onClickRedirectToPayment()
+    {
+        NavigationManager.NavigateTo("/payment");
+    }
     private ApplicationUser Profile;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        
+        // Get the user ID from the ClaimsPrincipal
+        var userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            // Retrieve the ApplicationUser using UserManager
+            var applicationUser = await UserManager.FindByIdAsync(userId);
+
+            if (applicationUser != null)
+            {
+                // Get the roles for the ApplicationUser
+                var roles = await UserManager.GetRolesAsync(applicationUser);
+                IsPremium = roles.Contains("Premium");
+            }
+        }
+    }
+    
     protected override async Task OnParametersSetAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-
+        
         Profile = await UserProfileService.GetUserProfileAsync(userId, user);
         if (Profile != null)
         {
@@ -101,6 +143,50 @@ else
             pos = await UserProfileService.GetLeaderboardPositionAsync(Profile.Score);
             prom = await UserProfileService.GetPronounsAsync(Profile.Gender);
             tier = await UserProfileService.GetUserTierAsync(Profile);
+        }
+        
+        if (SessionId is not null)
+        {
+            var service = new SessionService();
+            var session = await service.GetAsync(SessionId);
+
+            // Verify if the payment was successful
+            if (session.PaymentStatus == "paid")
+            {
+                _customerName = session.CustomerDetails.Name;
+                ShowBusyDialog();
+                if (user.Identity.IsAuthenticated)
+                {
+                    var currentUser = await UserManager.GetUserAsync(user);
+
+                    if (currentUser != null)
+                    {
+                        var userRoles = await UserManager.GetRolesAsync(currentUser);
+
+                        if (!userRoles.Contains("Admin"))
+                        {
+                            var result = await UserManager.AddToRoleAsync(currentUser, "Premium");
+
+                            if (result.Succeeded)
+                            {
+                                // Optionally, you can log the success or perform other actions here
+                                Console.WriteLine("User role updated to Premium.");
+                                
+                            }
+                            else
+                            {
+                                // Handle errors here
+                                Console.WriteLine("Failed to update user role.");
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Handle the case where the payment was not successful
+                NavigationManager.NavigateTo("/PaymentFailed");
+            }
         }
     }
 
@@ -117,7 +203,29 @@ else
         </RadzenStack>
     </RadzenStack>);
     }
+    async Task BusyDialog()
+    {
+        await DialogService.OpenAsync("", ds =>
+            @<RadzenStack AlignItems="AlignItems.Center" Gap="2rem" class="rz-p-12">
+                <RadzenImage Path="/img/Gifs/suc.gif" Style="width: 200px;" AlternateText="community" />
+                <RadzenText TextStyle="TextStyle.H6">Blahoželám, si premium user</RadzenText>
+            </RadzenStack>, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
+    }
+    
+    async Task ShowBusyDialog()
+    {
+        InvokeAsync(async () =>
+        {
+            // Simulate background task
+            await Task.Delay(10000);
 
+            // Close the dialog
+            DialogService.Close();
+        });
+            await BusyDialog();
+    }
+
+    
     private async Task UpdateStatus()
     {
         try

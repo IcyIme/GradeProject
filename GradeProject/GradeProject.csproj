@@ -34,7 +34,7 @@
     <PackageReference Include="BlazorPro.BlazorSize" Version="8.0.0" />
     <PackageReference Include="Blzr.Components.CommandLine" Version="5.0.0" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.68.0.3421" />
-    <PackageReference Include="MailKit" Version="4.6.0" />
+    <PackageReference Include="MailKit" Version="4.7.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.10.0" />

@@ -1,7 +1,7 @@
 ﻿@page "/PaymentSuccess"
 
 @using Stripe.Checkout
-
+@inject DialogService DialogService
 @inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -10,8 +10,13 @@
     <h3>Payment Success</h3>
     <p>Hi, @_customerName!</p>
     <p>Your account has been upgraded to Premium.</p>
+    <p>Redirecting to the login page in 5 seconds...</p>
 </div>
-
+<script>
+    setTimeout(function() {
+        window.location.href = '@NavigationManager.ToAbsoluteUri("/")';
+    }, 5000);
+</script>
 @code {
     [SupplyParameterFromQuery(Name = "sessionId")]
     public string SessionId { get; set; }
@@ -30,24 +35,29 @@
 
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
-
+            BusyDialog();
             if (user.Identity.IsAuthenticated)
             {
                 var currentUser = await UserManager.GetUserAsync(user);
 
                 if (currentUser != null)
                 {
-                    var result = await UserManager.AddToRoleAsync(currentUser, "Premium");
+                    var userRoles = await UserManager.GetRolesAsync(currentUser);
 
-                    if (result.Succeeded)
+                    if (!userRoles.Contains("Admin"))
                     {
-                        // Optionally, you can log the success or perform other actions here
-                        Console.WriteLine("User role updated to Premium.");
-                    }
-                    else
-                    {
-                        // Handle errors here
-                        Console.WriteLine("Failed to update user role.");
+                        var result = await UserManager.AddToRoleAsync(currentUser, "Premium");
+
+                        if (result.Succeeded)
+                        {
+                            // Optionally, you can log the success or perform other actions here
+                            Console.WriteLine("User role updated to Premium.");
+                        }
+                        else
+                        {
+                            // Handle errors here
+                            Console.WriteLine("Failed to update user role.");
+                        }
                     }
                 }
             }
@@ -58,4 +68,14 @@
             NavigationManager.NavigateTo("/PaymentFailed");
         }
     }
+    
+        // Busy dialog from markup
+        async Task BusyDialog()
+        {
+            await DialogService.OpenAsync("", ds =>
+                @<RadzenStack AlignItems="AlignItems.Center" Gap="2rem" class="rz-p-12">
+                    <RadzenImage Path="/img/Gifs/suc.gif" Style="width: 200px;" AlternateText="community" />
+                    <RadzenText TextStyle="TextStyle.H6">Loading, please wait...</RadzenText>
+                </RadzenStack>, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
+        }
 }
