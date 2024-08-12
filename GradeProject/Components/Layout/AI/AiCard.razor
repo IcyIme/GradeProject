@@ -1,11 +1,13 @@
+@using System.Text
+@using System.Threading.Tasks
 @using OpenAI_API
 @using OpenAI_API.Completions
-
 @inject IConfiguration Configuration
+@attribute [StreamRendering(true)]
 
 <RadzenStack Gap="1rem" Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
     <div class="centered-image">
-        <img src="img/Icons/ai.png"/>
+        @* <img src="img/Icons/ai.png"/> *@
     </div>
     <div>
         <RadzenFormField Text="Tu zadaj svoj dotaz" class="w-100">
@@ -16,60 +18,155 @@
         <RadzenButton Click="GenerateText">Odoslať</RadzenButton>
     </div>
 
-    @if (promptText is not null)
+    @if (!string.IsNullOrWhiteSpace(promptText))
     {
         <div class="bubble right">
             <p>@promptText</p>
         </div>
     }
-    @if (generatedText is not null)
+    @if (!string.IsNullOrWhiteSpace(generatedText))
     {
         <div class="bubble left">
             <p>@generatedText</p>
         </div>
     }
-    
+
     @if (loading)
     {
-        <div class="rz-m-12">
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    <div class="rz-m-12">
+        <div class="centered-image w-25 h-25">
+            <img src="img/Gifs/ai.gif"/>
         </div>
+
+    </div>
     }
 
 </RadzenStack>
+<script>
+    const mcos = Math.cos,
+        msin = Math.sin,
+        PI = Math.PI,
+        Tau = PI * 2,
+        height = 500,
+        width = 500,
+        offsetX = width * .5,
+        offsetY = height * .5,
+        radius = width * .5;
 
+    // Pattern density
+    const numLines = 360;
+
+    // Control the speed of pattern change
+    const rateOfChange = .01;
+
+    // Speed at which rainbow rolls around the perimiter
+    const colourOffsetShift = 1;
+
+    let canvas,
+        ctx,
+        factor = 0,
+        colourFactor = (360 / numLines),
+        colourOffset = 1;
+
+    canvas = document.createElement('canvas');
+    document.querySelector('#canvas-wrapper').appendChild(canvas);
+    canvas.width = width;
+    canvas.height = height;
+    ctx = canvas.getContext('2d');
+
+    const map = (v, i1, i2, o1, o2) => {
+        return o1 + (o2 - o1) * ((v - i1) / (i2 - i1));
+    }
+
+    const getAngle = (i) => {
+        return map(i, 0, numLines, 0, Tau) - factor;
+    }
+
+    const getPoint = (angle) => {
+        return {x:radius * mcos(angle), y:radius * msin(angle)};
+    }
+
+    function draw(){
+        ctx.clearRect(0, 0, width, height);
+        for(let i = 0; i < numLines; i++){
+            let pt1 = getPoint(getAngle(i)),
+                pt2 = getPoint(getAngle((i*factor) % numLines));
+            ctx.strokeStyle = `hsl(${i * colourFactor + colourOffset}, 100%, 50%)`;
+            ctx.beginPath();
+            ctx.moveTo(offsetX + pt1.x, offsetY + pt1.y);
+            ctx.lineTo(offsetX + pt2.x, offsetY + pt2.y);
+            ctx.stroke();
+        }
+    }
+
+    function animate(){
+        draw();
+        factor += rateOfChange;
+        colourOffset += colourOffsetShift;
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+</script>
 @code {
     private bool loading = false;
-
     private OpenAIAPI client;
     private string promptText;
     private string generatedText;
-    
     private string apiKey;
 
     protected override void OnInitialized()
     {
         apiKey = Configuration.GetValue<string>("OpenAI:ApiKey");
-
         client = new OpenAIAPI(apiKey);
     }
 
     private async Task GenerateText()
     {
-        loading = true;
-        generatedText = null;
-        var parameters = new CompletionRequest
+        if (string.IsNullOrWhiteSpace(promptText))
         {
-            Model = "gpt-3.5-turbo-instruct",
-            Prompt = "Odpovedaj iba dotazy ohľadne c# ak je dotaz na niečo iné nápis nerozumiem dotazu, dotaz na ktory sa pytam:" + promptText,
-            Temperature = 0,
-            MaxTokens = 500
-        };
+            generatedText = "Please enter a query.";
+            return;
+        }
 
-        var response = await client.Completions.CreateCompletionAsync(parameters);
+        loading = true;
+        generatedText = string.Empty;
 
-        generatedText = response.Completions[0].Text;
-        loading = false;
+        try
+        {
+            var parameters = new CompletionRequest
+            {
+                Model = "gpt-3.5-turbo-instruct",
+                Prompt = $"Odpovedzte na otázky týkajúce sa jazyka C#. Ak otázka nesúvisí s C#, odpovedzte „Nerozumiem otázke.“ otázka: {promptText}",
+                Temperature = 0,
+                MaxTokens = 500
+            };
+
+            // Initialize the response as an empty string
+            var responseText = new StringBuilder();
+
+            await foreach (var completionResult in client.Completions.StreamCompletionEnumerableAsync(parameters))
+            {
+                if (completionResult.Completions != null && completionResult.Completions.Count > 0)
+                {
+                    foreach (var character in completionResult.Completions[0].Text)
+                    {
+                        responseText.Append(character);
+                        generatedText = responseText.ToString(); // Update UI
+                        StateHasChanged(); // Request a UI update
+                        await Task.Delay(25); // Delay to simulate typing effect
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            generatedText = "An error occurred: " + ex.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
