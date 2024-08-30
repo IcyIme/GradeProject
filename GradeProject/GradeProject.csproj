@@ -76,10 +76,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <UpToDateCheckInput Remove="Components\Layout\SubMenu.razor" />
   </ItemGroup>
 
