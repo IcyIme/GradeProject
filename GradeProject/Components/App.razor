@@ -16,6 +16,28 @@
 </head>
 
 <body>
+
+    <div id="components-reconnect-modal" class="my-reconnect-modal components-reconnect-hide">
+        <div class="show">
+            <div id="preloader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="failed">
+            <p>
+                Komunikácia so serverom zlyhala!
+            </p>
+        </div>
+        <div class="rejected">
+            <p>
+                Server odmietol požiadavku komunikovat!
+            </p>
+        </div>
+    </div>
+
     <Routes @rendermode="RenderModeForPage"/>
     <script src="_content/BlazorMonaco/jsInterop.js"></script>
     <script src="_content/BlazorMonaco/lib/monaco-editor/min/vs/loader.js"></script>

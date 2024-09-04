@@ -2,6 +2,8 @@
 @inject IForumService ForumService
 @inject NavigationManager NavigationManager
 
+@attribute [StreamRendering(true)]
+
 @attribute [Authorize]
 
 <RadzenButton Text="vytvoriť miestnosť" Click="CreateRoom"></RadzenButton>
@@ -26,8 +28,11 @@
 }
 else
 {
-    <div class="rz-m-12">
-        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    <div id="preloader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
 }
 
