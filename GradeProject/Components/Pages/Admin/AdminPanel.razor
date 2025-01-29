@@ -10,19 +10,19 @@
 <h3>AdminPanel</h3>
 <AuthorizeView>
     <Authorized>
-        @if (!isWorking)
-        {
-            <RadzenButton Style="width: 260px; border-radius: 10px" Click="@ResetScores">Reset All Scores</RadzenButton>
-        }
-        else
-        {
-            <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
-        }
-        <RadzenChart>
-            <RadzenPieSeries Data="@ChartData" CategoryProperty="Label" ValueProperty="Value" />
-        </RadzenChart>
-        
-
+        <div class="bgtext">
+			@if (!isWorking)
+			{
+				<RadzenButton Style="width: 260px; border-radius: 10px" Click="@ResetScores">Reset All Scores</RadzenButton>
+			}
+			else
+			{
+				<RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+			}
+			<RadzenChart>
+				<RadzenPieSeries Data="@ChartData" CategoryProperty="Label" ValueProperty="Value" />
+			</RadzenChart>
+       </div>
     </Authorized>
     <NotAuthorized>
         <p>chyba 401</p>
